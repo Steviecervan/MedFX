@@ -26,6 +26,10 @@ public class CreateAccountPage extends VBox
 	
 	public CreateAccountPage() throws IOException
 	{
+		//set default css pane setup
+		this.getStylesheets().add(getClass().getResource("application.css").toString()); // fetches the style sheet
+		this.getStyleClass().add("BasicPaneSetUp");
+		
 		// add image
 		// loads image from file and then creates an image view to add to scene
 		FileInputStream imagePath = new FileInputStream("MedFxLogo.png"); // will read the file that contains the image, may throw FileNotFoundException
@@ -54,8 +58,21 @@ public class CreateAccountPage extends VBox
 	    //add to birthdate pane
 	    birthDatePane.getChildren().addAll(month, day, year);
 	    
+	    //setting css classes for each text field
+	    firstName.getStyleClass().add("GrayTextField");
+	    lastName.getStyleClass().add("GrayTextField");
+	    month.getStyleClass().add("GrayTextField");
+	    day.getStyleClass().add("GrayTextField");
+	    year.getStyleClass().add("GrayTextField");
+	    
+	    // specific resizing for the birthdate textfields
+	    month.setStyle("-fx-pref-column-count: 2");
+	    day.setStyle("-fx-pref-column-count: 2");
+	    year.setStyle("-fx-pref-column-count: 4");
+	    
 	    //create account button
 	    createAcntBtn = new Button("Create Account");
+	    createAcntBtn.getStyleClass().add("BlueButton");
 	    createAcntBtn.setOnAction(new ButtonHandler());
 	    
 	    // user input pane
@@ -77,7 +94,7 @@ public class CreateAccountPage extends VBox
 		{
 			if (createAcntBtn.isArmed())
 			{
-				// TODO: implement creat account button functionality
+				// TODO: implement create account button functionality
 			}
 		}
 	}

@@ -24,6 +24,9 @@ public class UserMainPage extends VBox
 	
 	public UserMainPage() throws IOException
 	{
+		// set css style sheet
+		this.getStylesheets().add(getClass().getResource("application.css").toString());
+		this.getStyleClass().add("BasicPaneSetUp");
 		// loads image from file and then creates an image view to add to scene
 		FileInputStream imagePath = new FileInputStream("MedFxLogo.png"); // will read the file that contains the image, may throw FileNotFoundException
 		Image medFXPng = new Image(imagePath); // creates Image object out of image path
@@ -39,7 +42,9 @@ public class UserMainPage extends VBox
 		Label instructions = new Label("Enter your username as: LastName-FirstName-MM/DD/YYYY");
 		username = new TextField("Username");
 		username.setMaxWidth(300); // prevents textfield from spanning whole window
+		username.getStyleClass().add("GrayTextField");
 		submitBtn = new Button("Submit");
+		submitBtn.getStyleClass().add("BlueButton");
 		
 		// create username input pane and add corresponding nodes
 		inputUsernamePane = new VBox();
@@ -48,6 +53,7 @@ public class UserMainPage extends VBox
 		inputUsernamePane.getChildren().addAll(instructions, username, submitBtn);
 		
 		createAcntBtn = new Button("Create Account");
+		createAcntBtn.getStyleClass().add("WhiteButton");
 		
 		// set buttonhandlers
 		submitBtn.setOnAction(new ButtonHandler());

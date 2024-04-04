@@ -1,0 +1,36 @@
+/*
+ * CSS style class for a blue button as seen on UserMainPage (submit button)
+ */
+.BlueButton {
+	-fx-background-color: #39C0EA;
+	-fx-text-fill: white;
+}
+
+/*
+ * CSS style class for a white buttton with blue text as seen on UserMainPage (create account button)
+ */
+.WhiteButton {
+	-fx-background-color: #FFFFFF;
+	-fx-text-fill: #39C0EA;
+	-fx-font-weight: bold;
+}
+
+/*
+ * CSS style class for the gray text fields seen on UserMainPage and CreateAccountPage
+ */
+.GrayTextField {
+	-fx-background-color: #E8E8E8;
+	-fx-text-fill: #D3D3D3;
+	-fx-font-size: 18;
+	-fx-alignment: center;
+}
+
+/*
+ * The BasicSetUp class for a pane, set it when you create your screen to default set the font
+ * and font size. Any of this can be overriden with specific CSS styling in your code.
+ */
+.BasicPaneSetUp {
+	-fx-background-color: #FFFFFF;
+	-fx-font-family: 'Roboto';
+	-fx-font-size: 15;
+}
