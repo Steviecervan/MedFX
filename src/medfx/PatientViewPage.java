@@ -34,7 +34,8 @@ public class PatientViewPage extends VBox{
 	public PatientViewPage() {		
 		this.setPadding(new Insets(15,15,15,15));
 
-		//	General View
+		//	General View -----------------------------------------------------------------------------------------
+		//	This view is static
 		Label welcomeHeaderLabel = new Label("Welcome, " + pName);
 		HBox displayContainer = new HBox();
 		displayContainer.setPadding(new Insets(15,0,0,0));
@@ -52,7 +53,9 @@ public class PatientViewPage extends VBox{
 		
 		navigationContainer.getChildren().addAll(myInfoButton, myVisitsButton, messagesButton);
 		
-		//	Info View
+		//	Info View -----------------------------------------------------------------------------------------
+		//	This view shows the patients information
+		
 		//	Labels (does not have user information)
 		Label infoHeaderLabel = new Label("My Info");
 		Label nameLabel = new Label("Name");
@@ -106,7 +109,9 @@ public class PatientViewPage extends VBox{
 		
 		patientInfoContainer.getChildren().add(infoGridPane);
 		
-		//	Visits View
+		//	Visits View -----------------------------------------------------------------------------------------
+		//	This view shows the patient's visits
+		
 		//	Labels
 		Label visitsHeaderLabel = new Label("My Visits");
 		visitsHeaderLabel.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 20)); 
@@ -187,11 +192,14 @@ public class PatientViewPage extends VBox{
 			}
 		};
 		
+		//	Sets summary buttons click event
 		summaryButton.setOnAction(event);
 		
+		//	Adds the visits to the container. The examinationContainer will be the parent container
+		//	to display all the visits.
 		examinationContainer.getChildren().addAll(examinationDateLabel, summaryButton);
 
-		//	Messages View
+		//	Messages View -----------------------------------------------------------------------------------------
 		//	Come back to match up w/ Carly's message view
 		
 		//	Add everything together
