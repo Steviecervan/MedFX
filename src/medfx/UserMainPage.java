@@ -75,7 +75,15 @@ public class UserMainPage extends VBox
 			}
 			else if (createAcntBtn.isArmed())
 			{
-				//TODO: implement what create account button will do
+				//Changes the screen to the CreateAccountPage
+				try
+				{
+					SceneController.switchToCreateAccountPage(e); // This method can possibly throw an IOException because of the Image
+				}
+				catch (IOException ex)
+				{
+					// do nothing if there is an exception, as long as the image file does not move, there should be no error
+				}
 			}
 		}
 	}
