@@ -46,9 +46,11 @@ public class PatientViewPage extends VBox{
 		Image medFXPng = new Image(imagePath); // creates Image object out of image path
 		imagePath.close(); // close stream
 		ImageView logoView = new ImageView(medFXPng); // need to create an ImageView object because you cannot add an image directly to the scene
+		
 		// Use the ImageView object to resize image
 		logoView.setFitHeight(30); 
 		logoView.setFitWidth(335);           
+		
 		//Setting the preserve ratio of the image view 
 		logoView.setPreserveRatio(true);		
 		
@@ -251,10 +253,26 @@ public class PatientViewPage extends VBox{
 		examinationContainer.getChildren().addAll(examinationDateLabel, summaryButton);
 
 		//	Messages View -----------------------------------------------------------------------------------------
-		//	Come back to match up w/ Carly's message view
+		VBox messageViewContainer = new VBox();
+		messageViewContainer.setSpacing(5);
+		
+		VBox messageBox = new VBox();
+		messageBox.setPrefHeight(400);
+		
+		HBox inputBox = new HBox();
+		inputBox.setSpacing(5);
+		
+		TextField pTextInput = new TextField();
+		pTextInput.setPrefWidth(550);
+		
+		Button sendButton = new Button("^");
+		sendButton.getStyleClass().add("BlueButton");
+		
+		inputBox.getChildren().addAll(pTextInput, sendButton);
+		messageViewContainer.getChildren().addAll(messageBox, inputBox);
 		
 		//	Add everything 
-		patientInfoContainer.getChildren().addAll(infoHeaderLabel, infoGridPane);
+		patientInfoContainer.getChildren().add(messageViewContainer);
 		displayContainer.getChildren().addAll(navigationContainer, patientInfoContainer);
 		this.getChildren().addAll(topContainer,welcomeHeaderLabel, displayContainer);
 	}
