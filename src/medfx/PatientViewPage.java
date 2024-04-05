@@ -271,8 +271,12 @@ public class PatientViewPage extends VBox{
 		inputBox.getChildren().addAll(pTextInput, sendButton);
 		messageViewContainer.getChildren().addAll(messageBox, inputBox);
 		
-		//	Add everything 
-		patientInfoContainer.getChildren().add(messageViewContainer);
+		//	Info view: infoHeaderLabel, infoGridPane
+		//	Visits view: visitsHeaderLabel, examinationContainer
+		//	Message View: messageViewContainer
+		
+		//	Add everything to parents
+		patientInfoContainer.getChildren().addAll(infoHeaderLabel, infoGridPane);
 		displayContainer.getChildren().addAll(navigationContainer, patientInfoContainer);
 		this.getChildren().addAll(topContainer,welcomeHeaderLabel, displayContainer);
 	}
