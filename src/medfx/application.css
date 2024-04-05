@@ -34,3 +34,21 @@
 	-fx-font-family: 'Roboto';
 	-fx-font-size: 15;
 }
+/*
+ * CSS Style for header labels like those seen in the patient view pages
+ */
+ .HeaderText {
+ 	-fx-font-family: 'Roboto';
+ 	-fx-font-weight: bold;
+ 	-fx-font-size: 20;
+ 	-fx-padding: 0, 0, 0, 20;
+ }
+ /*
+  * Patient Navigation Button in Patient View
+  */
+  .NavigationButton{
+  	-fx-font-family: 'Roboto';
+  	-fx-font-size: 15;
+  	-fx-background-color: transparent;
+  	-fx-text-fill: black; 
+  }

@@ -2,6 +2,9 @@
 
 package medfx;
 
+import java.io.FileInputStream;
+import java.io.IOException;
+
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -11,6 +14,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
@@ -31,25 +36,60 @@ public class PatientViewPage extends VBox{
 	private Label pPharmacy; 
 	private VBox patientInfoContainer;
 	
-	public PatientViewPage() {		
-		this.setPadding(new Insets(15,15,15,15));
-
+	public PatientViewPage() throws IOException {	
+		//	Set CSS style sheet
+		this.getStylesheets().add(getClass().getResource("application.css").toString());
+		this.getStyleClass().add("BasicPaneSetUp");
+		
+		// loads image from file and then creates an image view to add to scene
+		FileInputStream imagePath = new FileInputStream("MedFxLogo.png"); // will read the file that contains the image, may throw FileNotFoundException
+		Image medFXPng = new Image(imagePath); // creates Image object out of image path
+		imagePath.close(); // close stream
+		ImageView logoView = new ImageView(medFXPng); // need to create an ImageView object because you cannot add an image directly to the scene
+		// Use the ImageView object to resize image
+		logoView.setFitHeight(30); 
+		logoView.setFitWidth(335);           
+		//Setting the preserve ratio of the image view 
+		logoView.setPreserveRatio(true);		
+		
 		//	General View -----------------------------------------------------------------------------------------
 		//	This view is static
 		Label welcomeHeaderLabel = new Label("Welcome, " + pName);
+		//welcomeHeaderLabel.getStyleClass().add("HeaderText");
+		welcomeHeaderLabel.setPadding(new Insets(5, 0, 5, 15));
+		welcomeHeaderLabel.setStyle("-fx-font-size: 25; -fx-font-family: 'Roboto'; -fx-font-weight: bold");
+		
+		Button signOutButton = new Button("Sign Out");
+		signOutButton.getStyleClass().add("WhiteButton");
+		
+		HBox topContainer = new HBox();
+		topContainer.setAlignment(Pos.CENTER_LEFT);
+		topContainer.setSpacing(593);
+		topContainer.setStyle("-fx-background-color: #39C0EA; -fx-pref-height: 50; -fx-padding: 15");
+		topContainer.getChildren().addAll(logoView, signOutButton);
+		
 		HBox displayContainer = new HBox();
-		displayContainer.setPadding(new Insets(15,0,0,0));
+		displayContainer.setPadding(new Insets(0,15,15,15));
+		displayContainer.setSpacing(15);
+		displayContainer.setPrefHeight(445);
 		
 		VBox navigationContainer = new VBox();
-		navigationContainer.setPrefWidth(300);
-		navigationContainer.setSpacing(15);
+		navigationContainer.setPrefWidth(200);
+		//navigationContainer.setSpacing();
+		navigationContainer.setStyle("-fx-background-color: whitesmoke; -fx-padding: 8");
 		
 		patientInfoContainer = new VBox();
 		patientInfoContainer.setMinWidth(600);
+		patientInfoContainer.setStyle("-fx-background-color: whitesmoke; -fx-padding: 8");
 		
 		Button myInfoButton = new Button("My Info");
+		myInfoButton.getStyleClass().add("NavigationButton");
+		
 		Button myVisitsButton = new Button("My Visits");
+		myVisitsButton.getStyleClass().add("NavigationButton");
+		
 		Button messagesButton = new Button("Messages");
+		messagesButton.getStyleClass().add("NavigationButton");
 		
 		navigationContainer.getChildren().addAll(myInfoButton, myVisitsButton, messagesButton);
 		
@@ -58,6 +98,8 @@ public class PatientViewPage extends VBox{
 		
 		//	Labels (does not have user information)
 		Label infoHeaderLabel = new Label("My Info");
+		infoHeaderLabel.getStyleClass().add("HeaderText");
+		
 		Label nameLabel = new Label("Name");
 		Label birthDateLabel = new Label("Birth date");
 		Label addressLabel = new Label("Address");
@@ -77,9 +119,20 @@ public class PatientViewPage extends VBox{
 		
 		//	Buttons to change data
 		Button addressButton = new Button("Change");
+		addressButton.getStyleClass().add("WhiteButton");
+		addressButton.setStyle("-fx-font-weight: normal; -fx-font-size: 12; -fx-background-color: transparent");
+		
 		Button phoneNumberButton = new Button("Change");
+		phoneNumberButton.getStyleClass().add("WhiteButton");
+		phoneNumberButton.setStyle("-fx-font-weight: normal; -fx-font-size: 12; -fx-background-color: transparent");
+		
 		Button emailButton = new Button("Change");
+		emailButton.getStyleClass().add("WhiteButton");
+		emailButton.setStyle("-fx-font-weight: normal; -fx-font-size: 12; -fx-background-color: transparent");
+		
 		Button pharmacyButton = new Button("Change");
+		pharmacyButton.getStyleClass().add("WhiteButton");
+		pharmacyButton.setStyle("-fx-font-weight: normal; -fx-font-size: 12; -fx-background-color: transparent");
 		
 		//	Information grid pane
 		GridPane infoGridPane = new GridPane();
@@ -107,24 +160,25 @@ public class PatientViewPage extends VBox{
 		infoGridPane.add(pPharmacy, 1, 6);
 		infoGridPane.add(pharmacyButton, 2, 6);
 		
-		patientInfoContainer.getChildren().add(infoGridPane);
-		
 		//	Visits View -----------------------------------------------------------------------------------------
 		//	This view shows the patient's visits
 		
 		//	Labels
 		Label visitsHeaderLabel = new Label("My Visits");
-		visitsHeaderLabel.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 20)); 
-		visitsHeaderLabel.setPadding(new Insets(15, 15, 15, 15));
+		visitsHeaderLabel.getStyleClass().add("HeaderText");
 		
 		//	Examination Container (template)
 		//	When implementing the database, we can use this template for each visit object
 		HBox examinationContainer = new HBox();		
-		examinationContainer.setPadding(new Insets(15, 15, 15, 15));
+		examinationContainer.setPadding(new Insets(5, 0, 0, 0));
+		examinationContainer.setAlignment(Pos.CENTER_LEFT);
 		
 		Label examinationDateLabel = new Label("Examination Date: MM/DD/YYYY");
-		examinationDateLabel.setMinWidth(400);
+		examinationDateLabel.setMinWidth(505);
+		
 		Button summaryButton = new Button("Summary");
+		summaryButton.getStyleClass().add("WhiteButton");
+		summaryButton.setStyle("-fx-background-color: transparent; -fx-font-weight: normal; -fx-font-size: 12");
 				
 		//	Action Event for showing the summary of a visit
 		EventHandler<ActionEvent> event = new EventHandler<ActionEvent>() {
@@ -138,19 +192,16 @@ public class PatientViewPage extends VBox{
 				summaryContainer.setPadding(new Insets(15, 15, 15, 15));
 				
 				Label visitDateLabel = new Label("Visit MM-DD-YYYY");
-				visitDateLabel.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 20)); 
-				visitDateLabel.setPadding(new Insets(0, 5, 5, 0));
+				visitDateLabel.setStyle("-fx-font-family: roboto; -fx-font-weight: bold; -fx-font-size: 20; -fx-padding: 0, 0, 0, 20");
 				
 				Label vitalResultsLabel = new Label("Vital Results");
-				vitalResultsLabel.setFont(Font.font("verdana", FontWeight.SEMI_BOLD, FontPosture.REGULAR, 15));
-				vitalResultsLabel.setPadding(new Insets(5, 5, 5, 0));
-				
+				vitalResultsLabel.setStyle("-fx-font-family: roboto; -fx-font-weight: bold; -fx-font-size: 15; -fx-padding: 0, 5, 0, 5");
+								
 				Label healthConcernsLabel = new Label("Health Concerns");
-				healthConcernsLabel.setFont(Font.font("verdana", FontWeight.SEMI_BOLD, FontPosture.REGULAR, 15));
-				healthConcernsLabel.setPadding(new Insets(5, 5, 5, 0));
+				healthConcernsLabel.setStyle("-fx-font-family: roboto; -fx-font-weight: bold; -fx-font-size: 15; -fx-padding: 0, 5, 0, 5");
 				
 				Label physicalResultsLabel = new Label("Physical Results");
-				physicalResultsLabel.setFont(Font.font("verdana", FontWeight.SEMI_BOLD, FontPosture.REGULAR, 15));
+				physicalResultsLabel.setStyle("-fx-font-family: roboto; -fx-font-weight: bold; -fx-font-size: 15; -fx-padding: 0, 5, 0, 5");
 				
 				//	Vital Results
 				Label weightLabel = new Label("Weight");
@@ -202,8 +253,9 @@ public class PatientViewPage extends VBox{
 		//	Messages View -----------------------------------------------------------------------------------------
 		//	Come back to match up w/ Carly's message view
 		
-		//	Add everything together
+		//	Add everything 
+		patientInfoContainer.getChildren().addAll(infoHeaderLabel, infoGridPane);
 		displayContainer.getChildren().addAll(navigationContainer, patientInfoContainer);
-		this.getChildren().addAll(welcomeHeaderLabel, displayContainer);
+		this.getChildren().addAll(topContainer,welcomeHeaderLabel, displayContainer);
 	}
 }
