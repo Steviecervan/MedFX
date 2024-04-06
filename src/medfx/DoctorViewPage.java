@@ -35,7 +35,7 @@ import javafx.scene.control.TextInputDialog;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 
-public class DoctorViewPage extends BorderPane
+public class DoctorViewPage extends VBox
 {
 	
 	public DoctorViewPage() throws IOException {	
@@ -81,15 +81,11 @@ public class DoctorViewPage extends BorderPane
 	     BorderPane mainPane= new BorderPane();
 	     mainPane.setCenter(wholeSearchBox);
 	     mainPane.setTop(titleBox);
+	     this.getChildren().add(mainPane);
 	     
-	     Scene scene = new Scene(mainPane,800,500);
-	     Stage mainStage= new Stage();
-	     mainStage.setScene(scene);
-	     mainStage.show();
+	     
+	     
 	     	     	     	 
 }
-	
-	
-	
 	
 }
