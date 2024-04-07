@@ -83,9 +83,123 @@ public class DoctorViewPage extends VBox
 	     mainPane.setTop(titleBox);
 	     this.getChildren().add(mainPane);
 	     
-	     
-	     
+	        newPatientButton.setOnAction(event -> openNewPatientIntakeScreen());
+     
 	     	     	     	 
 }
+	
+	
+	private void openNewPatientIntakeScreen() {
+		HBox topBox= new HBox(500);
+    	Label medFXLabel= new Label("MedFX");
+    	 medFXLabel.setFont(Font.font("Arial", FontWeight.BOLD, 24)); 
+    	 medFXLabel.setTextFill(javafx.scene.paint.Color.WHITE);
+        Button signOutButton = new Button("Sign Out");
+        topBox.getChildren().addAll(medFXLabel, signOutButton);
+        topBox.setStyle("-fx-background-color: #ADD8E6;");
+        topBox.setPadding(new Insets(10));
+    	
+        BorderPane intakePane = new BorderPane();
+        GridPane intakeGridPane= new GridPane();
+       
+	        Label firstNameLabel= new Label("First Name:");
+	        TextArea firstNameArea = new TextArea();
+	        firstNameArea.setPrefRowCount(1); 
+	        firstNameArea.setPrefColumnCount(10);
+	       
+	        Label middleInitial= new Label("Middle Initial");
+	        TextArea middleInitialArea= new TextArea();
+	        middleInitialArea.setPrefRowCount(1); 
+	        middleInitialArea.setPrefColumnCount(1);
+	               
+	        Label lastNameLabel= new Label("Last Name:");
+	        TextArea lastNameArea = new TextArea();
+	        lastNameArea.setPrefRowCount(1); 
+	        lastNameArea.setPrefColumnCount(10);
+	             
+	        Label emailLabel= new Label("Email Address:");
+	        TextArea emailArea = new TextArea();
+	        emailArea.setPrefRowCount(1); 
+	        emailArea.setPrefColumnCount(5);
+	             
+	        Label phoneLabel= new Label("Phone Number:");
+	        TextArea phoneArea = new TextArea();
+	        phoneArea.setPrefRowCount(1); 
+	        phoneArea.setPrefColumnCount(5);
+	            
+	        Label DOBLabel= new Label("DOB:");
+	        TextArea DOBArea = new TextArea();     
+	        DOBArea.setPrefRowCount(1); 
+	        DOBArea.setPrefColumnCount(1);
+	              
+	        Label addressLabel = new Label("Address:");
+	        TextArea addressArea = new TextArea();
+	        addressArea.setPrefRowCount(1); 
+	        addressArea.setPrefColumnCount(10);
+              
+        intakeGridPane.setHgap(5);
+        intakeGridPane.setVgap(5);
+        
+	        intakeGridPane.add(firstNameLabel, 0, 0);
+	        intakeGridPane.add(firstNameArea, 1, 0);
+	        intakeGridPane.add(middleInitial, 2, 0);
+	        intakeGridPane.add(middleInitialArea, 3, 0);
+	        intakeGridPane.add(lastNameLabel, 4, 0);
+	        intakeGridPane.add(lastNameArea, 5, 0);
+	
+	        intakeGridPane.add(DOBLabel, 0, 1);
+	        intakeGridPane.add(DOBArea, 1, 1);
+	        intakeGridPane.add(phoneLabel, 2, 1);
+	        intakeGridPane.add(phoneArea, 3, 1);
+	        
+	        intakeGridPane.add(addressLabel, 0, 2);
+	        intakeGridPane.add(addressArea, 1, 2);
+	        intakeGridPane.add(emailLabel, 2, 2);
+	        intakeGridPane.add(emailArea, 3, 2);
+	        
+        VBox visitBox= new VBox();
+        Label visitLabel= new Label("Visits");
+        Button visitButton= new Button("Go 2 Visit");
+        visitBox.getChildren().addAll(visitLabel, visitButton);
+        
+        GridPane medHistoryGrid= new GridPane();
+        Label medHistoryLabel= new Label("Medical History");
+        medHistoryGrid.getChildren().add(medHistoryLabel);
+
+        GridPane allergyGrid= new GridPane();
+        Label allergyLabel= new Label("Allergies");
+        allergyGrid.getChildren().add(allergyLabel);
+
+        GridPane immunizationGrid= new GridPane();
+        Label immunizationLabel= new Label("Immunization History");
+        immunizationGrid.getChildren().add(immunizationLabel);
+
+        GridPane medicationGrid= new GridPane();
+        Label medicationLabel= new Label("Medication History");
+        medicationGrid.getChildren().add(medicationLabel);
+        
+        
+        GridPane patientHistoryGrid= new GridPane();
+        patientHistoryGrid.add(medHistoryGrid, 0, 0);
+        patientHistoryGrid.add(allergyGrid, 0, 1);
+        patientHistoryGrid.add(immunizationGrid, 1, 0);
+        patientHistoryGrid.add(medicationGrid, 1, 1);
+        patientHistoryGrid.setHgap(200); 
+        patientHistoryGrid.setVgap(50);        
+        
+        VBox allPatientInfoBox= new VBox();
+        allPatientInfoBox.getChildren().addAll(intakeGridPane, visitBox, patientHistoryGrid);
+        allPatientInfoBox.setSpacing(20);
+        allPatientInfoBox.setPadding(new Insets(20));
+        allPatientInfoBox.setAlignment(Pos.CENTER);
+                   
+        intakePane.setCenter(allPatientInfoBox);
+        intakePane.setTop(topBox);
+        //intakePane.setPadding(new Insets(5)); 
+
+        Scene newPatientScene = new Scene(intakePane, 800, 500);
+        Stage stage = (Stage) getScene().getWindow();
+        stage.setScene(newPatientScene);
+    }
 	
 }
