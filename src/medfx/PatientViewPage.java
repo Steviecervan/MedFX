@@ -1,8 +1,6 @@
-//	Author: Stevie Cervantes (idk if we're doing this)
+//	Author: Stevie Cervantes
 
 package medfx;
-
-//TEST BRANCH COMMIT
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -38,67 +36,95 @@ public class PatientViewPage extends VBox{
 	private Label pPharmacy; 
 	private VBox patientInfoContainer;
 	
-	public PatientViewPage() throws IOException {	
-		//	Set CSS style sheet
-		this.getStylesheets().add(getClass().getResource("application.css").toString());
-		this.getStyleClass().add("BasicPaneSetUp");
-		
-		// loads image from file and then creates an image view to add to scene
-		FileInputStream imagePath = new FileInputStream("MedFxLogo.png"); // will read the file that contains the image, may throw FileNotFoundException
-		Image medFXPng = new Image(imagePath); // creates Image object out of image path
-		imagePath.close(); // close stream
-		ImageView logoView = new ImageView(medFXPng); // need to create an ImageView object because you cannot add an image directly to the scene
-		
-		// Use the ImageView object to resize image
-		logoView.setFitHeight(30); 
-		logoView.setFitWidth(335);           
-		
-		//Setting the preserve ratio of the image view 
-		logoView.setPreserveRatio(true);		
-		
+	public PatientViewPage(){			
 		//	General View -----------------------------------------------------------------------------------------
-		//	This view is static
-		Label welcomeHeaderLabel = new Label("Welcome, " + pName);
-		//welcomeHeaderLabel.getStyleClass().add("HeaderText");
-		welcomeHeaderLabel.setPadding(new Insets(5, 0, 5, 15));
-		welcomeHeaderLabel.setStyle("-fx-font-size: 25; -fx-font-family: 'Roboto'; -fx-font-weight: bold");
+		//	This remains the same throughout the use of this view
 		
-		Button signOutButton = new Button("Sign Out");
-		signOutButton.getStyleClass().add("WhiteButton");
-		
+		//	Top Container
 		HBox topContainer = new HBox();
 		topContainer.setAlignment(Pos.CENTER_LEFT);
 		topContainer.setSpacing(593);
-		topContainer.setStyle("-fx-background-color: #39C0EA; -fx-pref-height: 50; -fx-padding: 15");
-		topContainer.getChildren().addAll(logoView, signOutButton);
+		topContainer.setStyle("-fx-background-color: #39C0EA; -fx-pref-height: 50; -fx-padding: 10");
+
+		//	Text Logo
+		Label medfxLabel = new Label("MedFX");
+		medfxLabel.setStyle("-fx-font-size: 27; -fx-font-family: 'Roboto'; -fx-font-weight: bold; -fx-text-fill: white");
 		
+		//	Sign out button
+		Button signOutButton = new Button("Sign Out");
+		signOutButton.getStyleClass().add("WhiteButton");
+
+		//	Add medFxLabel and sign out button to top container
+		topContainer.getChildren().addAll(medfxLabel, signOutButton);
+		
+		//	Display Container
 		HBox displayContainer = new HBox();
 		displayContainer.setPadding(new Insets(0,15,15,15));
 		displayContainer.setSpacing(15);
 		displayContainer.setPrefHeight(445);
 		
+		//	Navigation Container
+		//	Holds the buttons to navigate the different views
 		VBox navigationContainer = new VBox();
 		navigationContainer.setPrefWidth(200);
-		//navigationContainer.setSpacing();
 		navigationContainer.setStyle("-fx-background-color: whitesmoke; -fx-padding: 8");
+
+		//	Welcome Label
+		Label welcomeHeaderLabel = new Label("Welcome, " + pName);
+		welcomeHeaderLabel.getStyleClass().add("HeaderText");
+		welcomeHeaderLabel.setPadding(new Insets(5, 0, 5, 15));
+		welcomeHeaderLabel.setStyle("-fx-font-size: 25; -fx-font-family: 'Roboto'; -fx-font-weight: bold");
 		
+		//	PatientInfoContainer
 		patientInfoContainer = new VBox();
 		patientInfoContainer.setMinWidth(600);
 		patientInfoContainer.setStyle("-fx-background-color: whitesmoke; -fx-padding: 8");
 		
+		//	Navigation functionality for each button
 		Button myInfoButton = new Button("My Info");
 		myInfoButton.getStyleClass().add("NavigationButton");
+		myInfoButton.setOnAction(new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent e) {
+				patientInfoContainer.getChildren().remove(0);
+				patientInfoContainer.getChildren().add(setToInfoView());
+			}
+		});
 		
 		Button myVisitsButton = new Button("My Visits");
 		myVisitsButton.getStyleClass().add("NavigationButton");
+		myVisitsButton.setOnAction(new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent e) {
+				patientInfoContainer.getChildren().remove(0);
+				patientInfoContainer.getChildren().add(setToVisitsView());
+			}
+		});
 		
 		Button messagesButton = new Button("Messages");
 		messagesButton.getStyleClass().add("NavigationButton");
+		messagesButton.setOnAction(new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent e) {
+				patientInfoContainer.getChildren().remove(0);
+				patientInfoContainer.getChildren().add(setToMessageView());
+			}
+		});
 		
+		//	Put navigation buttons into navigationContainer
 		navigationContainer.getChildren().addAll(myInfoButton, myVisitsButton, messagesButton);
 		
-		//	Info View -----------------------------------------------------------------------------------------
-		//	This view shows the patients information
+		//	PatientInfoContainer contains the changing views for the patient
+		//	DisplayContainer contains the navigationContainer and patientInfoContainer
+		//	Add PatientInfoContainer and DisplayContainer to be children of the class
+		//	PatientInfoContainer defaults to myInfoView
+		patientInfoContainer.getChildren().addAll(setToInfoView());
+		displayContainer.getChildren().addAll(navigationContainer, patientInfoContainer);
+		this.getChildren().addAll(topContainer,welcomeHeaderLabel, displayContainer);
+	}
+	
+	//	Info View -----------------------------------------------------------------------------------------
+	//	This view shows the patients information
+	public VBox setToInfoView() {
+		//	Main container that gets returned to set the info view
+		VBox mainContainer = new VBox();
 		
 		//	Labels (does not have user information)
 		Label infoHeaderLabel = new Label("My Info");
@@ -164,8 +190,18 @@ public class PatientViewPage extends VBox{
 		infoGridPane.add(pPharmacy, 1, 6);
 		infoGridPane.add(pharmacyButton, 2, 6);
 		
-		//	Visits View -----------------------------------------------------------------------------------------
-		//	This view shows the patient's visits
+		//	Add the info view components to the mainContainer
+		mainContainer.getChildren().addAll(infoHeaderLabel, infoGridPane);
+		
+		//	Return the VBox w/ infoViewLabel and infoGridPane
+		return mainContainer;
+	}
+	
+	//	Visits View -----------------------------------------------------------------------------------------
+	//	This view shows the patient's visits
+	public VBox setToVisitsView() {
+		//	Main Container that gets returned for the visit view
+		VBox mainContainer = new VBox();
 		
 		//	Labels
 		Label visitsHeaderLabel = new Label("My Visits");
@@ -183,7 +219,7 @@ public class PatientViewPage extends VBox{
 		Button summaryButton = new Button("Summary");
 		summaryButton.getStyleClass().add("WhiteButton");
 		summaryButton.setStyle("-fx-background-color: transparent; -fx-font-weight: normal; -fx-font-size: 12");
-				
+		
 		//	Action Event for showing the summary of a visit
 		EventHandler<ActionEvent> event = new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent e) {
@@ -200,7 +236,7 @@ public class PatientViewPage extends VBox{
 				
 				Label vitalResultsLabel = new Label("Vital Results");
 				vitalResultsLabel.setStyle("-fx-font-family: roboto; -fx-font-weight: bold; -fx-font-size: 15; -fx-padding: 0, 5, 0, 5");
-								
+				
 				Label healthConcernsLabel = new Label("Health Concerns");
 				healthConcernsLabel.setStyle("-fx-font-family: roboto; -fx-font-weight: bold; -fx-font-size: 15; -fx-padding: 0, 5, 0, 5");
 				
@@ -236,10 +272,10 @@ public class PatientViewPage extends VBox{
 				vitalsGridPane.add(pBodyTemp, 1, 2);
 				vitalsGridPane.add(bloodPressureLabel, 0, 3);
 				vitalsGridPane.add(pBloodPressure, 1, 3);
-
+				
 				summaryContainer.getChildren().addAll(visitDateLabel, vitalResultsLabel, vitalsGridPane, healthConcernsLabel, healthConcernTextArea, physicalResultsLabel, physicalResultsTextArea);
 				
-				//	Add everything together
+				//	Add everything together to create the Summary container
 				Scene scene = new Scene(summaryContainer);
 				summaryWindow.setScene(scene);
 				
@@ -253,8 +289,17 @@ public class PatientViewPage extends VBox{
 		//	Adds the visits to the container. The examinationContainer will be the parent container
 		//	to display all the visits.
 		examinationContainer.getChildren().addAll(examinationDateLabel, summaryButton);
-
-		//	Messages View -----------------------------------------------------------------------------------------
+		
+		//	Adds the header label and examinationContainer to the mainContainer to be 
+		//	returned
+		
+		mainContainer.getChildren().addAll(visitsHeaderLabel, examinationContainer);
+		
+		return mainContainer;
+	}
+	
+	//	Messages View -----------------------------------------------------------------------------------------
+	public VBox setToMessageView() {
 		VBox messageViewContainer = new VBox();
 		messageViewContainer.setSpacing(5);
 		
@@ -271,15 +316,8 @@ public class PatientViewPage extends VBox{
 		sendButton.getStyleClass().add("BlueButton");
 		
 		inputBox.getChildren().addAll(pTextInput, sendButton);
-		messageViewContainer.getChildren().addAll(messageBox, inputBox);
+		messageViewContainer.getChildren().addAll(messageBox, inputBox);	
 		
-		//	Info view: infoHeaderLabel, infoGridPane
-		//	Visits view: visitsHeaderLabel, examinationContainer
-		//	Message View: messageViewContainer
-		
-		//	Add everything to parents
-		patientInfoContainer.getChildren().addAll(infoHeaderLabel, infoGridPane);
-		displayContainer.getChildren().addAll(navigationContainer, patientInfoContainer);
-		this.getChildren().addAll(topContainer,welcomeHeaderLabel, displayContainer);
+		return messageViewContainer;
 	}
 }
