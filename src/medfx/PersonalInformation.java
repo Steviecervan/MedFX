@@ -11,9 +11,9 @@ public class PersonalInformation {
 	private String address;
 	private String email;
 	private String birthDate;	//	MM/DD/YYYY
-	private int phoneNumber;
+	private String phoneNumber;
 	
-	public PersonalInformation(String firstName, String lastName, String address, String email, String birthDate, int phoneNumber) {
+	public PersonalInformation(String firstName, String lastName, String address, String email, String birthDate, String phoneNumber) {
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.address = address;
@@ -42,7 +42,7 @@ public class PersonalInformation {
 		return birthDate;
 	}
 	
-	public int getPhoneNumber() {
+	public String getPhoneNumber() {
 		return phoneNumber;
 	}
 	
@@ -55,7 +55,7 @@ public class PersonalInformation {
 		this.email = newEmail;
 	}
 	
-	public void changePhoneNumber(int newPhoneNumber) {
+	public void changePhoneNumber(String newPhoneNumber) {
 		this.phoneNumber = newPhoneNumber;
 	}
 }
