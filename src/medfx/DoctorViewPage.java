@@ -37,6 +37,7 @@ import javafx.scene.text.FontWeight;
 
 public class DoctorViewPage extends VBox
 {
+	private Scene visitScene;
 	
 	public DoctorViewPage() throws IOException {	
 	
@@ -81,15 +82,10 @@ public class DoctorViewPage extends VBox
 	     BorderPane mainPane= new BorderPane();
 	     mainPane.setCenter(wholeSearchBox);
 	     mainPane.setTop(titleBox);
-	     this.getChildren().add(mainPane);
-	     
-	        newPatientButton.setOnAction(event -> openNewPatientIntakeScreen());
-     
-	     	     	     	 
+	     this.getChildren().add(mainPane); 
+	    newPatientButton.setOnAction(event -> newPatientScreen());	     	     	     	 
 }
-	
-	
-	private void openNewPatientIntakeScreen() {
+	private void newPatientScreen() {
 		HBox topBox= new HBox(500);
     	Label medFXLabel= new Label("MedFX");
     	 medFXLabel.setFont(Font.font("Arial", FontWeight.BOLD, 24)); 
@@ -195,11 +191,72 @@ public class DoctorViewPage extends VBox
                    
         intakePane.setCenter(allPatientInfoBox);
         intakePane.setTop(topBox);
-        //intakePane.setPadding(new Insets(5)); 
 
         Scene newPatientScene = new Scene(intakePane, 800, 500);
         Stage stage = (Stage) getScene().getWindow();
-        stage.setScene(newPatientScene);
+        stage.setScene(newPatientScene);       	 
+        visitButton.setOnAction(event -> visitScreen());
+
     }
+	
+	private void visitScreen() {
+		
+		   BorderPane visitPane = new BorderPane();
+		    HBox topBox = new HBox(10);
+		    topBox.setPadding(new Insets(10));
+		    topBox.setStyle("-fx-background-color: #ADD8E6;");
+		    Label medFXLabel = new Label("MedFX");
+		    medFXLabel.setFont(Font.font("Arial", FontWeight.BOLD, 24)); 
+		    medFXLabel.setTextFill(javafx.scene.paint.Color.WHITE);
+		    Button patientButton = new Button("Patients");
+		    Button messageButton = new Button("Messages");
+		    Button signOutButton = new Button("Sign Out");
+
+		    Label visitTopLabel = new Label("Visit");
+		    Font largeBoldFont = Font.font("Arial", FontWeight.BOLD, 20); 
+		    visitTopLabel.setFont(largeBoldFont);
+
+		    GridPane vitalGrid = new GridPane();
+		    VBox concernBox = new VBox();
+		    VBox physicalResultBox = new VBox();
+		    VBox prescribeBox = new VBox();
+
+		    Label vitalResult = new Label("Vital Results");
+		    Label concernLabel = new Label("Health Concerns");
+		    Label physicalResultLabel = new Label("Physical Results");
+		    Label prescribeLabel = new Label("Prescribe Medication");
+
+		    // Create new label instances for each container
+		    Label vitalResultCopy = new Label("Vital Results");
+		    Label concernLabelCopy = new Label("Health Concerns");
+		    Label physicalResultLabelCopy = new Label("Physical Results");
+		    Label prescribeLabelCopy = new Label("Prescribe Medication");
+
+		    vitalGrid.getChildren().addAll(vitalResult);
+		    concernBox.getChildren().addAll(concernLabel);
+		    physicalResultBox.getChildren().addAll(physicalResultLabel);
+		    prescribeBox.getChildren().addAll(prescribeLabel);
+
+		    VBox visitInfoBox = new VBox();
+		    visitInfoBox.setAlignment(Pos.CENTER); 
+		    visitInfoBox.setSpacing(40); 
+		    visitInfoBox.getChildren().addAll(visitTopLabel,vitalGrid, concernBox, physicalResultBox, prescribeBox);
+
+		    vitalGrid.setAlignment(Pos.CENTER);
+		    concernBox.setAlignment(Pos.CENTER);
+		    physicalResultBox.setAlignment(Pos.CENTER);
+		    prescribeBox.setAlignment(Pos.CENTER);
+
+		    topBox.getChildren().addAll(medFXLabel, patientButton, messageButton, signOutButton);
+		    topBox.setPadding(new Insets(10));
+
+		    visitPane.setTop(topBox);
+		    visitPane.setCenter(visitInfoBox);
+		    Scene visitScene = new Scene(visitPane, 800, 500);
+		    Stage visitStage = new Stage();
+		    visitStage.setScene(visitScene);
+		    visitStage.show();
+	}
+	
 	
 }
