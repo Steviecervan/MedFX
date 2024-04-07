@@ -39,7 +39,7 @@ public class UserMainPage extends VBox
 	    logoView.setPreserveRatio(true); 
 	    
 		
-		Label instructions = new Label("Enter your username as: LastName-FirstName-MM/DD/YYYY");
+		Label instructions = new Label("Enter your username as: LastName-FirstName-MM-DD-YYYY");
 		username = new TextField("Username");
 		username.setMaxWidth(300); // prevents textfield from spanning whole window
 		username.getStyleClass().add("GrayTextField");
