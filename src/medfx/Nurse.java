@@ -1,8 +1,6 @@
 package medfx;
 
 public class Nurse extends User{
-	
-	
 	/**
 	 * Generated serialVersionUID
 	 */
