@@ -5,7 +5,13 @@
 
 package medfx;
 
-public class PersonalInformation {
+import java.io.Serializable;
+
+public class PersonalInformation implements Serializable {
+	/**
+	 * Generated serialVersionUID
+	 */
+	private static final long serialVersionUID = -8294629946474104641L;
 	private String firstName;
 	private String lastName;
 	private String address;

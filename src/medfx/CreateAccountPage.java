@@ -1,12 +1,16 @@
 package medfx;
 
+import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectOutputStream;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -23,6 +27,8 @@ public class CreateAccountPage extends VBox
 	private TextField day;
 	private TextField year;
 	private Button createAcntBtn;
+	
+	private VBox errorPane;
 	
 	public CreateAccountPage() throws IOException
 	{
@@ -81,11 +87,14 @@ public class CreateAccountPage extends VBox
 	    userInputPane.setSpacing(10);
 	    userInputPane.getChildren().addAll(firstName, lastName, birthDatePane);
 	    
+	    //create errorPane
+	    errorPane = new VBox();
+	    errorPane.setAlignment(Pos.CENTER);
 	    
 	    
 	    this.setAlignment(Pos.CENTER);
 	    this.setSpacing(30);
-	    this.getChildren().addAll(logoView, userInputPane, createAcntBtn);
+	    this.getChildren().addAll(logoView, userInputPane, createAcntBtn, errorPane);
 	}
 	
 	private class ButtonHandler implements EventHandler<ActionEvent>
@@ -94,8 +103,75 @@ public class CreateAccountPage extends VBox
 		{
 			if (createAcntBtn.isArmed())
 			{
-				// TODO: implement create account button functionality
+				errorPane.getChildren().clear(); // clears error pane
+				// extracts information in order to create account
+				String patientFirstName = firstName.getText();
+				String patientLastName = lastName.getText();
+				String birthMonth = month.getText();
+				String birthDay = day.getText();
+				String birthYear = year.getText();
+				
+				// make sure that the birth date has the correct number of characters
+				if (!isNumber(birthMonth) || !isNumber(birthDay) || !isNumber(birthYear) ||
+						birthMonth.length() != 2 || birthDay.length() != 2 || birthYear.length() != 4 ||
+						patientFirstName.equals("First Name") || patientLastName.equals("Last Name"))
+				{
+					Label error = new Label("Make sure all fields are completed and filled out correctly");
+					error.setStyle("-fx-text-fill: red");
+					errorPane.getChildren().add(error); // displays error to user
+				}
+				else // create new patient
+				{
+					String birthDate = String.format("%s-%s-%s", birthMonth, birthDay, birthYear);
+					PersonalInformation patientInfo = new PersonalInformation(patientFirstName, patientLastName, "", "", birthDate, ""); // no contact email, address, or phone number has been inputted
+					
+					// create patient object
+					Patient newPatient = new Patient(patientInfo, "Patient");
+					String patientUsername = newPatient.getUsername();
+					
+					// write the patient object to database
+					try
+					{
+						File directory = new File("PatientDatabase"); // this will be the name of the folder we want the patient object to be written to
+						FileOutputStream bytesToDisk = new FileOutputStream(new File(directory, patientUsername + ".object")); // the constructor for FileOutputStream takes in a File object we are writing to: new File(directory, nameOfNewFile)
+						ObjectOutputStream objectToBytes = new ObjectOutputStream(bytesToDisk); // takes in the FileOutputStream object
+						
+						// write the object to the file
+						objectToBytes.writeObject(newPatient);
+						// close streams
+						bytesToDisk.close();
+						objectToBytes.close();
+						
+						//Send user back to user main page
+						SceneController.switchToUserMainPage(e);
+					}
+					catch (IOException ex)
+					{
+						Label error = new Label(ex.toString());
+						error.setStyle("-fx-text-fill: red");
+						errorPane.getChildren().add(error); // displays error to user
+					}
+					
+				}
 			}
+		}
+		
+		/**
+		 * Checks if the given string is a number by checking the ASCII values
+		 * @param text
+		 * @return boolean with true if is a number and false otherwise
+		 */
+		public boolean isNumber(String text)
+		{
+			for (int i = 0; i < text.length(); i++)
+			{
+				if (text.charAt(i) < 48 || text.charAt(i) > 57)
+				{
+					return false;
+				}
+			}
+			
+			return true; // if for loop terminates then, the string does represent a number
 		}
 	}
 }
