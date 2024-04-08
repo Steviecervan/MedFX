@@ -55,7 +55,6 @@ public class DoctorViewPage extends VBox
 		 titleBox.getChildren().addAll(medFXLabel, patientButton,messageButton,signOutButton);
 		 titleBox.setPadding(new Insets(10));
 		 
-		 
 		 Label patientsLabel= new Label("Patients");
 		 Font largeBoldFont = Font.font("Arial", FontWeight.BOLD, 20); 
 	     patientsLabel.setFont(largeBoldFont);
@@ -237,6 +236,12 @@ public class DoctorViewPage extends VBox
 		    TextArea medNameArea= new TextArea();
 		    TextArea medStrengthArea= new TextArea();
 		    TextArea medDosageArea= new TextArea();
+		    medNameArea.setMaxWidth(200);
+		    medNameArea.setMaxHeight(2);
+		    medStrengthArea.setMaxWidth(200);
+		    medStrengthArea.setMaxHeight(2);
+		    medDosageArea.setMaxWidth(200);
+		    medDosageArea.setMaxHeight(2);
 
 		    medNameBox.getChildren().addAll(medName, medNameArea);
 		    medStrengthBox.getChildren().addAll(medStrength, medStrengthArea);
@@ -247,10 +252,10 @@ public class DoctorViewPage extends VBox
 		    TextArea concernArea= new TextArea();
 		    TextArea physicalResultArea= new TextArea();
 		    
-		    concernArea.setPrefWidth(20);
-		    concernArea.setPrefHeight(5);
-		    physicalResultArea.setPrefWidth(20);
-		    physicalResultArea.setPrefHeight(5);
+		    concernArea.setMaxWidth(200);
+		    concernArea.setMaxHeight(2);
+		    physicalResultArea.setMaxWidth(200);
+		    physicalResultArea.setMaxHeight(2);
 		    
 		    vitalResult.setStyle("-fx-underline: true;");
 		    concernLabel.setStyle("-fx-underline: true;");
@@ -284,7 +289,11 @@ public class DoctorViewPage extends VBox
 		    concernBox.getChildren().addAll(concernLabel, concernArea);
 		    physicalResultBox.getChildren().addAll(physicalResultLabel,physicalResultArea);
 		    prescribeBox.getChildren().addAll(prescribeLabel, medNameBox, medStrengthBox, medDosageBox, orderButton);
-
+		   
+		    medNameBox.setAlignment(Pos.CENTER);
+		    medStrengthBox.setAlignment(Pos.CENTER);
+		    medDosageBox.setAlignment(Pos.CENTER);
+		    
 		    VBox visitInfoBox = new VBox();
 		    visitInfoBox.setAlignment(Pos.CENTER); 
 		    visitInfoBox.setSpacing(20); 
