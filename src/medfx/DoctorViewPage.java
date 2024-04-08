@@ -4,6 +4,7 @@ import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
@@ -35,15 +36,15 @@ import javafx.scene.control.TextInputDialog;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 
+
 public class DoctorViewPage extends VBox
 {
 	private Scene visitScene;
-	
+	private Button signOutButton;	
 	private Doctor doctor;
 	
-	public DoctorViewPage(Doctor doctor) throws IOException {	
+	public DoctorViewPage(Doctor doctor) throws IOException {
 		
-		// doctor object
 		this.doctor = doctor;
 	
 	Label medFXLabel= new Label("MedFX");
@@ -52,12 +53,16 @@ public class DoctorViewPage extends VBox
 	    
 	    Button patientButton = new Button("Patients");
 	    Button messageButton = new Button("Messages");
-	    Button signOutButton = new Button("Sign Out");
+	    signOutButton = new Button("Sign Out");
+	    signOutButton.setOnAction(new ButtonHandler());
+	    
+	    Region spacer = new Region();
+        HBox.setHgrow(spacer, Priority.ALWAYS);
 
 		 HBox titleBox= new HBox(10);
-	     titleBox.setStyle("-fx-background-color: #ADD8E6;");
-		 
-		 titleBox.getChildren().addAll(medFXLabel, patientButton,messageButton,signOutButton);
+	     titleBox.setStyle("-fx-background-color: #39C0EA;");
+
+		 titleBox.getChildren().addAll(medFXLabel, patientButton,messageButton,spacer, signOutButton);
 		 titleBox.setPadding(new Insets(10));
 		 
 		 Label patientsLabel= new Label("Patients");
@@ -67,36 +72,62 @@ public class DoctorViewPage extends VBox
 		 patientSearch.setPromptText("Search Patient");
 		 Button searchButton= new Button("Search");
 		 Button newPatientButton= new Button("New Patient");
-		 
+	 
 		 HBox searchBarBox= new HBox(10);
-		 searchBarBox.setPadding(new Insets(10)); 
+		 //searchBarBox.setPadding(new Insets(10)); 
 		 searchBarBox.getChildren().addAll(patientsLabel, patientSearch, searchButton, newPatientButton);
-		 searchBarBox.setPadding(new Insets(10));
+		 searchBarBox.setPadding(new Insets(10,10,10,10));
 		
 		Label patientNameLabel= new Label("Patient Name");
-		
-		VBox patientBox= new VBox();
-		patientBox.getChildren().addAll(patientNameLabel);
-		patientBox.setPadding(new Insets(10));
+        patientNameLabel.setFont(Font.font("Arial", FontWeight.BOLD, 16)); 
+        
+        HBox individualPatientBox= new HBox(5);
+	    Label nameLabel= new Label("last-first-DOB");
+	    Button viewButton= new Button("View");
+	    Button msgsButton= new Button("Message");
+	    
+	    individualPatientBox.setPadding(new Insets(10,10,10,10));
+
+	    individualPatientBox.getChildren().addAll(nameLabel,spacer, viewButton,msgsButton);
+	    
+	    VBox individualPatientHolderBox= new VBox();
+	    individualPatientHolderBox.getChildren().addAll(individualPatientBox);
+	    individualPatientHolderBox.setPadding(new Insets(10,10,10,10));
 
 		
+		VBox patientBox= new VBox();
+		patientBox.getChildren().addAll(patientNameLabel, individualPatientHolderBox);
+		patientBox.setPadding(new Insets(10,10,250,10));
+		patientNameLabel.setAlignment(Pos.TOP_LEFT);
+		//patientBox.setAlignment(Pos.CENTER);
+		patientBox.setStyle("-fx-background-color: #d3d3d3;");
+		individualPatientBox.setStyle("-fx-background-color: #F4F4F4;");
+	
+		VBox holderBox= new VBox();
+		holderBox.setPadding(new Insets(20,50,50,50));
+		holderBox.getChildren().addAll(searchBarBox, patientBox);
+	
 		VBox wholeSearchBox= new VBox();
-		wholeSearchBox.getChildren().addAll(searchBarBox, patientBox);
-	     
+		wholeSearchBox.getChildren().addAll(holderBox);
+     
 	     BorderPane mainPane= new BorderPane();
 	     mainPane.setCenter(wholeSearchBox);
 	     mainPane.setTop(titleBox);
 	     this.getChildren().add(mainPane); 
-	    newPatientButton.setOnAction(event -> newPatientScreen());	     	     	     	 
+	    newPatientButton.setOnAction(event -> newPatientScreen());	
+	    viewButton.setOnAction(event -> visitScreen());	     
+
+	    
 }
 	private void newPatientScreen() {
 		HBox topBox= new HBox(500);
     	Label medFXLabel= new Label("MedFX");
     	 medFXLabel.setFont(Font.font("Arial", FontWeight.BOLD, 24)); 
     	 medFXLabel.setTextFill(javafx.scene.paint.Color.WHITE);
-        Button signOutButton = new Button("Sign Out");
+         signOutButton = new Button("Sign Out");
+        
         topBox.getChildren().addAll(medFXLabel, signOutButton);
-        topBox.setStyle("-fx-background-color: #ADD8E6;");
+        topBox.setStyle("-fx-background-color: #39C0EA;");
         topBox.setPadding(new Insets(10));
     	
         BorderPane intakePane = new BorderPane();
@@ -164,19 +195,19 @@ public class DoctorViewPage extends VBox
         
         GridPane medHistoryGrid= new GridPane();
         Label medHistoryLabel= new Label("Medical History");
-        medHistoryGrid.getChildren().add(medHistoryLabel);
+        medHistoryGrid.getChildren().addAll(medHistoryLabel);
 
         GridPane allergyGrid= new GridPane();
         Label allergyLabel= new Label("Allergies");
-        allergyGrid.getChildren().add(allergyLabel);
+        allergyGrid.getChildren().addAll(allergyLabel);
 
         GridPane immunizationGrid= new GridPane();
         Label immunizationLabel= new Label("Immunization History");
-        immunizationGrid.getChildren().add(immunizationLabel);
+        immunizationGrid.getChildren().addAll(immunizationLabel);
 
         GridPane medicationGrid= new GridPane();
         Label medicationLabel= new Label("Medication History");
-        medicationGrid.getChildren().add(medicationLabel);
+        medicationGrid.getChildren().addAll(medicationLabel);
         
         
         GridPane patientHistoryGrid= new GridPane();
@@ -208,13 +239,14 @@ public class DoctorViewPage extends VBox
 		   BorderPane visitPane = new BorderPane();
 		    HBox topBox = new HBox(10);
 		    topBox.setPadding(new Insets(10));
-		    topBox.setStyle("-fx-background-color: #ADD8E6;");
+		    topBox.setStyle("-fx-background-color: #39C0EA;");
 		    Label medFXLabel = new Label("MedFX");
 		    medFXLabel.setFont(Font.font("Arial", FontWeight.BOLD, 24)); 
 		    medFXLabel.setTextFill(javafx.scene.paint.Color.WHITE);
 		    Button patientButton = new Button("Patients");
 		    Button messageButton = new Button("Messages");
-		    Button signOutButton = new Button("Sign Out");
+		    signOutButton = new Button("Sign Out");
+		    
 
 		    Label visitTopLabel = new Label("Visit MM-DD-YYYY");
 		    Font largeBoldFont = Font.font("Arial", FontWeight.BOLD, 20); 
@@ -318,6 +350,27 @@ public class DoctorViewPage extends VBox
 		    Stage visitStage = new Stage();
 		    visitStage.setScene(visitScene);
 		    visitStage.show();
+	}
+	
+	private class ButtonHandler implements EventHandler<ActionEvent>
+	{
+		public void handle(ActionEvent e)
+		{
+			if (signOutButton.isArmed())
+			{
+				try
+				{
+					
+					SceneController.switchToUserMainPage(e); 
+				}
+				catch (Exception ex)
+				{
+					
+				}
+				
+				
+			}
+		}
 	}
 	
 	

@@ -2,6 +2,8 @@ package medfx;
 
 import java.io.IOException;
 
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -12,34 +14,41 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
+//import medfx.NurseViewPage.ButtonHandler;
 
 public class NurseViewPage extends VBox{
 private Scene visitScene;
 
 private Nurse nurse;
+private Button signOutButton;
 	
 	public NurseViewPage(Nurse nurse) throws IOException {	
 		
 		this.nurse = nurse;
 	
-	Label medFXLabel= new Label("MedFX");
+		Label medFXLabel= new Label("MedFX");
 	    medFXLabel.setFont(Font.font("Arial", FontWeight.BOLD, 24)); 
 	    medFXLabel.setTextFill(javafx.scene.paint.Color.WHITE);
 	    
 	    Button patientButton = new Button("Patients");
 	    Button messageButton = new Button("Messages");
-	    Button signOutButton = new Button("Sign Out");
+	    signOutButton = new Button("Sign Out");
+	    signOutButton.setOnAction(new ButtonHandler());
+	    
+	    Region Bigspacer = new Region();
+        HBox.setHgrow(Bigspacer, Priority.ALWAYS);
 
 		 HBox titleBox= new HBox(10);
-	     titleBox.setStyle("-fx-background-color: #ADD8E6;");
-		 
-		 titleBox.getChildren().addAll(medFXLabel, patientButton,messageButton,signOutButton);
+	     titleBox.setStyle("-fx-background-color: #39C0EA;");
+
+		 titleBox.getChildren().addAll(medFXLabel, patientButton,messageButton, Bigspacer, signOutButton);
 		 titleBox.setPadding(new Insets(10));
-		 
 		 
 		 Label patientsLabel= new Label("Patients");
 		 Font largeBoldFont = Font.font("Arial", FontWeight.BOLD, 20); 
@@ -48,28 +57,50 @@ private Nurse nurse;
 		 patientSearch.setPromptText("Search Patient");
 		 Button searchButton= new Button("Search");
 		 Button newPatientButton= new Button("New Patient");
-		 Button checkInButton= new Button("Check In");
+		
 		 
 		 HBox searchBarBox= new HBox(10);
-		 searchBarBox.setPadding(new Insets(10)); 
+		 //searchBarBox.setPadding(new Insets(10)); 
 		 searchBarBox.getChildren().addAll(patientsLabel, patientSearch, searchButton, newPatientButton);
-		 searchBarBox.setPadding(new Insets(10));
+		 searchBarBox.setPadding(new Insets(10,10,10,10));
 		
 		Label patientNameLabel= new Label("Patient Name");
+        patientNameLabel.setFont(Font.font("Arial", FontWeight.BOLD, 16)); 
+        
+        HBox individualPatientBox= new HBox(5);
+	    Label nameLabel= new Label("last-first-DOB");
+	    Button checkInButton= new Button("Check In");
+	    Button msgsButton= new Button("Message");
+	    
+	    individualPatientBox.setPadding(new Insets(10,10,10,10));
+
+	    individualPatientBox.getChildren().addAll(nameLabel,Bigspacer, checkInButton, msgsButton);
+	    
+	    VBox individualPatientHolderBox= new VBox();
+	    individualPatientHolderBox.getChildren().addAll(individualPatientBox);
+	    individualPatientHolderBox.setPadding(new Insets(10,10,10,10));
+
 		
 		VBox patientBox= new VBox();
-		patientBox.getChildren().addAll(patientNameLabel, checkInButton);
-		patientBox.setPadding(new Insets(10));
+		patientBox.getChildren().addAll(patientNameLabel, individualPatientHolderBox);
+		patientBox.setPadding(new Insets(10,10,250,10));
+		patientNameLabel.setAlignment(Pos.TOP_LEFT);
+		//patientBox.setAlignment(Pos.CENTER);
+		patientBox.setStyle("-fx-background-color: #d3d3d3;");
+		individualPatientBox.setStyle("-fx-background-color: #F4F4F4;");
+
 		
-		 		
+		VBox holderBox= new VBox();
+		holderBox.setPadding(new Insets(20,50,50,50));
+		holderBox.getChildren().addAll(searchBarBox, patientBox);
+	
 		VBox wholeSearchBox= new VBox();
-		wholeSearchBox.getChildren().addAll(searchBarBox, patientBox);
-	     
+		wholeSearchBox.getChildren().addAll(holderBox);
+     
 	     BorderPane mainPane= new BorderPane();
 	     mainPane.setCenter(wholeSearchBox);
 	     mainPane.setTop(titleBox);
 	     this.getChildren().add(mainPane); 
-	     
 	    newPatientButton.setOnAction(event -> newPatientScreen());	     
 	    checkInButton.setOnAction(event -> checkInScreen());	     
 
@@ -81,7 +112,7 @@ private Nurse nurse;
     	 medFXLabel.setTextFill(javafx.scene.paint.Color.WHITE);
         Button signOutButton = new Button("Sign Out");
         topBox.getChildren().addAll(medFXLabel, signOutButton);
-        topBox.setStyle("-fx-background-color: #ADD8E6;");
+        topBox.setStyle("-fx-background-color: #39C0EA;");
         topBox.setPadding(new Insets(10));
     	
         BorderPane intakePane = new BorderPane();
@@ -207,15 +238,15 @@ private Nurse nurse;
 	    Button signOutButton = new Button("Sign Out");
 
 		 HBox titleBox= new HBox(10);
-	     titleBox.setStyle("-fx-background-color: #ADD8E6;");
+	     titleBox.setStyle("-fx-background-color: #39C0EA;");
 		 
 		 titleBox.getChildren().addAll(medFXLabel, patientButton,messageButton,signOutButton);
 		 titleBox.setPadding(new Insets(10));
 		
-		Label visitNameLabel = new Label("Last-First-DOB");
+		Label visitNameLabel = new Label("Last-First-DOB ");
 		visitNameLabel.setStyle("-fx-font-family: roboto; -fx-font-weight: bold; -fx-font-size: 20; -fx-padding: 0, 0, 0, 20");
 		
-		Label dateLabel = new Label("MM/DD/YYYY");
+		Label dateLabel = new Label(" (MM-DD-YYYY) ");
 		dateLabel.setStyle("-fx-font-family: roboto; -fx-font-weight: bold; -fx-font-size: 20; -fx-padding: 0, 0, 0, 20");
 		
 	
@@ -341,7 +372,7 @@ private Nurse nurse;
     	 medFXLabel.setTextFill(javafx.scene.paint.Color.WHITE);
         Button signOutButton = new Button("Sign Out");
         topBox.getChildren().addAll(medFXLabel, signOutButton);
-        topBox.setStyle("-fx-background-color: #ADD8E6;");
+        topBox.setStyle("-fx-background-color: #39C0EA;");
         topBox.setPadding(new Insets(10)); 
 		
 		Label visitDateLabel = new Label("Visit MM-DD-YYYY");
@@ -411,4 +442,25 @@ private Nurse nurse;
 		summaryWindow.show();
 	}
 
+	private class ButtonHandler implements EventHandler<ActionEvent>
+	{
+		public void handle(ActionEvent e)
+		{
+			if (signOutButton.isArmed())
+			{
+				try
+				{
+					
+					SceneController.switchToUserMainPage(e); 
+				}
+				catch (Exception ex)
+				{
+					
+				}
+				
+				
+			}
+		}
+	}
+	
 }
