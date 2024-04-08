@@ -1,9 +1,6 @@
 package medfx;
 
-import java.util.Date;
-
 public class CheckIn {
-	private Date date;
 	private double height;
 	private double weight;
 	private String bloodPressure;	//	"120/80" The larger number is the pressure in the arteries as the heart pumps out blood during each beat. The lower number is the pressure as the heart relaxes before the next beat.
