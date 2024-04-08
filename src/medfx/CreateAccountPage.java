@@ -132,15 +132,8 @@ public class CreateAccountPage extends VBox
 					// write the patient object to database
 					try
 					{
-						File directory = new File("PatientDatabase"); // this will be the name of the folder we want the patient object to be written to
-						FileOutputStream bytesToDisk = new FileOutputStream(new File(directory, patientUsername + ".object")); // the constructor for FileOutputStream takes in a File object we are writing to: new File(directory, nameOfNewFile)
-						ObjectOutputStream objectToBytes = new ObjectOutputStream(bytesToDisk); // takes in the FileOutputStream object
-						
-						// write the object to the file
-						objectToBytes.writeObject(newPatient);
-						// close streams
-						bytesToDisk.close();
-						objectToBytes.close();
+						// writes the new patient to the database
+						Patient.writePatientToDatabase(newPatient);
 						
 						//Send user back to user main page
 						SceneController.switchToUserMainPage(e);

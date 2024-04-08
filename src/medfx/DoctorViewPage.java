@@ -39,7 +39,12 @@ public class DoctorViewPage extends VBox
 {
 	private Scene visitScene;
 	
-	public DoctorViewPage() throws IOException {	
+	private Doctor doctor;
+	
+	public DoctorViewPage(Doctor doctor) throws IOException {	
+		
+		// doctor object
+		this.doctor = doctor;
 	
 	Label medFXLabel= new Label("MedFX");
 	    medFXLabel.setFont(Font.font("Arial", FontWeight.BOLD, 24)); 

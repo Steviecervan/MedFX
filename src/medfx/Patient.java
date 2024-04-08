@@ -1,5 +1,11 @@
 package medfx;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -53,5 +59,36 @@ public class Patient extends User {
 		return this.visitInformation;
 	}
 
-	// Getters and setters for personalInfo if needed...
+	// writing and reading patient objects
+	
+	public static void writePatientToDatabase(Patient patient) throws IOException
+	{
+		File patientDatabase = new File("PatientDatabase");
+
+		FileOutputStream bytesToDisk = new FileOutputStream(new File(patientDatabase, patient.getUsername() + ".object"));	
+		ObjectOutputStream objectToBytes = new ObjectOutputStream(bytesToDisk);
+		
+		objectToBytes.writeObject(patient);
+		
+		// close streams
+		bytesToDisk.close();
+		objectToBytes.close();
+	}
+	
+	public static Patient readPatientFromDatabase(String patientId) throws Exception // used generic exception account for both ClassNotFoundException and FileNotFoundException
+	{
+		File patientFile = new File(new File("PatientDatabase"), patientId + ".object");
+		
+		FileInputStream fileIn = new FileInputStream(patientFile);
+		ObjectInputStream in = new ObjectInputStream(fileIn);
+		
+		//Patient object
+		Patient patient = (Patient) in.readObject();
+		
+		//close stream
+		fileIn.close();
+		in.close();
+		
+		return patient;
+	}
 }
