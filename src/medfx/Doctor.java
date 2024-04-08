@@ -5,7 +5,7 @@ public class Doctor extends User{
 	 * Generated serialVersionUID
 	 */
 	private static final long serialVersionUID = -140347943225749714L;
-	private int docId;
+	private String docId;	//	D.....
 	
 	public Doctor(PersonalInformation personalInfo) {
 		//	Calls constructor for User
@@ -13,3 +13,5 @@ public class Doctor extends User{
 	}
 	
 }
+
+// WE GOT THIS! 🤓🤓🤓🤓🤓🤓🤓🤓🤓🤓🤓
