@@ -243,14 +243,13 @@ public class DoctorViewPage extends VBox
 		    medDosageBox.getChildren().addAll(medDosage, medDosageArea);
 
 		    Button orderButton=new Button("Order");
-
 		    
 		    TextArea concernArea= new TextArea();
 		    TextArea physicalResultArea= new TextArea();
 		    
-		    concernArea.setPrefWidth(100);
+		    concernArea.setPrefWidth(20);
 		    concernArea.setPrefHeight(5);
-		    physicalResultArea.setPrefWidth(100);
+		    physicalResultArea.setPrefWidth(20);
 		    physicalResultArea.setPrefHeight(5);
 		    
 		    vitalResult.setStyle("-fx-underline: true;");
