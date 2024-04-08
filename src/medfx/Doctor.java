@@ -12,6 +12,9 @@ public class Doctor extends User{
 		super(personalInfo, "Doctor");
 	}
 	
+	public String getDoctorId() {
+		return this.docId;
+	}
 }
 
 // WE GOT THIS! 🤓🤓🤓🤓🤓🤓🤓🤓🤓🤓🤓

@@ -12,4 +12,7 @@ public class Nurse extends User{
 		super(personalInfo, "Nurse");
 	}
 
+	public String getNurseId() {
+		return this.nurseId;
+	}
 }
