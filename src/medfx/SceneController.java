@@ -51,9 +51,27 @@ public class SceneController
 	 * @param e ActionEvent which triggers screen switch
 	 * @throws IOException
 	 */
-	public static void switchToPatientView(ActionEvent e) throws IOException // needs to throw IOException because of the image in create account page, if you don't use the image might not be needed
+	public static void switchToPatientView(ActionEvent e, Patient p) 
 	{
-		Parent root = new PatientViewPage(); // Parent is the parent class for any screen in JavaFX
+		Parent root = new PatientViewPage(p); // Parent is the parent class for any screen in JavaFX
+		Stage stage = (Stage) ((Node)e.getSource()).getScene().getWindow(); //gets the window where the button is being pressed using the ActionEvent (like a button press or something)
+		Scene scene = new Scene(root, LENGTH, WIDTH); //creates a new scene
+		stage.setScene(scene); //changes the stage 
+		stage.show(); //shows new stage
+	}
+	
+	public static void switchToDoctorView(ActionEvent e, Doctor doctor) throws IOException // needs to throw IOException because of the image in create account page, if you don't use the image might not be needed
+	{
+		Parent root = new DoctorViewPage(doctor); // Parent is the parent class for any screen in JavaFX
+		Stage stage = (Stage) ((Node)e.getSource()).getScene().getWindow(); //gets the window where the button is being pressed using the ActionEvent (like a button press or something)
+		Scene scene = new Scene(root, LENGTH, WIDTH); //creates a new scene
+		stage.setScene(scene); //changes the stage 
+		stage.show(); //shows new stage
+	}
+	
+	public static void switchToNurseView(ActionEvent e, Nurse nurse) throws IOException // needs to throw IOException because of the image in create account page, if you don't use the image might not be needed
+	{
+		Parent root = new NurseViewPage(nurse); // Parent is the parent class for any screen in JavaFX
 		Stage stage = (Stage) ((Node)e.getSource()).getScene().getWindow(); //gets the window where the button is being pressed using the ActionEvent (like a button press or something)
 		Scene scene = new Scene(root, LENGTH, WIDTH); //creates a new scene
 		stage.setScene(scene); //changes the stage 

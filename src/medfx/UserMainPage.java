@@ -10,8 +10,11 @@ import javafx.scene.layout.VBox;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
+import java.io.File;
 import java.io.FileInputStream;
-import java.io.IOException; 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.ObjectInputStream; 
 
 public class UserMainPage extends VBox
 {	
@@ -21,6 +24,8 @@ public class UserMainPage extends VBox
 	
 	// pane used for username input
 	private VBox inputUsernamePane;
+	
+	private VBox errorPane;
 	
 	public UserMainPage() throws IOException
 	{
@@ -59,9 +64,13 @@ public class UserMainPage extends VBox
 		submitBtn.setOnAction(new ButtonHandler());
 		createAcntBtn.setOnAction(new ButtonHandler());
 		
+		// set errorPane
+		errorPane = new VBox();
+		errorPane.setAlignment(Pos.CENTER);
+		
 		this.setAlignment(Pos.CENTER); // this will also center the image
 		this.setSpacing(50);
-		this.getChildren().addAll(logoView, inputUsernamePane, createAcntBtn);
+		this.getChildren().addAll(logoView, inputUsernamePane, createAcntBtn, errorPane);
 	}
 	
 	private class ButtonHandler implements EventHandler<ActionEvent>
@@ -71,7 +80,69 @@ public class UserMainPage extends VBox
 			// here is where the scene controller will change screens depending on which button is pressed
 			if (submitBtn.isArmed())
 			{
-				// TODO: implement what submit button will do
+				errorPane.getChildren().clear(); // clears errorPane
+				String inputUsername = username.getText();
+				// makes sure a user name was input
+				if (inputUsername.equals("Username"))
+				{
+					Label error = new Label("Make sure you input your username! If you don't have one press the Create Account button.");
+					error.setStyle("-fx-text-fill: red");
+					errorPane.getChildren().add(error); // displays error to user
+				}
+				else if (inputUsername.substring(0, 2).equals("D.")) // the user is a doctor
+				{
+					// try to read the doctor file
+					try
+					{
+						Doctor doctor = Doctor.readDoctorFromDatabase(inputUsername); // reads the doctor file object
+						
+						SceneController.switchToDoctorView(e, doctor); // doesn't throw an error so do not need try and catch
+					}
+					catch (Exception ex)
+					{
+						Label error = new Label("No doctor with that username exists, make sure you input it correctly.");
+						error.setStyle("-fx-text-fill: red");
+						errorPane.getChildren().add(error); // displays error to user
+					}
+
+				}
+				else if (inputUsername.substring(0, 2).equals("N.")) // user is a nurse
+				{
+					// try to read the doctor file
+					try
+					{
+						Nurse nurse = Nurse.readNurseFromDatabase(inputUsername);// reads the doctor file object
+						
+						SceneController.switchToNurseView(e, nurse);
+					}
+					catch (Exception ex)
+					{
+						Label error = new Label("No nurse with that username exists, make sure you input it correctly.");
+						error.setStyle("-fx-text-fill: red");
+						errorPane.getChildren().add(error); // displays error to user
+					}
+				}
+				else // user is a patient
+				{
+
+					// try to read the patient file
+					try
+					{
+						Patient currentPatient = Patient.readPatientFromDatabase(inputUsername); // reads the patient file object
+						
+						SceneController.switchToPatientView(e, currentPatient); // doesn't throw an error so do not need try and catch
+					}
+					catch (Exception ex)
+					{
+						Label error = new Label("No patient with that username exists, make sure you input it correctly.");
+						error.setStyle("-fx-text-fill: red");
+						errorPane.getChildren().add(error); // displays error to user
+					}
+
+						
+					
+				}
+				
 			}
 			else if (createAcntBtn.isArmed())
 			{

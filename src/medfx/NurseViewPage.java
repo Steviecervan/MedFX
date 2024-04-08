@@ -19,8 +19,12 @@ import javafx.stage.Stage;
 
 public class NurseViewPage extends VBox{
 private Scene visitScene;
+
+private Nurse nurse;
 	
-	public NurseViewPage() throws IOException {	
+	public NurseViewPage(Nurse nurse) throws IOException {	
+		
+		this.nurse = nurse;
 	
 	Label medFXLabel= new Label("MedFX");
 	    medFXLabel.setFont(Font.font("Arial", FontWeight.BOLD, 24)); 

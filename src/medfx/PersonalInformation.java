@@ -16,7 +16,7 @@ public class PersonalInformation implements Serializable {
 	private String lastName;
 	private String address;
 	private String email;
-	private String birthDate;	//	MM/DD/YYYY
+	private String birthDate;	//	MM-DD-YYYY
 	private String phoneNumber;
 	
 	public PersonalInformation(String firstName, String lastName, String address, String email, String birthDate, String phoneNumber) {

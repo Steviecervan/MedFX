@@ -36,7 +36,13 @@ public class PatientViewPage extends VBox{
 	private Label pPharmacy; 
 	private VBox patientInfoContainer;
 	
-	public PatientViewPage(){			
+	private Patient patient;
+	
+	public PatientViewPage(Patient patient){
+		
+		// Patient object
+		this.patient = patient;
+		
 		//	General View -----------------------------------------------------------------------------------------
 		//	This remains the same throughout the use of this view
 		
