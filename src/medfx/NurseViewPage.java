@@ -191,17 +191,22 @@ private Scene visitScene;
 		summaryWindow.setHeight(500);
 		
 		//	Display Information
-		VBox summaryContainer = new VBox();
-		//summaryContainer.setPadding(new Insets(0, 0, 15, 15));
+		BorderPane summaryContainer = new BorderPane();
+		summaryContainer.setPrefSize(100, 100);
 		
-		HBox topBox= new HBox(500);
-    	Label medFXLabel= new Label("MedFX");
-    	 medFXLabel.setFont(Font.font("Arial", FontWeight.BOLD, 24)); 
-    	 medFXLabel.setTextFill(javafx.scene.paint.Color.WHITE);
-        Button signOutButton = new Button("Sign Out");
-        topBox.getChildren().addAll(medFXLabel, signOutButton);
-        topBox.setStyle("-fx-background-color: #ADD8E6;");
-        topBox.setPadding(new Insets(10)); 
+		Label medFXLabel= new Label("MedFX");
+	    medFXLabel.setFont(Font.font("Arial", FontWeight.BOLD, 24)); 
+	    medFXLabel.setTextFill(javafx.scene.paint.Color.WHITE);
+	    
+	    Button patientButton = new Button("Patients");
+	    Button messageButton = new Button("Messages");
+	    Button signOutButton = new Button("Sign Out");
+
+		 HBox titleBox= new HBox(10);
+	     titleBox.setStyle("-fx-background-color: #ADD8E6;");
+		 
+		 titleBox.getChildren().addAll(medFXLabel, patientButton,messageButton,signOutButton);
+		 titleBox.setPadding(new Insets(10));
 		
 		Label visitNameLabel = new Label("Last-First-DOB");
 		visitNameLabel.setStyle("-fx-font-family: roboto; -fx-font-weight: bold; -fx-font-size: 20; -fx-padding: 0, 0, 0, 20");
@@ -215,21 +220,38 @@ private Scene visitScene;
 		vitalResultsLabel.setStyle("-fx-font-family: roboto; -fx-font-weight: bold; -fx-font-size: 15; -fx-padding: 0, 5, 0, 5");
 						
 		Label over12Label = new Label("Is Patient Over 12?");
-		over12Label.setStyle("-fx-font-family: roboto; -fx-font-weight: bold; -fx-font-size: 15; -fx-padding: 0, 5, 0, 5");
+		TextArea over12Area= new TextArea();
 		
-		Label allergyLabel = new Label("Known Allergies");
-		allergyLabel.setStyle("-fx-font-family: roboto; -fx-font-weight: bold; -fx-font-size: 15; -fx-padding: 0, 5, 0, 5");
 		
-		Label concernLabel = new Label("Concerns/Reasons for Visit");
-		concernLabel.setStyle("-fx-font-family: roboto; -fx-font-weight: bold; -fx-font-size: 15; -fx-padding: 0, 5, 0, 5");
+		Label allergyLabel = new Label("Known Allergies: ");
+		TextArea allergyArea= new TextArea();
+
+		Label substancesLabel = new Label("History of Alcohol/Drug use: ");
+		TextArea substancesArea= new TextArea();
 		
-		HBox over12Box= new HBox();
-		over12Box.getChildren().addAll(over12Label);
+		Label concernLabel = new Label("Concerns/Reasons for Visit: ");
+		TextArea concernArea= new TextArea();
+		
+		over12Area.setPrefSize(10, 10); 
+		allergyArea.setPrefSize(1, 1); 
+		substancesArea.setPrefSize(300, 20); 
+		concernArea.setPrefSize(300, 20); 
+
+		
+		HBox substancesBox= new HBox();
+		substancesBox.setPadding(new Insets(10));
+		HBox concernBox= new HBox();
+		concernBox.setPadding(new Insets(10));
+
+		substancesBox.getChildren().addAll(substancesLabel,substancesArea);
+		concernBox.getChildren().addAll(concernLabel,concernArea);
+		
+
 		
 		//	Vital Results
 		Label weightLabel = new Label("Weight");
 		Label heightLabel = new Label("Height");
-		Label bodyTemperatureLabel = new Label("Body Temperature");
+		Label bodyTemperatureLabel = new Label("Temperature");
 		Label bloodPressureLabel = new Label("Blood Pressure");
 		//Label pWeight = new Label("");
 		//Label pHeight= new Label("");
@@ -241,10 +263,10 @@ private Scene visitScene;
 		TextArea patientHeightArea= new TextArea();
 		TextArea patientTempArea= new TextArea();
 
-		 patientWeightArea.setPrefSize(2, 2); 
-	        patientBPArea.setPrefSize(2, 2);
-	        patientHeightArea.setPrefSize(2, 2);
-	        patientTempArea.setPrefSize(2, 2);
+		 patientWeightArea.setPrefSize(100, 5); 
+	     patientBPArea.setPrefSize(100, 5);
+	     patientHeightArea.setPrefSize(100, 5);
+	     patientTempArea.setPrefSize(100, 5);
 
 		
 		
@@ -255,29 +277,41 @@ private Scene visitScene;
 		physicalResultsTextArea.setEditable(false);
 		
 		GridPane vitalsGridPane = new GridPane();
-		vitalsGridPane.setAlignment(Pos.CENTER_LEFT);
+		//vitalsGridPane.setAlignment(Pos.CENTER_LEFT);
 		
 		vitalsGridPane.setVgap(5);
-		vitalsGridPane.setHgap(5);
+		vitalsGridPane.setHgap(20);
 		
 		
 		vitalsGridPane.add(heightLabel, 0, 0);
 		vitalsGridPane.add(patientHeightArea, 1, 0);
 		vitalsGridPane.add(weightLabel, 0, 1);
 		vitalsGridPane.add(patientWeightArea, 1, 1);
+		vitalsGridPane.add(over12Label, 2, 1);
+		vitalsGridPane.add(over12Area, 3, 1);
+
+		
 		vitalsGridPane.add(bodyTemperatureLabel, 0, 2);
 		vitalsGridPane.add(patientTempArea, 1, 2);
+		vitalsGridPane.add(allergyLabel, 2, 2);
+		vitalsGridPane.add(allergyArea, 3, 2);
+
+		
 		vitalsGridPane.add(bloodPressureLabel, 0, 3);
 		vitalsGridPane.add(patientBPArea, 1, 3);
 		
-		HBox infoBox= new HBox(50);
+		
+		HBox infoBox= new HBox();
 		infoBox.getChildren().addAll(visitNameLabel,dateLabel);
 		
 		VBox visitSummaryBox= new VBox();
-		visitSummaryBox.getChildren().addAll(infoBox, vitalResultsLabel, vitalsGridPane);
-		visitSummaryBox.setPadding(new Insets(30));
+		visitSummaryBox.getChildren().addAll(infoBox, vitalResultsLabel, vitalsGridPane, substancesBox, concernBox);
+		visitSummaryBox.setPadding(new Insets(5, 50, 55, 55));
+
+	
+		summaryContainer.setTop(titleBox);
+		summaryContainer.setCenter(visitSummaryBox);
 		
-		summaryContainer.getChildren().addAll(topBox, visitSummaryBox);
 		
 		//	Add everything together
 		Scene scene = new Scene(summaryContainer);

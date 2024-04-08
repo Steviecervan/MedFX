@@ -212,7 +212,7 @@ public class DoctorViewPage extends VBox
 		    Button messageButton = new Button("Messages");
 		    Button signOutButton = new Button("Sign Out");
 
-		    Label visitTopLabel = new Label("Visit");
+		    Label visitTopLabel = new Label("Visit MM-DD-YYYY");
 		    Font largeBoldFont = Font.font("Arial", FontWeight.BOLD, 20); 
 		    visitTopLabel.setFont(largeBoldFont);
 
@@ -225,21 +225,70 @@ public class DoctorViewPage extends VBox
 		    Label concernLabel = new Label("Health Concerns");
 		    Label physicalResultLabel = new Label("Physical Results");
 		    Label prescribeLabel = new Label("Prescribe Medication");
+		    
+		   HBox medNameBox= new HBox();
+		   HBox medStrengthBox= new HBox();
+		   HBox medDosageBox= new HBox();
+		  
+		    Label medName=new Label("Medication Name:");
+		    Label medStrength=new Label("Strength:");
+		    Label medDosage=new Label("Dosage:");
+		    
+		    TextArea medNameArea= new TextArea();
+		    TextArea medStrengthArea= new TextArea();
+		    TextArea medDosageArea= new TextArea();
 
-		    // Create new label instances for each container
-		    Label vitalResultCopy = new Label("Vital Results");
-		    Label concernLabelCopy = new Label("Health Concerns");
-		    Label physicalResultLabelCopy = new Label("Physical Results");
-		    Label prescribeLabelCopy = new Label("Prescribe Medication");
+		    medNameBox.getChildren().addAll(medName, medNameArea);
+		    medStrengthBox.getChildren().addAll(medStrength, medStrengthArea);
+		    medDosageBox.getChildren().addAll(medDosage, medDosageArea);
 
-		    vitalGrid.getChildren().addAll(vitalResult);
-		    concernBox.getChildren().addAll(concernLabel);
-		    physicalResultBox.getChildren().addAll(physicalResultLabel);
-		    prescribeBox.getChildren().addAll(prescribeLabel);
+		    Button orderButton=new Button("Order");
+
+		    
+		    TextArea concernArea= new TextArea();
+		    TextArea physicalResultArea= new TextArea();
+		    
+		    concernArea.setPrefWidth(100);
+		    concernArea.setPrefHeight(5);
+		    physicalResultArea.setPrefWidth(100);
+		    physicalResultArea.setPrefHeight(5);
+		    
+		    vitalResult.setStyle("-fx-underline: true;");
+		    concernLabel.setStyle("-fx-underline: true;");
+		    physicalResultLabel.setStyle("-fx-underline: true;");
+		    prescribeLabel.setStyle("-fx-underline: true;");
+		    
+		    Label weightLabel= new Label("Weight: ");
+		    Label heightLabel= new Label("Height: ");
+		    Label tempLabel= new Label("Body Temperature: ");
+		    Label BPLabel= new Label("Blood Pressure: ");
+		    
+		    Label XWLabel= new Label("XXX");
+		    Label XHLabel= new Label("XXX");
+		    Label XTLabel= new Label("XXX");
+		    Label XBPLabel= new Label("XXX");
+		    
+		    vitalGrid.add(vitalResult, 0,0);
+		    vitalGrid.add(weightLabel, 0,1);
+		    vitalGrid.add(XWLabel, 1,1);
+		    vitalGrid.add(heightLabel, 2,1);
+		    vitalGrid.add(XHLabel, 3,1);
+		    vitalGrid.add(tempLabel, 4,1);
+		    vitalGrid.add(XTLabel, 5,1);
+		    vitalGrid.add(BPLabel, 0,2);
+		    vitalGrid.add(XBPLabel, 1,2);
+		    
+		    vitalGrid.setHgap(20);
+		    vitalGrid.setVgap(6);
+		    
+		    
+		    concernBox.getChildren().addAll(concernLabel, concernArea);
+		    physicalResultBox.getChildren().addAll(physicalResultLabel,physicalResultArea);
+		    prescribeBox.getChildren().addAll(prescribeLabel, medNameBox, medStrengthBox, medDosageBox, orderButton);
 
 		    VBox visitInfoBox = new VBox();
 		    visitInfoBox.setAlignment(Pos.CENTER); 
-		    visitInfoBox.setSpacing(40); 
+		    visitInfoBox.setSpacing(20); 
 		    visitInfoBox.getChildren().addAll(visitTopLabel,vitalGrid, concernBox, physicalResultBox, prescribeBox);
 
 		    vitalGrid.setAlignment(Pos.CENTER);
