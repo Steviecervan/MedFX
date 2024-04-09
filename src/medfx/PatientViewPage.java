@@ -40,6 +40,11 @@ public class PatientViewPage extends VBox{
 	private TextArea textInputArea;
 	private VBox messageViewContainer;
 	
+	private Button addressButton;
+	private Button phoneNumberButton;
+	private Button emailButton;
+	private Button pharmacyButton;
+	
 	public PatientViewPage(Patient patient){
 		//set default css pane setup
 		this.getStylesheets().add(getClass().getResource("application.css").toString()); // fetches the style sheet
@@ -164,25 +169,29 @@ public class PatientViewPage extends VBox{
 		pAddress.setText(patient.getPersonalInfo().getAddress());
 		pPhoneNumber.setText(patient.getPersonalInfo().getPhoneNumber());
 		pEmail.setText(patient.getPersonalInfo().getEmail());
-		pInsurance.setText(patient.getPharmacy());
+		pInsurance.setText(patient.getInsurance());
 		pPharmacy.setText(patient.getPharmacy());
 		
 		//	Buttons to change data
-		Button addressButton = new Button("Change");
+		addressButton = new Button("Change");
 		addressButton.getStyleClass().add("WhiteButton");
 		addressButton.setStyle("-fx-font-weight: normal; -fx-font-size: 12; -fx-background-color: transparent");
+		addressButton.setOnAction(new ButtonHandler());
 		
-		Button phoneNumberButton = new Button("Change");
+		phoneNumberButton = new Button("Change");
 		phoneNumberButton.getStyleClass().add("WhiteButton");
 		phoneNumberButton.setStyle("-fx-font-weight: normal; -fx-font-size: 12; -fx-background-color: transparent");
+		phoneNumberButton.setOnAction(new ButtonHandler());
 		
-		Button emailButton = new Button("Change");
+		emailButton = new Button("Change");
 		emailButton.getStyleClass().add("WhiteButton");
 		emailButton.setStyle("-fx-font-weight: normal; -fx-font-size: 12; -fx-background-color: transparent");
+		emailButton.setOnAction(new ButtonHandler());
 		
-		Button pharmacyButton = new Button("Change");
+		pharmacyButton = new Button("Change");
 		pharmacyButton.getStyleClass().add("WhiteButton");
 		pharmacyButton.setStyle("-fx-font-weight: normal; -fx-font-size: 12; -fx-background-color: transparent");
+		pharmacyButton.setOnAction(new ButtonHandler());
 		
 		//	Information grid pane
 		GridPane infoGridPane = new GridPane();
@@ -374,5 +383,64 @@ public class PatientViewPage extends VBox{
 			mainContainer.getChildren().addAll(messageViewContainer, textInputContainer);
 			
 			return mainContainer;
+	}
+	
+
+	//	Shows change data window
+	private class ButtonHandler implements EventHandler<ActionEvent>{
+		public void handle(ActionEvent e) {
+			//	Create change pop up menu
+			Stage changeWindow = new Stage();
+			changeWindow.setWidth(500);
+			changeWindow.setHeight(150);
+			
+			//	Containers
+			VBox mainContainer = new VBox();
+			GridPane changeGridPane = new GridPane();
+			
+			//	Elements
+			Label changeHeader = new Label("Change Information");
+			Label instructions = new Label("Enter new data below and click Save");
+			Label dataLabel = new Label();
+			TextField newDataTextField = new TextField();
+			Button updateButton = new Button("Save");
+			
+			//	Style Elements
+			changeHeader.setStyle("-fx-font-family: 'Roboto'; -fx-font-size: 15; -fx-font-weight: bold");
+			updateButton.setStyle("-fx-background-color: #39C0EA; -fx-text-fill: white; -fx-font-weight: bold");
+			updateButton.setStyle("-fx-padding: 7, 7, 7, 7");
+			dataLabel.setMinWidth(120);
+			newDataTextField.setMinWidth(200);
+			changeGridPane.setHgap(15);
+			mainContainer.setSpacing(10);
+			mainContainer.setPadding(new Insets(10, 10, 10, 10));
+			
+			//	Add elements to gridpane
+			changeGridPane.add(dataLabel, 0, 0);
+			changeGridPane.add(newDataTextField, 1, 0);
+			changeGridPane.add(updateButton, 2, 0);
+			
+			//	Add all elements to main container
+			mainContainer.getChildren().addAll(changeHeader, instructions, changeGridPane);
+			
+			//	Creates the scene for the window
+			Scene scene = new Scene(mainContainer);
+			changeWindow.setScene(scene);
+			
+			changeWindow.show();
+			
+			if(addressButton.isArmed()) {
+				dataLabel.setText("New Address");
+			}
+			if(phoneNumberButton.isArmed()) {
+				dataLabel.setText("New Phone Number");
+			}
+			if(emailButton.isArmed()) {
+				dataLabel.setText("New Email");
+			}
+			if(pharmacyButton.isArmed()) {
+				dataLabel.setText("New Pharmacy");
+			}
+		}
 	}
 }
