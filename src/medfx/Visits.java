@@ -14,6 +14,12 @@ public class Visits implements Serializable {
 	private String vitals;
 	private String healthConcerns;
 	private List<Medication> prescriptions;
+	
+	private double weight;
+	private double height;
+	private String bloodPressure;
+	private double bodyTemp;
+	private String physicalResults;
 
 	// Constructor
 	public Visits(Date timestamp, String vitals, String healthConcerns, List<Medication> prescriptions) {
@@ -40,11 +46,51 @@ public class Visits implements Serializable {
 	public String getHealthConcerns() {
 		return healthConcerns;
 	}
+	
+	public double getWeight() {
+		return this.weight;
+	}
+	
+	public double getHeight() {
+		return this.height;
+	}
+	
+	public String getBloodPressure() {
+		return this.bloodPressure;
+	}
+	
+	public double getBodyTemperature() {
+		return this.bodyTemp;
+	}
+	
+	public String getPhysicalResults() {
+		return this.physicalResults;
+	}
 
 	public List<Medication> getPrescriptions() {
 		return prescriptions;
 	}
 
+	public void setWeight(double weight) {
+		this.weight = weight;
+	}
+	
+	public void setHeight(double height) {
+		this.height = height;
+	}
+	
+	public void setBloodPressure(String bloodPressure) {
+		this.bloodPressure = bloodPressure;
+	}
+	
+	public void setBodyTemperature(double bodyTemperature) {
+		this.bodyTemp = bodyTemperature;
+	}
+	
+	public void setPhysicalResults(String physicalResults) {
+		this.physicalResults = physicalResults;
+	}
+	
 	public void setTimestamp(Date timestamp) {
 		this.timestamp = timestamp;
 	}
