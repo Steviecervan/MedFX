@@ -239,93 +239,97 @@ public class PatientViewPage extends VBox{
 		Label visitsHeaderLabel = new Label("My Visits");
 		visitsHeaderLabel.getStyleClass().add("HeaderText");
 		
-		//	Examination Container (template)
-		//	When implementing the database, we can use this template for each visit object
-		HBox examinationContainer = new HBox();		
-		examinationContainer.setPadding(new Insets(5, 0, 0, 0));
-		examinationContainer.setAlignment(Pos.CENTER_LEFT);
-		
-		Label examinationDateLabel = new Label("Examination Date: MM/DD/YYYY");
-		examinationDateLabel.setMinWidth(505);
-		
-		Button summaryButton = new Button("Summary");
-		summaryButton.getStyleClass().add("WhiteButton");
-		summaryButton.setStyle("-fx-background-color: transparent; -fx-font-weight: normal; -fx-font-size: 12");
-		
-		//	Action Event for showing the summary of a visit
-		EventHandler<ActionEvent> event = new EventHandler<ActionEvent>() {
-			public void handle(ActionEvent e) {
-				Stage summaryWindow = new Stage();
-				summaryWindow.setWidth(600);
-				summaryWindow.setHeight(400);
-				
-				//	Display Information
-				VBox summaryContainer = new VBox();
-				summaryContainer.setPadding(new Insets(15, 15, 15, 15));
-				
-				Label visitDateLabel = new Label("Visit MM-DD-YYYY");
-				visitDateLabel.setStyle("-fx-font-family: roboto; -fx-font-weight: bold; -fx-font-size: 20; -fx-padding: 0, 0, 0, 20");
-				
-				Label vitalResultsLabel = new Label("Vital Results");
-				vitalResultsLabel.setStyle("-fx-font-family: roboto; -fx-font-weight: bold; -fx-font-size: 15; -fx-padding: 0, 5, 0, 5");
-				
-				Label healthConcernsLabel = new Label("Health Concerns");
-				healthConcernsLabel.setStyle("-fx-font-family: roboto; -fx-font-weight: bold; -fx-font-size: 15; -fx-padding: 0, 5, 0, 5");
-				
-				Label physicalResultsLabel = new Label("Physical Results");
-				physicalResultsLabel.setStyle("-fx-font-family: roboto; -fx-font-weight: bold; -fx-font-size: 15; -fx-padding: 0, 5, 0, 5");
-				
-				//	Vital Results
-				Label weightLabel = new Label("Weight");
-				Label heightLabel = new Label("Height");
-				Label bodyTemperatureLabel = new Label("Body Temperature");
-				Label bloodPressureLabel = new Label("Blood Pressure");
-				Label pWeight = new Label("");
-				Label pHeight= new Label("");
-				Label pBodyTemp= new Label("");
-				Label pBloodPressure = new Label("");
-				
-				TextArea healthConcernTextArea = new TextArea();				
-				healthConcernTextArea.setEditable(false);
-				
-				TextArea physicalResultsTextArea = new TextArea();
-				physicalResultsTextArea.setEditable(false);
-				
-				GridPane vitalsGridPane = new GridPane();
-				vitalsGridPane.setAlignment(Pos.CENTER_LEFT);
-				vitalsGridPane.setVgap(5);
-				vitalsGridPane.setHgap(25);
-				
-				vitalsGridPane.add(weightLabel, 0, 0);
-				vitalsGridPane.add(pWeight, 1, 0);
-				vitalsGridPane.add(heightLabel, 0, 1);
-				vitalsGridPane.add(pHeight, 1, 1);
-				vitalsGridPane.add(bodyTemperatureLabel, 0, 2);
-				vitalsGridPane.add(pBodyTemp, 1, 2);
-				vitalsGridPane.add(bloodPressureLabel, 0, 3);
-				vitalsGridPane.add(pBloodPressure, 1, 3);
-				
-				summaryContainer.getChildren().addAll(visitDateLabel, vitalResultsLabel, vitalsGridPane, healthConcernsLabel, healthConcernTextArea, physicalResultsLabel, physicalResultsTextArea);
-				
-				//	Add everything together to create the Summary container
-				Scene scene = new Scene(summaryContainer);
-				summaryWindow.setScene(scene);
-				
-				summaryWindow.show();
-			}
-		};
-		
-		//	Sets summary buttons click event
-		summaryButton.setOnAction(event);
-		
-		//	Adds the visits to the container. The examinationContainer will be the parent container
-		//	to display all the visits.
-		examinationContainer.getChildren().addAll(examinationDateLabel, summaryButton);
-		
-		//	Adds the header label and examinationContainer to the mainContainer to be 
-		//	returned
-		
-		mainContainer.getChildren().addAll(visitsHeaderLabel, examinationContainer);
+		//	Add Each Visit the Patient Contains
+		for(Visits visit : patient.getVisits()) {
+			//	Holds all of the visit information together
+			HBox examinationContainer = new HBox();		
+			examinationContainer.setPadding(new Insets(5, 0, 0, 0));
+			examinationContainer.setAlignment(Pos.CENTER_LEFT);
+			
+			//	Visit date Label
+			Label examinationDateLabel = new Label("Examination Date:" + visit.getTimestamp());
+			examinationDateLabel.setMinWidth(505);
+			
+			//	Visit Summary Button
+			Button summaryButton = new Button("Summary");
+			summaryButton.getStyleClass().add("WhiteButton");
+			summaryButton.setStyle("-fx-background-color: transparent; -fx-font-weight: normal; -fx-font-size: 12");
+			
+			//	Adds the header label and examinationContainer to the mainContainer to be returned
+			mainContainer.getChildren().add(visitsHeaderLabel);
+			
+			//	Action Event for showing the summary of a visit		
+			summaryButton.setOnAction(new EventHandler<ActionEvent>() {
+				public void handle(ActionEvent e) {
+					Stage summaryWindow = new Stage();
+					summaryWindow.setWidth(600);
+					summaryWindow.setHeight(400);
+					
+					//	Display Information
+					VBox summaryContainer = new VBox();
+					summaryContainer.setPadding(new Insets(15, 15, 15, 15));
+					
+					Label visitDateLabel = new Label("Visit" + visit.getTimestamp());
+					visitDateLabel.setStyle("-fx-font-family: roboto; -fx-font-weight: bold; -fx-font-size: 20; -fx-padding: 0, 0, 0, 20");
+					
+					Label vitalResultsLabel = new Label("Vital Results");
+					vitalResultsLabel.setStyle("-fx-font-family: roboto; -fx-font-weight: bold; -fx-font-size: 15; -fx-padding: 0, 5, 0, 5");
+					
+					Label healthConcernsLabel = new Label("Health Concerns");
+					healthConcernsLabel.setStyle("-fx-font-family: roboto; -fx-font-weight: bold; -fx-font-size: 15; -fx-padding: 0, 5, 0, 5");
+					
+					Label physicalResultsLabel = new Label("Physical Results");
+					physicalResultsLabel.setStyle("-fx-font-family: roboto; -fx-font-weight: bold; -fx-font-size: 15; -fx-padding: 0, 5, 0, 5");
+					
+					//	Vital Results
+					Label weightLabel = new Label("Weight");
+					Label heightLabel = new Label("Height");
+					Label bodyTemperatureLabel = new Label("Body Temperature");
+					Label bloodPressureLabel = new Label("Blood Pressure");
+					Label pWeight = new Label("");
+					Label pHeight= new Label("");
+					Label pBodyTemp= new Label("");
+					Label pBloodPressure = new Label("");
+					
+					TextArea healthConcernTextArea = new TextArea();				
+					healthConcernTextArea.setEditable(false);
+					healthConcernTextArea.setText(visit.getHealthConcerns());
+					
+					TextArea physicalResultsTextArea = new TextArea();
+					physicalResultsTextArea.setEditable(false);
+					//physicalResultsTextArea.setText();
+					
+					GridPane vitalsGridPane = new GridPane();
+					vitalsGridPane.setAlignment(Pos.CENTER_LEFT);
+					vitalsGridPane.setVgap(5);
+					vitalsGridPane.setHgap(25);
+					
+					vitalsGridPane.add(weightLabel, 0, 0);
+					vitalsGridPane.add(pWeight, 1, 0);
+					vitalsGridPane.add(heightLabel, 0, 1);
+					vitalsGridPane.add(pHeight, 1, 1);
+					vitalsGridPane.add(bodyTemperatureLabel, 0, 2);
+					vitalsGridPane.add(pBodyTemp, 1, 2);
+					vitalsGridPane.add(bloodPressureLabel, 0, 3);
+					vitalsGridPane.add(pBloodPressure, 1, 3);
+					
+					summaryContainer.getChildren().addAll(visitDateLabel, vitalResultsLabel, vitalsGridPane, healthConcernsLabel, healthConcernTextArea, physicalResultsLabel, physicalResultsTextArea);
+					
+					//	Add everything together to create the Summary container
+					Scene scene = new Scene(summaryContainer);
+					summaryWindow.setScene(scene);
+					
+					summaryWindow.show();
+				}
+			});
+			
+			//	Adds the visits to the container. The examinationContainer will be the parent container
+			//	to display all the visits.
+			examinationContainer.getChildren().addAll(examinationDateLabel, summaryButton);
+			
+			//	Adds the examinationContainer to the mainContainer
+			mainContainer.getChildren().add(examinationContainer);
+		}
 		
 		return mainContainer;
 	}
