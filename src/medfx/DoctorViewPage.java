@@ -69,17 +69,19 @@ public class DoctorViewPage extends VBox
 		 Font largeBoldFont = Font.font("Arial", FontWeight.BOLD, 20); 
 	     patientsLabel.setFont(largeBoldFont);
 		 TextField patientSearch= new TextField();
+		 
 		 patientSearch.setPromptText("Search Patient");
 		 Button searchButton= new Button("Search");
 		 Button newPatientButton= new Button("New Patient");
 	 
 		 HBox searchBarBox= new HBox(10);
-		 //searchBarBox.setPadding(new Insets(10)); 
 		 searchBarBox.getChildren().addAll(patientsLabel, patientSearch, searchButton, newPatientButton);
 		 searchBarBox.setPadding(new Insets(10,10,10,10));
 		
 		Label patientNameLabel= new Label("Patient Name");
         patientNameLabel.setFont(Font.font("Arial", FontWeight.BOLD, 16)); 
+        
+       
         
         HBox individualPatientBox= new HBox(5);
 	    Label nameLabel= new Label("last-first-DOB");
@@ -114,11 +116,11 @@ public class DoctorViewPage extends VBox
 	     mainPane.setCenter(wholeSearchBox);
 	     mainPane.setTop(titleBox);
 	     this.getChildren().add(mainPane); 
-	    newPatientButton.setOnAction(event -> newPatientScreen());	
-	    viewButton.setOnAction(event -> visitScreen());	     
-
+	    viewButton.setOnAction(event -> newPatientScreen());	
+	    //viewButton.setOnAction(event -> visitScreen());	     
 	    
 }
+	//need to put Patient p as parameter here !!!!!!!!!!!!!!!!!!!!!!!!!!!!
 	private void newPatientScreen() {
 		HBox topBox= new HBox(500);
     	Label medFXLabel= new Label("MedFX");
