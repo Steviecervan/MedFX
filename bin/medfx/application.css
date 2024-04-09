@@ -52,3 +52,62 @@
   	-fx-background-color: transparent;
   	-fx-text-fill: black; 
   }
+  
+/*CSS FOR MESSAGING VIEWS */
+  /*
+   * CSS Style for sender message box
+   */
+.MessageBoxSend{
+	-fx-background-color: #39C0EA;
+	-fx-background-radius: 15;
+	-fx-font-family: 'Roboto';
+	-fx-font-size: 15;
+	-fx-alignment: top-left;
+}
+/*
+ * CSS Style for sender text 
+ */
+.MessageTextSend{
+	-fx-text-fill: white;
+	-fx-padding: 8, 8, 8, 8;
+	-fx-border-radius: 20;
+	-fx-wrap-text: true;
+}
+/*
+ * CSS Style for receiver message box
+ */
+.MessageBoxReceive{
+	-fx-background-color: white;
+	-fx-background-radius: 15;
+	-fx-font-family: 'Roboto';
+	-fx-font-size: 15;
+	-fx-alignment: top-left;
+}
+/*
+ * CSS Style for receiver text 
+ */
+.MessageTextReceive{
+	-fx-text-fill: black;
+	-fx-padding: 8, 8, 8, 8;
+	-fx-border-radius: 20;
+}
+
+/*
+ * CSS Style but input fields and buttons
+ */
+.SendButton{
+	-fx-border-radius: 100;
+	-fx-text-fill: white;
+	-fx-text-weight: bold;
+	-fx-background-color: #39C0EA;
+	-fx-text-alignment: center;
+}
+
+.TextInputContainer{
+	-fx-alignment: center;
+	-fx-spacing: 7;
+}
+.TextInputArea{
+	-fx-wrap-text: true;
+	-fx-max-height: 10;
+}
