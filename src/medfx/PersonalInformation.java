@@ -37,10 +37,16 @@ public class PersonalInformation implements Serializable {
 	}
 	
 	public String getAddress() {
+		if(address.equals("")){
+			return "Information not provided";
+		}
 		return address;
 	}
 	
 	public String getEmail() {
+		if(email.equals("")) {
+			return "Information not provided";
+		}
 		return email;
 	}
 	
@@ -49,6 +55,9 @@ public class PersonalInformation implements Serializable {
 	}
 	
 	public String getPhoneNumber() {
+		if(phoneNumber.equals("")) {
+			return "Information not provided";
+		}
 		return phoneNumber;
 	}
 	

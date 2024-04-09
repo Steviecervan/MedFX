@@ -96,10 +96,16 @@ public class Patient extends User {
 	
 	//	Getters
 	public String getInsurance() {
+		if(insurance == null) {
+			return "Information not provided";
+		}
 		return this.insurance;
 	}
 	
 	public String getPharmacy() {
+		if(pharmacy == null) {
+			return "Information not provided";
+		}
 		return this.pharmacy;
 	}
 	
