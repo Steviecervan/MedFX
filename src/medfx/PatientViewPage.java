@@ -81,7 +81,7 @@ public class PatientViewPage extends VBox{
 		navigationContainer.setStyle("-fx-background-color: whitesmoke; -fx-padding: 8");
 
 		//	Welcome Label
-		Label welcomeHeaderLabel = new Label("Welcome, " + pName);
+		Label welcomeHeaderLabel = new Label("Welcome, " + patient.getPersonalInfo().getFirstName());
 		welcomeHeaderLabel.getStyleClass().add("HeaderText");
 		welcomeHeaderLabel.setPadding(new Insets(5, 0, 5, 15));
 		welcomeHeaderLabel.setStyle("-fx-font-size: 25; -fx-font-family: 'Roboto'; -fx-font-weight: bold; -fx-padding: 15, 0, 0, 0");
@@ -150,13 +150,22 @@ public class PatientViewPage extends VBox{
 		Label pharmacyLabel = new Label("Preferred Pharmacy");
 		
 		//	Labels (where user information goes)
-		pName = new Label("Stevie Marie Cervantes");
-		pBirthDate = new Label("06/03/2004");
-		pAddress = new Label("1151 S Forest Ave, Tempe, AZ");
-		pPhoneNumber = new Label("602-303-2033");
-		pEmail = new Label("smcerva8@asu.edu");
-		pInsurance = new Label("United Healthcare");
-		pPharmacy = new Label("Walgreens");
+		pName = new Label();
+		pBirthDate = new Label();
+		pAddress = new Label();
+		pPhoneNumber = new Label();
+		pEmail = new Label();
+		pInsurance = new Label();
+		pPharmacy = new Label();
+		
+		//	Fills in above labels with patient information
+		pName.setText(patient.getPersonalInfo().getFirstName() + " " + patient.getPersonalInfo().getLastName());
+		pBirthDate.setText(patient.getPersonalInfo().getBirthDate());
+		pAddress.setText(patient.getPersonalInfo().getAddress());
+		pPhoneNumber.setText(patient.getPersonalInfo().getPhoneNumber());
+		pEmail.setText(patient.getPersonalInfo().getEmail());
+		pInsurance.setText(patient.getPharmacy());
+		pPharmacy.setText(patient.getPharmacy());
 		
 		//	Buttons to change data
 		Button addressButton = new Button("Change");
