@@ -13,6 +13,8 @@ public class Patient extends User {
 	private static final long serialVersionUID = -1632230017250822490L;
 	private PersonalInformation personalInfo;
 	private ArrayList<Visits> visitInformation; // Updated to store Visit objects
+	private String insurance;
+	private String pharmacy;
 
 	// Constructor
 	public Patient(PersonalInformation personalInfo, String role) {
@@ -90,5 +92,23 @@ public class Patient extends User {
 		in.close();
 		
 		return patient;
+	}
+	
+	//	Getters
+	public String getInsurance() {
+		return this.insurance;
+	}
+	
+	public String getPharmacy() {
+		return this.pharmacy;
+	}
+	
+	//	Setters
+	public void setInsurance(String newInsurance) {
+		this.insurance = newInsurance;
+	}
+	
+	public void setPharmacy(String newPharmacy) {
+		this.pharmacy = newPharmacy;
 	}
 }
