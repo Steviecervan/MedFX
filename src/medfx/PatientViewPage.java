@@ -45,6 +45,9 @@ public class PatientViewPage extends VBox{
 	private Button emailButton;
 	private Button pharmacyButton;
 	
+	private String data;
+	private TextField newDataTextField;
+	
 	public PatientViewPage(Patient patient){
 		//set default css pane setup
 		this.getStylesheets().add(getClass().getResource("application.css").toString()); // fetches the style sheet
@@ -388,9 +391,7 @@ public class PatientViewPage extends VBox{
 
 	//	Shows change data window
 	private class ButtonHandler implements EventHandler<ActionEvent>{
-		public void handle(ActionEvent e) {
-			String data;
-			
+		public void handle(ActionEvent e) {			
 			//	Create change pop up menu
 			Stage changeWindow = new Stage();
 			changeWindow.setWidth(500);
@@ -404,10 +405,34 @@ public class PatientViewPage extends VBox{
 			Label changeHeader = new Label("Change Information");
 			Label instructions = new Label("Enter new data below and click Save");
 			Label dataLabel = new Label();
-			TextField newDataTextField = new TextField();
+			newDataTextField = new TextField();
 			Button updateButton = new Button("Save");
 			
-			//	TODO: Update Button Event
+			//	Update Button Event
+			updateButton.setOnAction(new EventHandler<ActionEvent>() {
+				public void handle(ActionEvent event) {
+					//	Change the data
+					if(data == "address") {
+						patient.getPersonalInfo().changeAddress(newDataTextField.getText());
+						pAddress.setText(patient.getPersonalInfo().getAddress());
+					}
+					if(data == "phone") {
+						patient.getPersonalInfo().changePhoneNumber(newDataTextField.getText());
+						pPhoneNumber.setText(patient.getPersonalInfo().getPhoneNumber());
+					}
+					if(data == "email") {
+						patient.getPersonalInfo().changePhoneNumber(newDataTextField.getText());
+						pEmail.setText(patient.getPersonalInfo().getEmail());
+					}
+					if(data == "pharmacy") {
+						patient.setPharmacy(newDataTextField.getText());
+						pPharmacy.setText(patient.getPharmacy());
+					}
+					
+					//	Close the change window
+					changeWindow.close();
+				}
+			});
 			
 			//	Style Elements
 			changeHeader.setStyle("-fx-font-family: 'Roboto'; -fx-font-size: 15; -fx-font-weight: bold");
