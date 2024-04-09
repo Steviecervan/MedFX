@@ -29,6 +29,8 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
+
 import javafx.stage.Stage;
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -85,8 +87,10 @@ public class DoctorViewPage extends VBox
         patientNameLabel.setFont(Font.font("Arial", FontWeight.BOLD, 16)); 
         
         HBox individualPatientBox= new HBox(5);
-	    Label nameLabel= new Label("last-first-DOB");
+        ArrayList<Patient> patientList = Doctor.getPatientList();
+	    Label nameLabel= new Label(patientList.get(0).getUsername());
 	    Button viewButton= new Button("View");
+	    viewButton.setOnAction(event -> newPatientScreen(patientList.get(0)));
 	    Button msgsButton= new Button("Message");
 	    
 	    individualPatientBox.setPadding(new Insets(10,10,10,10));
@@ -117,12 +121,12 @@ public class DoctorViewPage extends VBox
 	     mainPane.setCenter(wholeSearchBox);
 	     mainPane.setTop(titleBox);
 	     this.getChildren().add(mainPane); 
-	    newPatientButton.setOnAction(event -> newPatientScreen());	
-	    viewButton.setOnAction(event -> visitScreen());	     
-	    messageButton.setOnAction(event -> messageScreen());
+	    //newPatientButton.setOnAction(event -> newPatientScreen());	
+	   // viewButton.setOnAction(event -> visitScreen());	     
+	   messageButton.setOnAction(event -> messageScreen());
 	    
 }
-	private void newPatientScreen() {
+	private void newPatientScreen(Patient p) {
 		HBox topBox= new HBox(500);
     	Label medFXLabel= new Label("MedFX");
     	 medFXLabel.setFont(Font.font("Arial", FontWeight.BOLD, 24)); 
@@ -135,22 +139,19 @@ public class DoctorViewPage extends VBox
     	
         BorderPane intakePane = new BorderPane();
         GridPane intakeGridPane= new GridPane();
+        
+        String[] usernameParts = p.getUsername().split("-");
+        String firstName = usernameParts[1];
+        String lastName = usernameParts[0];
+        String DOB = usernameParts[2] + "-" + usernameParts[3] + "-" + usernameParts[4];
+
        
 	        Label firstNameLabel= new Label("First Name:");
-	        TextArea firstNameArea = new TextArea();
-	        firstNameArea.setPrefRowCount(1); 
-	        firstNameArea.setPrefColumnCount(10);
-	       
-	        Label middleInitial= new Label("Middle Initial");
-	        TextArea middleInitialArea= new TextArea();
-	        middleInitialArea.setPrefRowCount(1); 
-	        middleInitialArea.setPrefColumnCount(1);
-	               
+	        Label patientFirstName= new Label(firstName);
+	        	               
 	        Label lastNameLabel= new Label("Last Name:");
-	        TextArea lastNameArea = new TextArea();
-	        lastNameArea.setPrefRowCount(1); 
-	        lastNameArea.setPrefColumnCount(10);
-	             
+		    Label patientLastName= new Label(lastName);
+    
 	        Label emailLabel= new Label("Email Address:");
 	        TextArea emailArea = new TextArea();
 	        emailArea.setPrefRowCount(1); 
@@ -161,10 +162,8 @@ public class DoctorViewPage extends VBox
 	        phoneArea.setPrefRowCount(1); 
 	        phoneArea.setPrefColumnCount(5);
 	            
-	        Label DOBLabel= new Label("DOB:");
-	        TextArea DOBArea = new TextArea();     
-	        DOBArea.setPrefRowCount(1); 
-	        DOBArea.setPrefColumnCount(1);
+	      Label DOBLabel= new Label("DOB:");
+		  Label patientDOB= new Label(DOB);
 	              
 	        Label addressLabel = new Label("Address:");
 	        TextArea addressArea = new TextArea();
@@ -175,14 +174,12 @@ public class DoctorViewPage extends VBox
         intakeGridPane.setVgap(5);
         
 	        intakeGridPane.add(firstNameLabel, 0, 0);
-	        intakeGridPane.add(firstNameArea, 1, 0);
-	        intakeGridPane.add(middleInitial, 2, 0);
-	        intakeGridPane.add(middleInitialArea, 3, 0);
-	        intakeGridPane.add(lastNameLabel, 4, 0);
-	        intakeGridPane.add(lastNameArea, 5, 0);
+	        intakeGridPane.add(patientFirstName, 1, 0);
+	        intakeGridPane.add(lastNameLabel, 2, 0);
+	        intakeGridPane.add(patientLastName, 3, 0);
 	
-	        intakeGridPane.add(DOBLabel, 0, 1);
-	        intakeGridPane.add(DOBArea, 1, 1);
+	       intakeGridPane.add(DOBLabel, 0, 1);
+	       intakeGridPane.add(patientDOB, 1, 1);
 	        intakeGridPane.add(phoneLabel, 2, 1);
 	        intakeGridPane.add(phoneArea, 3, 1);
 	        
