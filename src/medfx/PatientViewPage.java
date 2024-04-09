@@ -389,6 +389,8 @@ public class PatientViewPage extends VBox{
 	//	Shows change data window
 	private class ButtonHandler implements EventHandler<ActionEvent>{
 		public void handle(ActionEvent e) {
+			String data;
+			
 			//	Create change pop up menu
 			Stage changeWindow = new Stage();
 			changeWindow.setWidth(500);
@@ -405,12 +407,14 @@ public class PatientViewPage extends VBox{
 			TextField newDataTextField = new TextField();
 			Button updateButton = new Button("Save");
 			
+			//	TODO: Update Button Event
+			
 			//	Style Elements
 			changeHeader.setStyle("-fx-font-family: 'Roboto'; -fx-font-size: 15; -fx-font-weight: bold");
 			updateButton.setStyle("-fx-background-color: #39C0EA; -fx-text-fill: white; -fx-font-weight: bold");
 			updateButton.setStyle("-fx-padding: 7, 7, 7, 7");
 			dataLabel.setMinWidth(120);
-			newDataTextField.setMinWidth(200);
+			newDataTextField.setMinWidth(250);
 			changeGridPane.setHgap(15);
 			mainContainer.setSpacing(10);
 			mainContainer.setPadding(new Insets(10, 10, 10, 10));
@@ -431,15 +435,19 @@ public class PatientViewPage extends VBox{
 			
 			if(addressButton.isArmed()) {
 				dataLabel.setText("New Address");
+				data = "address";
 			}
 			if(phoneNumberButton.isArmed()) {
 				dataLabel.setText("New Phone Number");
+				data = "phone";
 			}
 			if(emailButton.isArmed()) {
 				dataLabel.setText("New Email");
+				data = "email";
 			}
 			if(pharmacyButton.isArmed()) {
 				dataLabel.setText("New Pharmacy");
+				data = "pharmacy";
 			}
 		}
 	}
