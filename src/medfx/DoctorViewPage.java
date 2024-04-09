@@ -43,6 +43,9 @@ public class DoctorViewPage extends VBox
 	private Button signOutButton;	
 	private Doctor doctor;
 	
+	private TextArea textInputArea;
+	private VBox messageViewContainer;
+	
 	public DoctorViewPage(Doctor doctor) throws IOException {
 		
 		this.doctor = doctor;
@@ -116,7 +119,7 @@ public class DoctorViewPage extends VBox
 	     this.getChildren().add(mainPane); 
 	    newPatientButton.setOnAction(event -> newPatientScreen());	
 	    viewButton.setOnAction(event -> visitScreen());	     
-
+	    messageButton.setOnAction(event -> messageScreen());
 	    
 }
 	private void newPatientScreen() {
@@ -350,6 +353,137 @@ public class DoctorViewPage extends VBox
 		    Stage visitStage = new Stage();
 		    visitStage.setScene(visitScene);
 		    visitStage.show();
+	}
+	
+	private void messageScreen() {
+		Label medFXLabel= new Label("MedFX");
+	    medFXLabel.setFont(Font.font("Arial", FontWeight.BOLD, 24)); 
+	    medFXLabel.setTextFill(javafx.scene.paint.Color.WHITE);
+	    
+	    Button patientButton = new Button("Patients");
+	    Button messageButton = new Button("Messages");
+	    signOutButton = new Button("Sign Out");
+	    signOutButton.setOnAction(new ButtonHandler());
+	    
+	    Region spacer = new Region();
+        HBox.setHgrow(spacer, Priority.ALWAYS);
+
+		HBox titleBox= new HBox(10);
+	    titleBox.setStyle("-fx-background-color: #39C0EA;");
+
+		titleBox.getChildren().addAll(medFXLabel, patientButton,messageButton,spacer, signOutButton);
+		titleBox.setPadding(new Insets(10));
+	
+		// Main Container holds everything
+				VBox mainContainer = new VBox();
+				mainContainer.setStyle("-fx-background-color: white");
+
+				// Display Container - holds contacts container and message container
+				HBox displayContainer = new HBox();
+				displayContainer.setStyle("-fx-padding: 15, 15, 15, 15; -fx-spacing: 15; -fx-alignment: center");
+
+				// Side container - displays the patients being messaged
+				VBox contactsContainer = new VBox();
+				contactsContainer.setMinWidth(235);
+				contactsContainer.setStyle("-fx-background-color: whitesmoke; -fx-padding: 8, 8, 8, 8; -fx-spacing: 7");
+
+				// Message container - shows the current conversation being displayed
+				// with input bar and send button
+				VBox messageContainer = new VBox();
+				messageContainer.setStyle("-fx-background-color: whitesmoke; -fx-padding: 10, 10, 10, 10");
+
+				//	MessageViewContainer - holds the message bubbles
+				messageViewContainer = new VBox();
+				messageViewContainer.setPadding(new Insets(0, 0, 10, 0));
+				messageViewContainer.setSpacing(5);
+				messageViewContainer.setMinHeight(365);
+				messageViewContainer.setAlignment(Pos.BOTTOM_RIGHT);
+
+				//	-- Text Input Container --
+				HBox textInputContainer = new HBox();
+				// textInputContainer.getStyleClass().add("TextInputContainer");
+				textInputContainer.setStyle("-fx-alignment: center; -fx-spacing: 7;");
+
+				// TextField - message input
+				textInputArea = new TextArea();
+				textInputArea.getStyleClass().add("TextInputArea");
+				textInputArea.setMaxWidth(535);
+				textInputArea.setStyle("-fx-wrap-text: true; -fx-max-height: 10;");
+
+				// Send Message Button
+				Button sendButton = new Button("^");
+				sendButton.getStyleClass().add("SendButton");
+				sendButton.setMinWidth(30);
+				sendButton.setMinHeight(30);
+				sendButton.setStyle("-fx-border-radius: 100; -fx-text-fill: white; -fx-text-weight: bold; -fx-background-color: #39C0EA; -fx-text-alignment: center;");
+				sendButton.setOnAction(new EventHandler<ActionEvent>() {
+					public void handle(ActionEvent e) {
+						// ~ Message bubble (Sender) ~
+						VBox messageBubbleContainerSender = new VBox();
+						//messageBubbleContainerSender.getStyleClass().add("MessageBoxSend");
+						messageBubbleContainerSender.setStyle("-fx-background-color: #39C0EA; -fx-background-radius: 15; -fx-font-family: 'Roboto'; -fx-font-size: 15; -fx-alignment: top-left;");
+						messageBubbleContainerSender.setMaxWidth(300);
+
+						// Text for Message
+						Label messageTextSender = new Label();
+						messageTextSender.setText(textInputArea.getText());
+						//messageTextSender.getStyleClass().add("MessageTextSend");
+						messageTextSender.setStyle("-fx-text-fill: white;-fx-padding: 8, 8, 8, 8; -fx-border-radius: 20; -fx-wrap-text: true;");
+
+						// Puts the text into the message bubble
+						messageBubbleContainerSender.getChildren().addAll(messageTextSender);
+
+						// Clear the text input
+						textInputArea.clear();
+
+						// Adds the bubble to the messageViewContainer
+						messageViewContainer.getChildren().add(messageBubbleContainerSender);
+					}
+				});
+
+				// Add message input & send message button to textInputContainer
+				textInputContainer.getChildren().addAll(textInputArea, sendButton);
+
+				//	Add the messageViewContainer and textInputContainer to the messageContainer
+				messageContainer.getChildren().addAll(messageViewContainer, textInputContainer);
+
+				// Adds side container and message container to display container
+				displayContainer.getChildren().addAll(contactsContainer, messageContainer);
+
+				// Adds all components together
+				mainContainer.getChildren().addAll(titleBox, displayContainer);
+
+				//	PATIENT CONTACT CONTAINER ----------------
+				//	This will be used to show patient contacts in the contacts container
+				//	We could pass in a patient object to get all of this information
+				VBox patientContact = new VBox();
+				patientContact.setMaxWidth(220);
+				patientContact.setMaxHeight(50);
+				patientContact.setStyle("-fx-background-color: white; -fx-spacing: 5; -fx-padding: 8, 8, 8, 8; -fx-background-radius: 10");
+
+				//	Contact Labels 
+				Label pName = new Label();
+				Label messagePreview = new Label(); //	Will be the last send message (either from patient or doctor)
+
+				pName.setText("Patient Name");	//	Placeholder
+				messagePreview.setText("Here is a small message preview"); //	Placeholder
+
+				//	Set styling
+				pName.setStyle("-fx-text-fill: black;\r\n"
+						+ "	-fx-font-size: 15;");
+				messagePreview.setStyle("-fx-text-fill: grey;\r\n"
+						+ "	-fx-font-size: 13;");
+				messagePreview.setMaxWidth(220);
+
+				//	Put the name and preview into the patientContact container
+				patientContact.getChildren().addAll(pName, messagePreview);
+
+				//	Add the patientContact to the contacts container
+				contactsContainer.getChildren().add(patientContact);
+
+				Scene messageScene = new Scene(mainContainer, 800, 500);
+				Stage stage = (Stage) getScene().getWindow();
+				stage.setScene(messageScene);
 	}
 	
 	private class ButtonHandler implements EventHandler<ActionEvent>
