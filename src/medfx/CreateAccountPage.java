@@ -134,6 +134,8 @@ public class CreateAccountPage extends VBox
 					{
 						// writes the new patient to the database
 						Patient.writePatientToDatabase(newPatient);
+						Doctor.addPatient(newPatient);
+						Nurse.addPatient(newPatient);
 						
 						//Send user back to user main page
 						SceneController.switchToUserMainPage(e);

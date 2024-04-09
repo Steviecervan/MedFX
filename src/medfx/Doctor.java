@@ -7,6 +7,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.ArrayList;
 import java.util.Random;
 
 public class Doctor extends User{
@@ -15,6 +16,7 @@ public class Doctor extends User{
 	 */
 	private static final long serialVersionUID = -140347943225749714L;
 	private String docId;	//	D.....
+	private static ArrayList<Patient> patientList = new ArrayList<Patient>();
 	
 	public Doctor(PersonalInformation personalInfo) {
 		//	Calls constructor for User
@@ -25,6 +27,16 @@ public class Doctor extends User{
 	
 	public String getDoctorId() {
 		return this.docId;
+	}
+	
+	public static void addPatient(Patient p)
+	{
+		patientList.add(p);
+	}
+	
+	public static ArrayList<Patient> getPatientList()
+	{
+		return patientList;
 	}
 	
 	public static void writeDoctorToDatabase(Doctor doctor) throws IOException

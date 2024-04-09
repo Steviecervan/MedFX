@@ -6,6 +6,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.ArrayList;
 
 public class Nurse extends User{
 	/**
@@ -13,6 +14,7 @@ public class Nurse extends User{
 	 */
 	private static final long serialVersionUID = -120582796748093181L;
 	private String nurseId;		//	N.....
+	private static ArrayList<Patient> patientList = new ArrayList<Patient>();
 
 	public Nurse(PersonalInformation personalInfo) {
 		//	Calls constructor for user
@@ -22,6 +24,16 @@ public class Nurse extends User{
 
 	public String getNurseId() {
 		return this.nurseId;
+	}
+	
+	public static void addPatient(Patient p)
+	{
+		patientList.add(p);
+	}
+	
+	public static ArrayList<Patient> getPatientList()
+	{
+		return patientList;
 	}
 	
 	// writing and reading to/from database
