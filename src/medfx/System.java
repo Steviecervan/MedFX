@@ -1,7 +1,5 @@
 package medfx;
 
-import java.io.IOException;
-
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.layout.StackPane;
@@ -10,7 +8,7 @@ import javafx.stage.Stage;
 
 public class System extends Application{
 	
-	public void start(Stage primaryStage) throws IOException // IOException because of the fileinputstream in user main page and writeobject methods
+	public void start(Stage primaryStage) throws Exception // Exception because of the fileinputstream in user main page and writeobject methods
 	{
 		/**
 		 * Create Doctor and Nurse object
@@ -24,6 +22,10 @@ public class System extends Application{
 		//write to database
 		Doctor.writeDoctorToDatabase(doctor);
 		Nurse.writeNurseToDatabase(nurse);
+		
+		//read current patients from database
+		Doctor.readAllPatientsFromDatabase();
+		Nurse.readAllPatientsFromDatabase();
 		
 		StackPane root = new StackPane();
         VBox mainMenu = new UserMainPage(); // this is what the main screen will be called, you can change it to fit your testing purposes
