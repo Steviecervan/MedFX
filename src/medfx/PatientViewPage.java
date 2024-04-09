@@ -34,9 +34,11 @@ public class PatientViewPage extends VBox{
 	private Label pEmail;
 	private Label pInsurance;
 	private Label pPharmacy; 
-	private VBox patientInfoContainer;
-	
 	private Patient patient;
+		
+	private VBox patientInfoContainer;
+	private TextArea textInputArea;
+	private VBox messageViewContainer;
 	
 	public PatientViewPage(Patient patient){
 		//set default css pane setup
@@ -82,7 +84,7 @@ public class PatientViewPage extends VBox{
 		Label welcomeHeaderLabel = new Label("Welcome, " + pName);
 		welcomeHeaderLabel.getStyleClass().add("HeaderText");
 		welcomeHeaderLabel.setPadding(new Insets(5, 0, 5, 15));
-		welcomeHeaderLabel.setStyle("-fx-font-size: 25; -fx-font-family: 'Roboto'; -fx-font-weight: bold");
+		welcomeHeaderLabel.setStyle("-fx-font-size: 25; -fx-font-family: 'Roboto'; -fx-font-weight: bold; -fx-padding: 15, 0, 0, 0");
 		
 		//	PatientInfoContainer
 		patientInfoContainer = new VBox();
@@ -309,24 +311,59 @@ public class PatientViewPage extends VBox{
 	
 	//	Messages View -----------------------------------------------------------------------------------------
 	public VBox setToMessageView() {
-		VBox messageViewContainer = new VBox();
-		messageViewContainer.setSpacing(5);
-		
-		VBox messageBox = new VBox();
-		messageBox.setPrefHeight(400);
-		
-		HBox inputBox = new HBox();
-		inputBox.setSpacing(5);
-		
-		TextField pTextInput = new TextField();
-		pTextInput.setPrefWidth(550);
-		
-		Button sendButton = new Button("^");
-		sendButton.getStyleClass().add("BlueButton");
-		
-		inputBox.getChildren().addAll(pTextInput, sendButton);
-		messageViewContainer.getChildren().addAll(messageBox, inputBox);	
-		
-		return messageViewContainer;
+//		Main Container
+			VBox mainContainer = new VBox();
+
+			//	Container that holds the message bubbles
+			messageViewContainer = new VBox();
+			messageViewContainer.setPadding(new Insets(0, 0, 10, 0));
+			messageViewContainer.setSpacing(5);
+			messageViewContainer.setMinHeight(295);
+			messageViewContainer.setAlignment(Pos.BOTTOM_RIGHT);
+			
+			//	-- Text Input Container --
+			HBox textInputContainer = new HBox();
+			textInputContainer.getStyleClass().add("TextInputContainer");
+			
+			//	TextField - message input
+			textInputArea = new TextArea();
+			textInputArea.getStyleClass().add("TextInputArea");
+			textInputArea.setMaxWidth(535);
+			
+			//	Send Message Button
+			Button sendButton = new Button("^");
+			sendButton.getStyleClass().add("SendButton");
+			sendButton.setMinWidth(30);
+			sendButton.setMinHeight(30);
+			sendButton.setOnAction(new EventHandler<ActionEvent> () {
+				public void handle(ActionEvent e) {				
+					//	~ Message bubble (Sender) ~
+					VBox messageBubbleContainerSender = new VBox();
+					messageBubbleContainerSender.getStyleClass().add("MessageBoxSend");
+					messageBubbleContainerSender.setMaxWidth(300);
+					
+					//	Text for Message
+					Label messageTextSender = new Label();
+					messageTextSender.setText(textInputArea.getText());
+					messageTextSender.getStyleClass().add("MessageTextSend");
+					
+					//	Puts the text into the message bubble
+					messageBubbleContainerSender.getChildren().addAll(messageTextSender);
+					
+					//	Clear the text input
+					textInputArea.clear();
+					
+					//	Adds the bubble to the messageViewContainer
+					messageViewContainer.getChildren().add(messageBubbleContainerSender);
+				}
+			});
+			
+			//	Add message input & send message button to textInputContainer
+			textInputContainer.getChildren().addAll(textInputArea, sendButton);
+			
+			//	Adds the message bubble container and text input container to the main container
+			mainContainer.getChildren().addAll(messageViewContainer, textInputContainer);
+			
+			return mainContainer;
 	}
 }
