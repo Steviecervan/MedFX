@@ -39,6 +39,9 @@ public class PatientViewPage extends VBox{
 	private Patient patient;
 	
 	public PatientViewPage(Patient patient){
+		//set default css pane setup
+		this.getStylesheets().add(getClass().getResource("application.css").toString()); // fetches the style sheet
+		this.getStyleClass().add("BasicPaneSetUp");
 		
 		// Patient object
 		this.patient = patient;
