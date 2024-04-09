@@ -62,6 +62,7 @@
 	-fx-background-radius: 15;
 	-fx-font-family: 'Roboto';
 	-fx-font-size: 15;
+	-fx-alignment: top-left;
 }
 /*
  * CSS Style for sender text 
@@ -70,6 +71,7 @@
 	-fx-text-fill: white;
 	-fx-padding: 8, 8, 8, 8;
 	-fx-border-radius: 20;
+	-fx-wrap-text: true;
 }
 /*
  * CSS Style for receiver message box
@@ -79,6 +81,7 @@
 	-fx-background-radius: 15;
 	-fx-font-family: 'Roboto';
 	-fx-font-size: 15;
+	-fx-alignment: top-left;
 }
 /*
  * CSS Style for receiver text 
@@ -88,4 +91,23 @@
 	-fx-padding: 8, 8, 8, 8;
 	-fx-border-radius: 20;
 }
-  
+
+/*
+ * CSS Style but input fields and buttons
+ */
+.SendButton{
+	-fx-border-radius: 100;
+	-fx-text-fill: white;
+	-fx-text-weight: bold;
+	-fx-background-color: #39C0EA;
+	-fx-text-alignment: center;
+}
+
+.TextInputContainer{
+	-fx-alignment: center;
+	-fx-spacing: 7;
+}
+.TextInputArea{
+	-fx-wrap-text: true;
+	-fx-max-height: 10;
+}
