@@ -17,7 +17,7 @@ public class User implements Serializable
 		this.role = role;
 		
 		// generates username from personal info
-		this.username = personalInfo.getLastName() + "-" + personalInfo.getFirstName() + "-" + personalInfo.getDate();
+		this.username = personalInfo.getLastName() + "-" + personalInfo.getFirstName() + "-" + personalInfo.getBirthDate();
 		
 	}
 	

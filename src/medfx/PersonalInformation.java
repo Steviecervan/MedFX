@@ -44,7 +44,7 @@ public class PersonalInformation implements Serializable {
 		return email;
 	}
 	
-	public String getDate() {
+	public String getBirthDate() {
 		return birthDate;
 	}
 	
