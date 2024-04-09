@@ -35,7 +35,10 @@ public class PatientViewPage extends VBox{
 	private Label pEmail;
 	private Label pInsurance;
 	private Label pPharmacy; 
+	private TextArea textInputArea;
+	
 	private VBox patientInfoContainer;
+	private VBox messageViewContainer;
 	
 	public PatientViewPage(){	
 		//set default css pane setup
@@ -76,9 +79,8 @@ public class PatientViewPage extends VBox{
 
 		//	Welcome Label
 		Label welcomeHeaderLabel = new Label("Welcome, " + pName);
-		welcomeHeaderLabel.setPadding(new Insets(5, 0, 5, 15));
 		welcomeHeaderLabel.getStyleClass().add("HeaderText");
-		welcomeHeaderLabel.setStyle("-fx-font-size: 25; -fx-font-family: 'Roboto'; -fx-font-weight: bold");
+		welcomeHeaderLabel.setStyle("-fx-font-size: 25; -fx-font-family: 'Roboto'; -fx-font-weight: bold; -fx-padding: 15, 0, 0, 0");
 		
 		//	PatientInfoContainer
 		patientInfoContainer = new VBox();
@@ -307,46 +309,50 @@ public class PatientViewPage extends VBox{
 	public VBox setToMessageView() {
 		//	Main Container
 		VBox mainContainer = new VBox();
-		
-		//	Container that displays the message bubbles
-		VBox messageViewContainer = new VBox();
+
+		//	Container that holds the message bubbles
+		messageViewContainer = new VBox();
+		messageViewContainer.setPadding(new Insets(0, 0, 10, 0));
 		messageViewContainer.setSpacing(5);
-		messageViewContainer.setMinHeight(321);
-				
-		//	Message bubble
-		VBox messageBubbleContainer = new VBox();
-		messageBubbleContainer.setAlignment(Pos.CENTER);
-		messageBubbleContainer.setMaxWidth(335);
-		messageBubbleContainer.getStyleClass().add("MessageBoxReceive");
+		messageViewContainer.setMinHeight(295);
+		messageViewContainer.setAlignment(Pos.BOTTOM_RIGHT);
 		
-		//	Text for Message
-		Label messageText = new Label("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.");
-		messageText.setWrapText(true);
-		messageText.getStyleClass().add("MessageTextReceive");
-		
-		//	Puts the text into the message bubble
-		messageBubbleContainer.getChildren().addAll(messageText);
-		
-		//	Adds the bubble to the messageViewContainer
-		messageViewContainer.getChildren().add(messageBubbleContainer);
-		
-		//	Text Input Container
+		//	-- Text Input Container --
 		HBox textInputContainer = new HBox();
-		textInputContainer.setAlignment(Pos.CENTER);
-		textInputContainer.setSpacing(7);
+		textInputContainer.getStyleClass().add("TextInputContainer");
 		
 		//	TextField - message input
-		TextArea textInputArea = new TextArea();
-		textInputArea.setWrapText(true);
+		textInputArea = new TextArea();
+		textInputArea.getStyleClass().add("TextInputArea");
 		textInputArea.setMaxWidth(535);
-		textInputArea.setMaxHeight(10);
 		
 		//	Send Message Button
 		Button sendButton = new Button("^");
-		sendButton.getStyleClass().add("BlueButton");
+		sendButton.getStyleClass().add("SendButton");
 		sendButton.setMinWidth(30);
 		sendButton.setMinHeight(30);
-		sendButton.setTextAlignment(TextAlignment.CENTER);
+		sendButton.setOnAction(new EventHandler<ActionEvent> () {
+			public void handle(ActionEvent e) {				
+				//	~ Message bubble (Sender) ~
+				VBox messageBubbleContainerSender = new VBox();
+				messageBubbleContainerSender.getStyleClass().add("MessageBoxSend");
+				messageBubbleContainerSender.setMaxWidth(300);
+				
+				//	Text for Message
+				Label messageTextSender = new Label();
+				messageTextSender.setText(textInputArea.getText());
+				messageTextSender.getStyleClass().add("MessageTextSend");
+				
+				//	Puts the text into the message bubble
+				messageBubbleContainerSender.getChildren().addAll(messageTextSender);
+				
+				//	Clear the text input
+				textInputArea.clear();
+				
+				//	Adds the bubble to the messageViewContainer
+				messageViewContainer.getChildren().add(messageBubbleContainerSender);
+			}
+		});
 		
 		//	Add message input & send message button to textInputContainer
 		textInputContainer.getChildren().addAll(textInputArea, sendButton);
