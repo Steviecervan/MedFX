@@ -269,9 +269,6 @@ public class PatientViewPage extends VBox{
 			summaryButton.getStyleClass().add("WhiteButton");
 			summaryButton.setStyle("-fx-background-color: transparent; -fx-font-weight: normal; -fx-font-size: 12");
 			
-			//	Adds the header label and examinationContainer to the mainContainer to be returned
-			mainContainer.getChildren().add(visitsHeaderLabel);
-			
 			//	Action Event for showing the summary of a visit		
 			summaryButton.setOnAction(new EventHandler<ActionEvent>() {
 				public void handle(ActionEvent e) {
