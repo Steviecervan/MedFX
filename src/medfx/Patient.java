@@ -13,13 +13,15 @@ public class Patient extends User {
 	private static final long serialVersionUID = -1632230017250822490L;
 	private PersonalInformation personalInfo;
 	private ArrayList<Visits> visitInformation; // Updated to store Visit objects
+	private ArrayList<Message> messages;
 	private String insurance;
 	private String pharmacy;
 
 	// Constructor
 	public Patient(PersonalInformation personalInfo, String role) {
 		super(personalInfo, role); // Calls the constructor for User
-		this.visitInformation = new ArrayList<>(); // Instantiate an empty ArrayList for visit information
+		this.visitInformation = new ArrayList<Visits>(); // Instantiate an empty ArrayList for visit information
+		this.messages = new ArrayList<Message>();
 	}
 
 	// Adds a new visit to the visit summaries for this patient
@@ -58,12 +60,11 @@ public class Patient extends User {
 
 
 	// Retrieves all visits for this patient
-	public List<Visits> getVisits() {
+	public ArrayList<Visits> getVisits() {
 		return this.visitInformation;
 	}
 
 	// writing and reading patient objects
-	
 	public static void writePatientToDatabase(Patient patient) throws IOException
 	{
 		File patientDatabase = new File("PatientDatabase");
@@ -93,6 +94,11 @@ public class Patient extends User {
 		in.close();
 		
 		return patient;
+	}
+	
+	//	Message Functionality
+	public ArrayList<Message> getMessages(){
+		return this.messages;
 	}
 	
 	//	Getters
