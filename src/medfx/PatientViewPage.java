@@ -56,6 +56,9 @@ public class PatientViewPage extends VBox{
 		// Patient object
 		this.patient = patient;
 		
+		//	TEST 
+		patient.addVisit(new Visits("MM-DD-YYYY", 130.0, 5.4, "120/80", 99.3, "All good", "Coughing blood", new Medication("ibruprofen", "2", "2", 5, "none", "consume")));
+		
 		//	General View -----------------------------------------------------------------------------------------
 		//	This remains the same throughout the use of this view		
 		
@@ -72,6 +75,15 @@ public class PatientViewPage extends VBox{
 		//	Sign out button
 		Button signOutButton = new Button("Sign Out");
 		signOutButton.getStyleClass().add("WhiteButton");
+		signOutButton.setOnAction(new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent e) {
+				try {
+					SceneController.switchToUserMainPage(e);									
+				}catch(IOException ex) {
+					//	Do nothing
+				}
+			}
+		});
 
 		//	Add medFxLabel and sign out button to top container
 		topContainer.getChildren().addAll(medfxLabel, signOutButton);
@@ -249,7 +261,7 @@ public class PatientViewPage extends VBox{
 			examinationContainer.setAlignment(Pos.CENTER_LEFT);
 			
 			//	Visit date Label
-			Label examinationDateLabel = new Label("Examination Date:" + visit.getTimestamp());
+			Label examinationDateLabel = new Label("Examination Date:" + visit.getDate());
 			examinationDateLabel.setMinWidth(505);
 			
 			//	Visit Summary Button
@@ -271,7 +283,7 @@ public class PatientViewPage extends VBox{
 					VBox summaryContainer = new VBox();
 					summaryContainer.setPadding(new Insets(15, 15, 15, 15));
 					
-					Label visitDateLabel = new Label("Visit" + visit.getTimestamp());
+					Label visitDateLabel = new Label("Visit" + visit.getDate());
 					visitDateLabel.setStyle("-fx-font-family: roboto; -fx-font-weight: bold; -fx-font-size: 20; -fx-padding: 0, 0, 0, 20");
 					
 					Label vitalResultsLabel = new Label("Vital Results");
@@ -338,7 +350,7 @@ public class PatientViewPage extends VBox{
 	
 	//	Messages View -----------------------------------------------------------------------------------------
 	public VBox setToMessageView() {
-//		Main Container
+			//	Main Container
 			VBox mainContainer = new VBox();
 
 			//	Container that holds the message bubbles
