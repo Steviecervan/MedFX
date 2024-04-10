@@ -370,6 +370,12 @@ public class PatientViewPage extends VBox{
 			sendButton.setMinHeight(30);
 			sendButton.setOnAction(new EventHandler<ActionEvent> () {
 				public void handle(ActionEvent e) {				
+					//	Creating a new message
+					Message newMessage = new Message("Patient", "Doctor", textInputArea.getText());
+					
+					//	Add Message to patient arraylist
+					patient.getMessages().add(newMessage);
+					
 					//	~ Message bubble (Sender) ~
 					VBox messageBubbleContainerSender = new VBox();
 					messageBubbleContainerSender.getStyleClass().add("MessageBoxSend");
@@ -383,6 +389,14 @@ public class PatientViewPage extends VBox{
 					//	Puts the text into the message bubble
 					messageBubbleContainerSender.getChildren().addAll(messageTextSender);
 					
+					//	Save the patient object
+					try {
+						//	Write new patient object to the database
+						Patient.writePatientToDatabase(patient);						
+					}catch(IOException ie) {
+						
+					}
+					
 					//	Clear the text input
 					textInputArea.clear();
 					
@@ -393,6 +407,47 @@ public class PatientViewPage extends VBox{
 			
 			//	Add message input & send message button to textInputContainer
 			textInputContainer.getChildren().addAll(textInputArea, sendButton);
+			
+			//	Updates Message View Container with messages
+			if(patient.getMessages().size() != 0) {
+				for(Message message : patient.getMessages()) {
+					if(message.getSender() == "Patient") {
+						//	Show the sender message style
+						//	~ Message bubble (Sender) ~
+						VBox messageBubbleContainerSender = new VBox();
+						messageBubbleContainerSender.getStyleClass().add("MessageBoxSend");
+						messageBubbleContainerSender.setMaxWidth(300);
+						
+						//	Text for Message
+						Label messageTextSender = new Label();
+						messageTextSender.setText(message.getContents());
+						messageTextSender.getStyleClass().add("MessageTextSend");
+						
+						//	Puts the text into the message bubble
+						messageBubbleContainerSender.getChildren().addAll(messageTextSender);
+						
+						//	Add to messageViewContainer
+						messageViewContainer.getChildren().add(messageBubbleContainerSender);
+					}else if(message.getSender().equals("Doctor") || message.getSender().equals("Nurse")) {
+						//	Show the receiver message style
+						//	~ Message bubble (Sender) ~
+						VBox messageBubbleContainerReceiver = new VBox();
+						messageBubbleContainerReceiver.getStyleClass().add("MessageBoxReceive");
+						messageBubbleContainerReceiver.setMaxWidth(300);
+						
+						//	Text for Message
+						Label messageTextSender = new Label();
+						messageTextSender.setText(message.getContents());
+						messageTextSender.getStyleClass().add("MessageTextReceive");
+						
+						//	Puts the text into the message bubble
+						messageBubbleContainerReceiver.getChildren().addAll(messageTextSender);
+						
+						//	Add to messageViewContainer
+						messageViewContainer.getChildren().add(messageBubbleContainerReceiver);
+					}
+				}
+			}
 			
 			//	Adds the message bubble container and text input container to the main container
 			mainContainer.getChildren().addAll(messageViewContainer, textInputContainer);
