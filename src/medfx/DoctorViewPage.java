@@ -74,14 +74,11 @@ public class DoctorViewPage extends VBox
 		 Label patientsLabel= new Label("Patients");
 		 Font largeBoldFont = Font.font("Arial", FontWeight.BOLD, 20); 
 	     patientsLabel.setFont(largeBoldFont);
-		 TextField patientSearch= new TextField();
-		 patientSearch.setPromptText("Search Patient");
-		 Button searchButton= new Button("Search");
 		 //Button newPatientButton= new Button("New Patient");
 	 
 		 HBox searchBarBox= new HBox(10);
 		 //searchBarBox.setPadding(new Insets(10)); 
-		 searchBarBox.getChildren().addAll(patientsLabel, patientSearch, searchButton);
+		 searchBarBox.getChildren().addAll(patientsLabel);
 		 searchBarBox.setPadding(new Insets(10,10,10,10));
 		
 		Label patientNameLabel= new Label("Patient Name");
