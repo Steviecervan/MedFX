@@ -208,23 +208,41 @@ private VBox messageViewContainer;
 	    VBox visitBox= new VBox(10);
 	    visitBox.setPadding(new Insets(10,10,10,10));
 	    
+	    
         Label visitLabel= new Label("Visits");
         visitLabel.setFont(Font.font("Arial", FontWeight.BOLD, 12)); 
+        visitBox.getChildren().addAll(visitLabel);
 
-	    Button visitButton= new Button("View");
+
+        ArrayList<Visits> patientVisits = patient.getVisits();
+
+        if (!patientVisits.isEmpty())
+        {
+        	visitLabel= new Label("Visits");
+        	// for loop to add visits
+            for (Visits visit : patientVisits)
+            {
+            	int visitIndex = patientVisits.indexOf(visit);
+            	
+            	Button visitButton= new Button("View");
+            	Region spacer = new Region();
+                HBox.setHgrow(spacer, Priority.ALWAYS);
+                
+                HBox individualVisitBox= new HBox(10);
+                individualVisitBox.setStyle("-fx-background-color: #d3d3d3;");
+                Label visitDateLabel= new Label("Visit Date: " + visit.getDate());   
+                individualVisitBox.getChildren().addAll(visitDateLabel, spacer, visitButton);
+                visitBox.getChildren().add(individualVisitBox);
+                visitButton.setOnAction(event -> visitScreen(patient, visitIndex));
+            	
+            }
+        	
+        }
+	  
 	    
-	    Region spacer = new Region();
-        HBox.setHgrow(spacer, Priority.ALWAYS);
-        
-        HBox individualVisitBox= new HBox(10);
-        individualVisitBox.setStyle("-fx-background-color: #d3d3d3;");
-        Label visitDateLabel= new Label("Visit Date MM-DD-YYYY");   
-        individualVisitBox.getChildren().addAll(visitDateLabel, spacer, visitButton);
 	    visitBox.setPadding(new Insets(10,10,10,10));
 
-        
-        visitBox.getChildren().addAll(visitLabel, individualVisitBox);
-
+	   
         GridPane medHistoryGrid= new GridPane();
         Label medHistoryLabel= new Label("Medical History");
         Label patientMedHistoryLabel = new Label("");
@@ -234,13 +252,33 @@ private VBox messageViewContainer;
         
        GridPane allergyGrid= new GridPane();
         Label allergyLabel= new Label("Allergies");
-        Label patientAllergyLabel = new Label ("Patient Allergies");
+        Label patientAllergyLabel = new Label();
         allergyGrid.add(allergyLabel,0,0);
         allergyGrid.add(patientAllergyLabel,0,1);
 
         GridPane medicationGrid= new GridPane();
         Label medicationLabel= new Label("Medication History");
-        Label patientMedicationLabel = new Label ("Patient Medication History");
+        Label patientMedicationLabel = new Label();
+        
+        
+        if (!patientVisits.isEmpty())
+        {
+        	//populate prescription
+        	patientMedicationLabel = new Label (patientVisits.get(0).getPrescription().toString()); // displays most recent medication
+        	patientMedicationLabel.setMinHeight(75);
+        	patientMedicationLabel.setMaxWidth(200);
+        	patientMedicationLabel.setWrapText(true);
+        	
+        	//populate allergy label
+        	patientAllergyLabel.setText(patientVisits.get(0).getAllergies());
+        	
+        	//populate medical history label
+        	patientMedHistoryLabel.setText(patientVisits.get(0).getMedicalHistory());
+        	
+        }
+        
+        
+        
         medicationGrid.add(medicationLabel,0,0);
         medicationGrid.add(patientMedicationLabel,0,1);
         
@@ -271,7 +309,8 @@ private VBox messageViewContainer;
         Scene newPatientScene = new Scene(intakePane, 800, 500);
         Stage stage = (Stage) getScene().getWindow();
         stage.setScene(newPatientScene);       	 
-        visitButton.setOnAction(event -> visitScreen());
+        
+       // visitButton.setOnAction(event -> visitScreen());
 
 
     }
@@ -328,30 +367,38 @@ private VBox messageViewContainer;
 		vitalResultsLabel.setStyle("-fx-font-family: roboto; -fx-font-weight: bold; -fx-font-size: 15; -fx-padding: 0, 5, 0, 5");
 						
 		Label over12Label = new Label("Is Patient Over 12?");
-		TextArea over12Area= new TextArea();
+		TextField over12Area= new TextField();
 		
 		
 		Label allergyLabel = new Label("Known Allergies: ");
-		TextArea allergyArea= new TextArea();
+		TextField allergyArea= new TextField();
 
-		Label substancesLabel = new Label("Physical Results: ");
-		TextArea substancesArea= new TextArea();
+		Label resultsLabel = new Label("Physical Results: ");
+		TextArea resultsArea= new TextArea();
 		
 		Label concernLabel = new Label("Concerns/Reasons for Visit: ");
 		TextArea concernArea= new TextArea();
 		   
+		Label medHistoryLabel = new Label("Medical History: ");
+		TextArea medHistoryArea= new TextArea();
+		//medHistoryArea.setPrefSize(100, 5); 
+
+		   
 		
 		over12Area.setPrefSize(10, 10); 
-		allergyArea.setPrefSize(1, 1); 
-		substancesArea.setPrefSize(300, 20); 
+		//allergyArea.setPrefSize(1, 1); 
+		resultsArea.setPrefSize(300, 20); 
 		concernArea.setPrefSize(300, 20); 
 		
-		HBox substancesBox= new HBox();
-		substancesBox.setPadding(new Insets(10));
+		HBox medHistoryBox= new HBox(10);
+		medHistoryBox.setPadding(new Insets(10));
+		HBox physicalResultsBox= new HBox();
+		physicalResultsBox.setPadding(new Insets(10));
 		HBox concernBox= new HBox();
 		concernBox.setPadding(new Insets(10));
 
-		substancesBox.getChildren().addAll(substancesLabel,substancesArea);
+		medHistoryBox.getChildren().addAll(medHistoryLabel,medHistoryArea);
+		physicalResultsBox.getChildren().addAll(resultsLabel,resultsArea);
 		concernBox.getChildren().addAll(concernLabel,concernArea);
 	
 		//	Vital Results
@@ -364,10 +411,10 @@ private VBox messageViewContainer;
 		//Label pBodyTemp= new Label("");
 		//Label pBloodPressure = new Label("");
 		
-		TextArea patientWeightArea= new TextArea();
-		TextArea patientBPArea= new TextArea();
-		TextArea patientHeightArea= new TextArea();
-		TextArea patientTempArea= new TextArea();
+		TextField patientWeightArea= new TextField();
+		TextField patientBPArea= new TextField();
+		TextField patientHeightArea= new TextField();
+		TextField patientTempArea= new TextField();
 
 		 patientWeightArea.setPrefSize(100, 5); 
 	     patientBPArea.setPrefSize(100, 5);
@@ -411,10 +458,10 @@ private VBox messageViewContainer;
 		infoBox.getChildren().addAll(ptIDLabel,currDateLabel);
 		
 		VBox visitSummaryBox= new VBox();
-		visitSummaryBox.getChildren().addAll(infoBox, vitalResultsLabel, vitalsGridPane, substancesBox, concernBox,saveButton);
-		visitSummaryBox.setPadding(new Insets(5, 50, 55, 55));
+		visitSummaryBox.getChildren().addAll(infoBox, vitalResultsLabel, vitalsGridPane, physicalResultsBox, concernBox, medHistoryBox, saveButton);
+		visitSummaryBox.setPadding(new Insets(0, 50, 55, 55));
 
-		Medication baseScript= new Medication("","","", 0,"","");
+		Medication baseScript= new Medication("","","");
 
 		saveButton.setOnAction(event -> 
 		{
@@ -424,7 +471,7 @@ private VBox messageViewContainer;
 		        double height = Double.parseDouble(patientHeightArea.getText());
 		        double temp = Double.parseDouble(patientTempArea.getText());
 
-		        Visits patientVisit = new Visits(formattedDate, weight, height, patientBPArea.getText(), temp, substancesArea.getText(), concernArea.getText(),baseScript);
+		        Visits patientVisit = new Visits(formattedDate, weight, height, patientBPArea.getText(), temp, resultsArea.getText(), concernArea.getText(),baseScript, allergyArea.getText(),medHistoryArea.getText() );
 		        patient.addVisit(patientVisit);
 		        Label successLabel=new Label("Successfully saved Visit Information");
 		        visitSummaryBox.getChildren().addAll(successLabel);
@@ -458,7 +505,7 @@ private VBox messageViewContainer;
 		
 	}
 	
-	private void visitScreen() {
+	private void visitScreen(Patient patient, int index) {
 		
 		Stage summaryWindow = new Stage();
 		summaryWindow.setWidth(800);

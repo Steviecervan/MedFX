@@ -366,8 +366,8 @@ public class DoctorViewPage extends VBox
 		    Label medStrength=new Label("Strength:");
 		    Label medDosage=new Label("Dosage:");
 		    
-		    TextArea medNameArea= new TextArea();
-		    TextArea medStrengthArea= new TextArea();
+		    TextField medNameArea= new TextField();
+		    TextField medStrengthArea= new TextField();
 		    TextArea medDosageArea= new TextArea();
 		    medNameArea.setMaxWidth(200);
 		    medNameArea.setMaxHeight(2);
