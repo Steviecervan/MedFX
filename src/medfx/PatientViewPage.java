@@ -57,7 +57,7 @@ public class PatientViewPage extends VBox{
 		this.patient = patient;
 		
 		//	General View -----------------------------------------------------------------------------------------
-		//	This remains the same throughout the use of this view
+		//	This remains the same throughout the use of this view		
 		
 		//	Top Container
 		HBox topContainer = new HBox();
@@ -239,6 +239,8 @@ public class PatientViewPage extends VBox{
 		Label visitsHeaderLabel = new Label("My Visits");
 		visitsHeaderLabel.getStyleClass().add("HeaderText");
 		
+		mainContainer.getChildren().add(visitsHeaderLabel);
+		
 		//	Add Each Visit the Patient Contains
 		for(Visits visit : patient.getVisits()) {
 			//	Holds all of the visit information together
@@ -286,10 +288,10 @@ public class PatientViewPage extends VBox{
 					Label heightLabel = new Label("Height");
 					Label bodyTemperatureLabel = new Label("Body Temperature");
 					Label bloodPressureLabel = new Label("Blood Pressure");
-					Label pWeight = new Label("");
-					Label pHeight= new Label("");
-					Label pBodyTemp= new Label("");
-					Label pBloodPressure = new Label("");
+					Label pWeight = new Label(String.valueOf(visit.getWeight()));
+					Label pHeight= new Label(String.valueOf(visit.getHeight()));
+					Label pBodyTemp= new Label(String.valueOf(visit.getBodyTemperature()));
+					Label pBloodPressure = new Label(String.valueOf(visit.getBloodPressure()));
 					
 					TextArea healthConcernTextArea = new TextArea();				
 					healthConcernTextArea.setEditable(false);
@@ -297,7 +299,7 @@ public class PatientViewPage extends VBox{
 					
 					TextArea physicalResultsTextArea = new TextArea();
 					physicalResultsTextArea.setEditable(false);
-					//physicalResultsTextArea.setText();
+					physicalResultsTextArea.setText(visit.getPhysicalResults());
 					
 					GridPane vitalsGridPane = new GridPane();
 					vitalsGridPane.setAlignment(Pos.CENTER_LEFT);
