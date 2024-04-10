@@ -56,9 +56,6 @@ public class PatientViewPage extends VBox{
 		// Patient object
 		this.patient = patient;
 		
-		//	TEST 
-		patient.addVisit(new Visits("MM-DD-YYYY", 130.0, 5.4, "120/80", 99.3, "All good", "Coughing blood", new Medication("ibruprofen", "2", "2", 5, "none", "consume")));
-		
 		//	General View -----------------------------------------------------------------------------------------
 		//	This remains the same throughout the use of this view		
 		
