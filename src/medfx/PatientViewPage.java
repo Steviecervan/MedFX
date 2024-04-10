@@ -261,7 +261,7 @@ public class PatientViewPage extends VBox{
 			examinationContainer.setAlignment(Pos.CENTER_LEFT);
 			
 			//	Visit date Label
-			Label examinationDateLabel = new Label("Examination Date:" + visit.getDate());
+			Label examinationDateLabel = new Label("Examination Date: " + visit.getDate());
 			examinationDateLabel.setMinWidth(505);
 			
 			//	Visit Summary Button
@@ -280,7 +280,7 @@ public class PatientViewPage extends VBox{
 					VBox summaryContainer = new VBox();
 					summaryContainer.setPadding(new Insets(15, 15, 15, 15));
 					
-					Label visitDateLabel = new Label("Visit" + visit.getDate());
+					Label visitDateLabel = new Label("Visit " + visit.getDate());
 					visitDateLabel.setStyle("-fx-font-family: roboto; -fx-font-weight: bold; -fx-font-size: 20; -fx-padding: 0, 0, 0, 20");
 					
 					Label vitalResultsLabel = new Label("Vital Results");
