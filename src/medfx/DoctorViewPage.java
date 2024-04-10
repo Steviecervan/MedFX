@@ -43,6 +43,7 @@ public class DoctorViewPage extends VBox
 {
 	private Scene visitScene;
 	private Button signOutButton;	
+	private Button backBtn;
 	private Doctor doctor;
 	
 	private TextArea textInputArea;
@@ -137,15 +138,18 @@ public class DoctorViewPage extends VBox
 	    
 }
 	private void newPatientScreen(Patient patient) {
-		HBox topBox= new HBox(500);
+		HBox topBox= new HBox(20);
+		topBox.setSpacing(20);
     	Label medFXLabel= new Label("MedFX");
     	 medFXLabel.setFont(Font.font("Arial", FontWeight.BOLD, 24)); 
     	 medFXLabel.setTextFill(javafx.scene.paint.Color.WHITE);
          signOutButton = new Button("Sign Out");
+
+         backBtn= new Button("Back");
+         backBtn.setOnAction(new ButtonHandler());
         
-        topBox.getChildren().addAll(medFXLabel, signOutButton);
+        topBox.getChildren().addAll(medFXLabel, signOutButton, backBtn);
         topBox.setStyle("-fx-background-color: #39C0EA;");
-        topBox.setPadding(new Insets(10));
     	
         BorderPane intakePane = new BorderPane();
         GridPane intakeGridPane= new GridPane();
@@ -195,16 +199,16 @@ public class DoctorViewPage extends VBox
 	        addressLabel.setFont(Font.font("Arial", FontWeight.BOLD, 12)); 
 
               
-        intakeGridPane.setHgap(25);
-        intakeGridPane.setVgap(5);
+	        intakeGridPane.setHgap(25);
+	        intakeGridPane.setVgap(5);
         
 	        intakeGridPane.add(firstNameLabel, 0, 0);
 	        intakeGridPane.add(patientFirstName, 1, 0);
 	        intakeGridPane.add(lastNameLabel, 2, 0);
 	        intakeGridPane.add(patientLastName, 3, 0);
 	
-	       intakeGridPane.add(DOBLabel, 0, 1);
-	       intakeGridPane.add(patientDOB, 1, 1);
+		    intakeGridPane.add(DOBLabel, 0, 1);
+		    intakeGridPane.add(patientDOB, 1, 1);
 	        intakeGridPane.add(phoneLabel, 2, 1);
 	        intakeGridPane.add(patientPhone, 3, 1);
 	        
@@ -230,31 +234,41 @@ public class DoctorViewPage extends VBox
         Label visitDateLabel= new Label("Visit Date MM-DD-YYYY");   
         individualVisitBox.getChildren().addAll(visitDateLabel, spacer, visitButton);
 	    visitBox.setPadding(new Insets(10,10,10,10));
-
         
         visitBox.getChildren().addAll(visitLabel, individualVisitBox);
 
         GridPane medHistoryGrid= new GridPane();
         Label medHistoryLabel= new Label("Medical History");
-        medHistoryGrid.getChildren().addAll(medHistoryLabel);
-
-        GridPane allergyGrid= new GridPane();
+        Label patientMedHistoryLabel = new Label ("Patient medical History");
+       
+       medHistoryGrid.add(medHistoryLabel,0,0);
+       medHistoryGrid.add(patientMedHistoryLabel,0,1);
+        
+       GridPane allergyGrid= new GridPane();
         Label allergyLabel= new Label("Allergies");
-        allergyGrid.getChildren().addAll(allergyLabel);
+        Label patientAllergyLabel = new Label ("Patient Allergies");
+        allergyGrid.add(allergyLabel,0,0);
+        allergyGrid.add(patientAllergyLabel,0,1);
 
         GridPane medicationGrid= new GridPane();
         Label medicationLabel= new Label("Medication History");
-        medicationGrid.getChildren().addAll(medicationLabel);
+        Label patientMedicationLabel = new Label ("Patient Medication History");
+        medicationGrid.add(medicationLabel,0,0);
+        medicationGrid.add(patientMedicationLabel,0,1);
+
         
         medHistoryLabel.setFont(Font.font("Arial", FontWeight.BOLD, 12)); 
         allergyLabel.setFont(Font.font("Arial", FontWeight.BOLD, 12)); 
         medicationLabel.setFont(Font.font("Arial", FontWeight.BOLD, 12)); 
 
+
+        
         
         GridPane patientHistoryGrid= new GridPane();
         patientHistoryGrid.add(medHistoryGrid, 0, 0);
         patientHistoryGrid.add(allergyGrid, 1, 0);
         patientHistoryGrid.add(medicationGrid, 0, 1);
+
         patientHistoryGrid.setHgap(200); 
         patientHistoryGrid.setVgap(50);        
         
@@ -275,6 +289,7 @@ public class DoctorViewPage extends VBox
         stage.setScene(newPatientScene);       	 
         visitButton.setOnAction(event -> visitScreen());
 
+
     }
 	
 	private void visitScreen() {
@@ -291,6 +306,9 @@ public class DoctorViewPage extends VBox
 		    Button messageButton = new Button("Messages");
 		    signOutButton = new Button("Sign Out");
 		    
+		    backBtn= new Button("Back");
+	        backBtn.setOnAction(new ButtonHandler());
+	        
 
 		    Label visitTopLabel = new Label("Visit MM-DD-YYYY");
 		    Font largeBoldFont = Font.font("Arial", FontWeight.BOLD, 20); 
@@ -376,9 +394,7 @@ public class DoctorViewPage extends VBox
 		   
 		    prescriptionPane.setAlignment(Pos.CENTER);
 		    prescriptionPane.setVgap(6);
-
-		   
-		    
+    
 		    VBox visitInfoBox = new VBox();
 		    visitInfoBox.setAlignment(Pos.CENTER); 
 		    visitInfoBox.setPadding(new Insets(20,100,100,100)); 
@@ -389,7 +405,7 @@ public class DoctorViewPage extends VBox
 		    physicalResultBox.setAlignment(Pos.CENTER);
 		    prescribeBox.setAlignment(Pos.CENTER);
 
-		    topBox.getChildren().addAll(medFXLabel, patientButton, messageButton, signOutButton);
+		    topBox.getChildren().addAll(medFXLabel, patientButton, messageButton, signOutButton, backBtn);
 		    topBox.setPadding(new Insets(10));
 
 
@@ -550,6 +566,22 @@ public class DoctorViewPage extends VBox
 				
 				
 			}
+			
+			if (backBtn.isArmed())
+			{
+				try
+				{
+					
+					SceneController.switchToDoctorView(e, doctor); 
+				}
+				catch (Exception ex)
+				{
+					
+				}
+				
+				
+			}
+			
 		}
 	}
 	
