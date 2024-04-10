@@ -1,6 +1,7 @@
 package medfx;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -69,18 +70,34 @@ private VBox messageViewContainer;
 		Label patientNameLabel= new Label("Patient Name");
         patientNameLabel.setFont(Font.font("Arial", FontWeight.BOLD, 16)); 
         
-        HBox individualPatientBox= new HBox(5);
-	    Label nameLabel= new Label("last-first-DOB");
-	    Button checkInButton= new Button("Check In");
-	    Button msgsButton= new Button("Message");
 	    
-	    individualPatientBox.setPadding(new Insets(10,10,10,10));
-
-	    individualPatientBox.getChildren().addAll(nameLabel,Bigspacer, checkInButton, msgsButton);
 	    
-	    VBox individualPatientHolderBox= new VBox();
-	    individualPatientHolderBox.getChildren().addAll(individualPatientBox);
+	    
+	    ArrayList<Patient> patientList = Nurse.getPatientList();
+	    
+	    
+	    VBox individualPatientHolderBox= new VBox(15);
 	    individualPatientHolderBox.setPadding(new Insets(10,10,10,10));
+
+		
+	    for (Patient patient : patientList) {
+	    	
+	    	 Region bigSpace = new Region();
+	         HBox.setHgrow(bigSpace, Priority.ALWAYS);
+	        Label nameLabel = new Label(patient.getUsername());
+
+		    Button checkInButton= new Button("Check In");
+		    checkInButton.setOnAction(event -> checkInScreen());	
+
+	        Button msgsButton = new Button("Message");
+
+	        HBox individualPatientBox = new HBox(5);
+	        individualPatientBox.setPadding(new Insets(10, 10, 10, 10));
+	        individualPatientBox.getChildren().addAll(nameLabel, bigSpace, checkInButton, msgsButton);
+			individualPatientBox.setStyle("-fx-background-color: #F4F4F4;");
+	        individualPatientHolderBox.getChildren().add(individualPatientBox);
+	    }
+	    
 
 		
 		VBox patientBox= new VBox();
@@ -89,7 +106,6 @@ private VBox messageViewContainer;
 		patientNameLabel.setAlignment(Pos.TOP_LEFT);
 		//patientBox.setAlignment(Pos.CENTER);
 		patientBox.setStyle("-fx-background-color: #d3d3d3;");
-		individualPatientBox.setStyle("-fx-background-color: #F4F4F4;");
 
 		
 		VBox holderBox= new VBox();
@@ -104,7 +120,6 @@ private VBox messageViewContainer;
 	     mainPane.setTop(titleBox);
 	     this.getChildren().add(mainPane); 
 	    newPatientButton.setOnAction(event -> newPatientScreen());	     
-	    checkInButton.setOnAction(event -> checkInScreen());	
 	    messageButton.setOnAction(event -> messageScreen());
 
 }
@@ -270,6 +285,8 @@ private VBox messageViewContainer;
 		Label concernLabel = new Label("Concerns/Reasons for Visit: ");
 		TextArea concernArea= new TextArea();
 		
+		Button saveButton= new Button("Save");
+		
 		over12Area.setPrefSize(10, 10); 
 		allergyArea.setPrefSize(1, 1); 
 		substancesArea.setPrefSize(300, 20); 
@@ -343,7 +360,7 @@ private VBox messageViewContainer;
 		infoBox.getChildren().addAll(visitNameLabel,dateLabel);
 		
 		VBox visitSummaryBox= new VBox();
-		visitSummaryBox.getChildren().addAll(infoBox, vitalResultsLabel, vitalsGridPane, substancesBox, concernBox);
+		visitSummaryBox.getChildren().addAll(infoBox, vitalResultsLabel, vitalsGridPane, substancesBox, concernBox,saveButton);
 		visitSummaryBox.setPadding(new Insets(5, 50, 55, 55));
 
 	

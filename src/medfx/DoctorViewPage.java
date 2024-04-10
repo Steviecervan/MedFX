@@ -29,6 +29,8 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
+
 import javafx.stage.Stage;
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -54,7 +56,7 @@ public class DoctorViewPage extends VBox
 	    medFXLabel.setFont(Font.font("Arial", FontWeight.BOLD, 24)); 
 	    medFXLabel.setTextFill(javafx.scene.paint.Color.WHITE);
 	    
-	    Button patientButton = new Button("Patients");
+	   // Button patientButton = new Button("Patients");
 	    Button messageButton = new Button("Messages");
 	    signOutButton = new Button("Sign Out");
 	    signOutButton.setOnAction(new ButtonHandler());
@@ -65,7 +67,7 @@ public class DoctorViewPage extends VBox
 		 HBox titleBox= new HBox(10);
 	     titleBox.setStyle("-fx-background-color: #39C0EA;");
 
-		 titleBox.getChildren().addAll(medFXLabel, patientButton,messageButton,spacer, signOutButton);
+		 titleBox.getChildren().addAll(medFXLabel, messageButton,spacer, signOutButton);
 		 titleBox.setPadding(new Insets(10));
 		 
 		 Label patientsLabel= new Label("Patients");
@@ -74,37 +76,48 @@ public class DoctorViewPage extends VBox
 		 TextField patientSearch= new TextField();
 		 patientSearch.setPromptText("Search Patient");
 		 Button searchButton= new Button("Search");
-		 Button newPatientButton= new Button("New Patient");
+		 //Button newPatientButton= new Button("New Patient");
 	 
 		 HBox searchBarBox= new HBox(10);
 		 //searchBarBox.setPadding(new Insets(10)); 
-		 searchBarBox.getChildren().addAll(patientsLabel, patientSearch, searchButton, newPatientButton);
+		 searchBarBox.getChildren().addAll(patientsLabel, patientSearch, searchButton);
 		 searchBarBox.setPadding(new Insets(10,10,10,10));
 		
 		Label patientNameLabel= new Label("Patient Name");
         patientNameLabel.setFont(Font.font("Arial", FontWeight.BOLD, 16)); 
-        
-        HBox individualPatientBox= new HBox(5);
-	    Label nameLabel= new Label("last-first-DOB");
-	    Button viewButton= new Button("View");
-	    Button msgsButton= new Button("Message");
+     
+        ArrayList<Patient> patientList = Doctor.getPatientList();
 	    
-	    individualPatientBox.setPadding(new Insets(10,10,10,10));
-
-	    individualPatientBox.getChildren().addAll(nameLabel,spacer, viewButton,msgsButton);
 	    
-	    VBox individualPatientHolderBox= new VBox();
-	    individualPatientHolderBox.getChildren().addAll(individualPatientBox);
+	    VBox individualPatientHolderBox= new VBox(15);
 	    individualPatientHolderBox.setPadding(new Insets(10,10,10,10));
 
 		
+	    for (Patient patient : patientList) {
+	    	
+	    	 Region bigSpace = new Region();
+	         HBox.setHgrow(bigSpace, Priority.ALWAYS);
+	        Label nameLabel = new Label(patient.getUsername());
+
+	        Button viewButton = new Button("View");
+	        viewButton.setOnAction(event -> newPatientScreen(patient));
+
+	        Button msgsButton = new Button("Message");
+
+	        HBox individualPatientBox = new HBox(5);
+	        individualPatientBox.setPadding(new Insets(10, 10, 10, 10));
+	        individualPatientBox.getChildren().addAll(nameLabel, bigSpace, viewButton, msgsButton);
+			individualPatientBox.setStyle("-fx-background-color: #F4F4F4;");
+
+	        individualPatientHolderBox.getChildren().add(individualPatientBox);
+	    }
+	    
 		VBox patientBox= new VBox();
 		patientBox.getChildren().addAll(patientNameLabel, individualPatientHolderBox);
 		patientBox.setPadding(new Insets(10,10,250,10));
 		patientNameLabel.setAlignment(Pos.TOP_LEFT);
 		//patientBox.setAlignment(Pos.CENTER);
 		patientBox.setStyle("-fx-background-color: #d3d3d3;");
-		individualPatientBox.setStyle("-fx-background-color: #F4F4F4;");
 	
 		VBox holderBox= new VBox();
 		holderBox.setPadding(new Insets(20,50,50,50));
@@ -117,12 +130,13 @@ public class DoctorViewPage extends VBox
 	     mainPane.setCenter(wholeSearchBox);
 	     mainPane.setTop(titleBox);
 	     this.getChildren().add(mainPane); 
-	    newPatientButton.setOnAction(event -> newPatientScreen());	
-	    viewButton.setOnAction(event -> visitScreen());	     
-	    messageButton.setOnAction(event -> messageScreen());
+	    //newPatientButton.setOnAction(event -> newPatientScreen());	
+	   // viewButton.setOnAction(event -> visitScreen());	     
+	   messageButton.setOnAction(event -> messageScreen());
+
 	    
 }
-	private void newPatientScreen() {
+	private void newPatientScreen(Patient patient) {
 		HBox topBox= new HBox(500);
     	Label medFXLabel= new Label("MedFX");
     	 medFXLabel.setFont(Font.font("Arial", FontWeight.BOLD, 24)); 
@@ -135,67 +149,91 @@ public class DoctorViewPage extends VBox
     	
         BorderPane intakePane = new BorderPane();
         GridPane intakeGridPane= new GridPane();
+        
+        String[] usernameParts = patient.getUsername().split("-");
+        String firstName = usernameParts[1];
+        String lastName = usernameParts[0];
+        String DOB = usernameParts[2] + "-" + usernameParts[3] + "-" + usernameParts[4];
+
        
 	        Label firstNameLabel= new Label("First Name:");
-	        TextArea firstNameArea = new TextArea();
-	        firstNameArea.setPrefRowCount(1); 
-	        firstNameArea.setPrefColumnCount(10);
-	       
-	        Label middleInitial= new Label("Middle Initial");
-	        TextArea middleInitialArea= new TextArea();
-	        middleInitialArea.setPrefRowCount(1); 
-	        middleInitialArea.setPrefColumnCount(1);
-	               
+	        Label patientFirstName= new Label(firstName);
+	        	               
 	        Label lastNameLabel= new Label("Last Name:");
-	        TextArea lastNameArea = new TextArea();
-	        lastNameArea.setPrefRowCount(1); 
-	        lastNameArea.setPrefColumnCount(10);
-	             
+		    Label patientLastName= new Label(lastName);
+    
+		    Label DOBLabel= new Label("DOB:");
+			Label patientDOB= new Label(DOB);
+			  
+			
 	        Label emailLabel= new Label("Email Address:");
-	        TextArea emailArea = new TextArea();
-	        emailArea.setPrefRowCount(1); 
-	        emailArea.setPrefColumnCount(5);
+	        Label patientEmail= new Label("Information not yet provided");
+	        if (!patient.getPersonalInfo().getEmail().isEmpty())
+	        {
+	        	patientEmail= new Label(patient.getPersonalInfo().getEmail());
+	        }
 	             
 	        Label phoneLabel= new Label("Phone Number:");
-	        TextArea phoneArea = new TextArea();
-	        phoneArea.setPrefRowCount(1); 
-	        phoneArea.setPrefColumnCount(5);
-	            
-	        Label DOBLabel= new Label("DOB:");
-	        TextArea DOBArea = new TextArea();     
-	        DOBArea.setPrefRowCount(1); 
-	        DOBArea.setPrefColumnCount(1);
-	              
+	        Label patientPhone= new Label("Information not yet provided");
+	        if (!patient.getPersonalInfo().getPhoneNumber().isEmpty())
+	        {
+	         patientPhone= new Label(patient.getPersonalInfo().getPhoneNumber());
+	        }
+	        
 	        Label addressLabel = new Label("Address:");
-	        TextArea addressArea = new TextArea();
-	        addressArea.setPrefRowCount(1); 
-	        addressArea.setPrefColumnCount(10);
+	        Label patientAddress= new Label("Information not yet provided");
+	        if (!patient.getPersonalInfo().getAddress().isEmpty())
+	        {
+	         patientAddress= new Label(patient.getPersonalInfo().getAddress());
+	        }
+	        
+	        firstNameLabel.setFont(Font.font("Arial", FontWeight.BOLD, 12)); 
+	        lastNameLabel.setFont(Font.font("Arial", FontWeight.BOLD, 12)); 
+	        emailLabel.setFont(Font.font("Arial", FontWeight.BOLD, 12)); 
+	        phoneLabel.setFont(Font.font("Arial", FontWeight.BOLD, 12)); 
+	        DOBLabel.setFont(Font.font("Arial", FontWeight.BOLD, 12)); 
+	        addressLabel.setFont(Font.font("Arial", FontWeight.BOLD, 12)); 
+
               
-        intakeGridPane.setHgap(5);
+        intakeGridPane.setHgap(25);
         intakeGridPane.setVgap(5);
         
 	        intakeGridPane.add(firstNameLabel, 0, 0);
-	        intakeGridPane.add(firstNameArea, 1, 0);
-	        intakeGridPane.add(middleInitial, 2, 0);
-	        intakeGridPane.add(middleInitialArea, 3, 0);
-	        intakeGridPane.add(lastNameLabel, 4, 0);
-	        intakeGridPane.add(lastNameArea, 5, 0);
+	        intakeGridPane.add(patientFirstName, 1, 0);
+	        intakeGridPane.add(lastNameLabel, 2, 0);
+	        intakeGridPane.add(patientLastName, 3, 0);
 	
-	        intakeGridPane.add(DOBLabel, 0, 1);
-	        intakeGridPane.add(DOBArea, 1, 1);
+	       intakeGridPane.add(DOBLabel, 0, 1);
+	       intakeGridPane.add(patientDOB, 1, 1);
 	        intakeGridPane.add(phoneLabel, 2, 1);
-	        intakeGridPane.add(phoneArea, 3, 1);
+	        intakeGridPane.add(patientPhone, 3, 1);
 	        
 	        intakeGridPane.add(addressLabel, 0, 2);
-	        intakeGridPane.add(addressArea, 1, 2);
+	        intakeGridPane.add(patientAddress, 1, 2);
 	        intakeGridPane.add(emailLabel, 2, 2);
-	        intakeGridPane.add(emailArea, 3, 2);
+	        intakeGridPane.add(patientEmail, 3, 2);
 	        
-        VBox visitBox= new VBox();
+       
+	    VBox visitBox= new VBox(10);
+	    visitBox.setPadding(new Insets(10,10,10,10));
+	    
         Label visitLabel= new Label("Visits");
-        Button visitButton= new Button("Go 2 Visit");
-        visitBox.getChildren().addAll(visitLabel, visitButton);
+        visitLabel.setFont(Font.font("Arial", FontWeight.BOLD, 12)); 
+
+	    Button visitButton= new Button("View");
+	    
+	    Region spacer = new Region();
+        HBox.setHgrow(spacer, Priority.ALWAYS);
         
+        HBox individualVisitBox= new HBox(10);
+        individualVisitBox.setStyle("-fx-background-color: #d3d3d3;");
+        Label visitDateLabel= new Label("Visit Date MM-DD-YYYY");   
+        individualVisitBox.getChildren().addAll(visitDateLabel, spacer, visitButton);
+	    visitBox.setPadding(new Insets(10,10,10,10));
+
+        
+        visitBox.getChildren().addAll(visitLabel, individualVisitBox);
+
         GridPane medHistoryGrid= new GridPane();
         Label medHistoryLabel= new Label("Medical History");
         medHistoryGrid.getChildren().addAll(medHistoryLabel);
@@ -204,20 +242,19 @@ public class DoctorViewPage extends VBox
         Label allergyLabel= new Label("Allergies");
         allergyGrid.getChildren().addAll(allergyLabel);
 
-        GridPane immunizationGrid= new GridPane();
-        Label immunizationLabel= new Label("Immunization History");
-        immunizationGrid.getChildren().addAll(immunizationLabel);
-
         GridPane medicationGrid= new GridPane();
         Label medicationLabel= new Label("Medication History");
         medicationGrid.getChildren().addAll(medicationLabel);
         
+        medHistoryLabel.setFont(Font.font("Arial", FontWeight.BOLD, 12)); 
+        allergyLabel.setFont(Font.font("Arial", FontWeight.BOLD, 12)); 
+        medicationLabel.setFont(Font.font("Arial", FontWeight.BOLD, 12)); 
+
         
         GridPane patientHistoryGrid= new GridPane();
         patientHistoryGrid.add(medHistoryGrid, 0, 0);
-        patientHistoryGrid.add(allergyGrid, 0, 1);
-        patientHistoryGrid.add(immunizationGrid, 1, 0);
-        patientHistoryGrid.add(medicationGrid, 1, 1);
+        patientHistoryGrid.add(allergyGrid, 1, 0);
+        patientHistoryGrid.add(medicationGrid, 0, 1);
         patientHistoryGrid.setHgap(200); 
         patientHistoryGrid.setVgap(50);        
         
@@ -225,8 +262,11 @@ public class DoctorViewPage extends VBox
         allPatientInfoBox.getChildren().addAll(intakeGridPane, visitBox, patientHistoryGrid);
         allPatientInfoBox.setSpacing(20);
         allPatientInfoBox.setPadding(new Insets(20));
-        allPatientInfoBox.setAlignment(Pos.CENTER);
-                   
+        allPatientInfoBox.setAlignment(Pos.CENTER); 
+        allPatientInfoBox.setMaxWidth(600);
+        allPatientInfoBox.setMaxHeight(300);
+        allPatientInfoBox.setStyle("-fx-background-color: #FFFFFF;");
+             
         intakePane.setCenter(allPatientInfoBox);
         intakePane.setTop(topBox);
 
@@ -240,6 +280,7 @@ public class DoctorViewPage extends VBox
 	private void visitScreen() {
 		
 		   BorderPane visitPane = new BorderPane();
+		   //visitPane.setPadding(new Insets(0,50,50,50));
 		    HBox topBox = new HBox(10);
 		    topBox.setPadding(new Insets(10));
 		    topBox.setStyle("-fx-background-color: #39C0EA;");
@@ -259,15 +300,14 @@ public class DoctorViewPage extends VBox
 		    VBox concernBox = new VBox();
 		    VBox physicalResultBox = new VBox();
 		    VBox prescribeBox = new VBox();
+		    prescribeBox.setPadding(new Insets(0,100,0,0));
 
 		    Label vitalResult = new Label("Vital Results");
 		    Label concernLabel = new Label("Health Concerns");
 		    Label physicalResultLabel = new Label("Physical Results");
 		    Label prescribeLabel = new Label("Prescribe Medication");
 		    
-		   HBox medNameBox= new HBox();
-		   HBox medStrengthBox= new HBox();
-		   HBox medDosageBox= new HBox();
+		   GridPane prescriptionPane=new GridPane();
 		  
 		    Label medName=new Label("Medication Name:");
 		    Label medStrength=new Label("Strength:");
@@ -282,10 +322,14 @@ public class DoctorViewPage extends VBox
 		    medStrengthArea.setMaxHeight(2);
 		    medDosageArea.setMaxWidth(200);
 		    medDosageArea.setMaxHeight(2);
-
-		    medNameBox.getChildren().addAll(medName, medNameArea);
-		    medStrengthBox.getChildren().addAll(medStrength, medStrengthArea);
-		    medDosageBox.getChildren().addAll(medDosage, medDosageArea);
+		    
+		    
+		    prescriptionPane.add(medName, 0, 0);
+		    prescriptionPane.add(medNameArea, 1, 0);
+		    prescriptionPane.add(medStrength, 0, 1);
+		    prescriptionPane.add(medStrengthArea, 1, 1);
+		    prescriptionPane.add(medDosage, 0, 2);
+		    prescriptionPane.add(medDosageArea, 1, 2);
 
 		    Button orderButton=new Button("Order");
 		    
@@ -328,15 +372,16 @@ public class DoctorViewPage extends VBox
 		    
 		    concernBox.getChildren().addAll(concernLabel, concernArea);
 		    physicalResultBox.getChildren().addAll(physicalResultLabel,physicalResultArea);
-		    prescribeBox.getChildren().addAll(prescribeLabel, medNameBox, medStrengthBox, medDosageBox, orderButton);
+		    prescribeBox.getChildren().addAll(prescribeLabel, prescriptionPane, orderButton);
 		   
-		    medNameBox.setAlignment(Pos.CENTER);
-		    medStrengthBox.setAlignment(Pos.CENTER);
-		    medDosageBox.setAlignment(Pos.CENTER);
+		    prescriptionPane.setAlignment(Pos.CENTER);
+		    prescriptionPane.setVgap(6);
+
+		   
 		    
 		    VBox visitInfoBox = new VBox();
 		    visitInfoBox.setAlignment(Pos.CENTER); 
-		    visitInfoBox.setSpacing(20); 
+		    visitInfoBox.setPadding(new Insets(20,100,100,100)); 
 		    visitInfoBox.getChildren().addAll(visitTopLabel,vitalGrid, concernBox, physicalResultBox, prescribeBox);
 
 		    vitalGrid.setAlignment(Pos.CENTER);
@@ -346,6 +391,7 @@ public class DoctorViewPage extends VBox
 
 		    topBox.getChildren().addAll(medFXLabel, patientButton, messageButton, signOutButton);
 		    topBox.setPadding(new Insets(10));
+
 
 		    visitPane.setTop(topBox);
 		    visitPane.setCenter(visitInfoBox);
