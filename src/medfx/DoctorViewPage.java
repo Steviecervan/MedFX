@@ -172,21 +172,21 @@ public class DoctorViewPage extends VBox
 			
 	        Label emailLabel= new Label("Email Address:");
 	        Label patientEmail= new Label("Information not yet provided");
-	        if (!patient.getPersonalInfo().getEmail().isEmpty())
+	        if (!patient.getPersonalInfo().getEmail().equals(""))      
 	        {
 	        	patientEmail= new Label(patient.getPersonalInfo().getEmail());
 	        }
 	             
 	        Label phoneLabel= new Label("Phone Number:");
 	        Label patientPhone= new Label("Information not yet provided");
-	        if (!patient.getPersonalInfo().getPhoneNumber().isEmpty())
+	        if (!patient.getPersonalInfo().getPhoneNumber().equals(""))
 	        {
 	         patientPhone= new Label(patient.getPersonalInfo().getPhoneNumber());
 	        }
 	        
 	        Label addressLabel = new Label("Address:");
 	        Label patientAddress= new Label("Information not yet provided");
-	        if (!patient.getPersonalInfo().getAddress().isEmpty())
+	        if (!patient.getPersonalInfo().getAddress().equals(""))
 	        {
 	         patientAddress= new Label(patient.getPersonalInfo().getAddress());
 	        }
