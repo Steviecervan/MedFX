@@ -58,7 +58,7 @@ public class Patient extends User {
 
 
 	// Retrieves all visits for this patient
-	public List<Visits> getVisits() {
+	public ArrayList<Visits> getVisits() {
 		return this.visitInformation;
 	}
 
