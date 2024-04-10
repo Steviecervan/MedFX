@@ -433,6 +433,13 @@ public class PatientViewPage extends VBox{
 						pPharmacy.setText(patient.getPharmacy());
 					}
 					
+					try {
+						//	Write new patient object to the database
+						Patient.writePatientToDatabase(patient);						
+					}catch(IOException e) {
+						
+					}
+					
 					//	Close the change window
 					changeWindow.close();
 				}
