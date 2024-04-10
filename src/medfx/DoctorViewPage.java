@@ -221,38 +221,72 @@ public class DoctorViewPage extends VBox
 	    VBox visitBox= new VBox(10);
 	    visitBox.setPadding(new Insets(10,10,10,10));
 	    
-        Label visitLabel= new Label("Visits");
+        Label visitLabel= new Label(); // temporarily creates empty label
         visitLabel.setFont(Font.font("Arial", FontWeight.BOLD, 12)); 
+        visitBox.getChildren().add(visitLabel); // add label to visit box
 
-	    Button visitButton= new Button("View");
-	    
-	    Region spacer = new Region();
-        HBox.setHgrow(spacer, Priority.ALWAYS);
+        ArrayList<Visits> patientVisits = patient.getVisits();
+
+        if (!patientVisits.isEmpty())
+        {
+        	visitLabel= new Label("Visits");
+        	// for loop to add visits
+            for (Visits visit : patientVisits)
+            {
+            	int visitIndex = patientVisits.indexOf(visit);
+            	
+            	Button visitButton= new Button("View");
+            	Region spacer = new Region();
+                HBox.setHgrow(spacer, Priority.ALWAYS);
+                
+                HBox individualVisitBox= new HBox(10);
+                individualVisitBox.setStyle("-fx-background-color: #d3d3d3;");
+                Label visitDateLabel= new Label("Visit Date: " + visit.getDate());   
+                individualVisitBox.getChildren().addAll(visitDateLabel, spacer, visitButton);
+                visitBox.getChildren().add(individualVisitBox);
+                visitButton.setOnAction(event -> visitScreen(patient, visitIndex));
+            	
+            }
+        	
+        }
         
-        HBox individualVisitBox= new HBox(10);
-        individualVisitBox.setStyle("-fx-background-color: #d3d3d3;");
-        Label visitDateLabel= new Label("Visit Date MM-DD-YYYY");   
-        individualVisitBox.getChildren().addAll(visitDateLabel, spacer, visitButton);
 	    visitBox.setPadding(new Insets(10,10,10,10));
         
-        visitBox.getChildren().addAll(visitLabel, individualVisitBox);
 
         GridPane medHistoryGrid= new GridPane();
         Label medHistoryLabel= new Label("Medical History");
-        Label patientMedHistoryLabel = new Label ("Patient medical History");
+        Label patientMedHistoryLabel = new Label();
        
        medHistoryGrid.add(medHistoryLabel,0,0);
        medHistoryGrid.add(patientMedHistoryLabel,0,1);
         
        GridPane allergyGrid= new GridPane();
         Label allergyLabel= new Label("Allergies");
-        Label patientAllergyLabel = new Label ("Patient Allergies");
+        Label patientAllergyLabel = new Label();
         allergyGrid.add(allergyLabel,0,0);
         allergyGrid.add(patientAllergyLabel,0,1);
 
         GridPane medicationGrid= new GridPane();
         Label medicationLabel= new Label("Medication History");
-        Label patientMedicationLabel = new Label ("Patient Medication History");
+        
+        Label patientMedicationLabel = new Label(); // temporarily creates empty label
+        
+        if (!patientVisits.isEmpty())
+        {
+        	//populate prescription
+        	patientMedicationLabel = new Label (patientVisits.get(0).getPrescription().toString()); // displays most recent medication
+        	patientMedicationLabel.setMinHeight(75);
+        	patientMedicationLabel.setMaxWidth(200);
+        	patientMedicationLabel.setWrapText(true);
+        	
+        	//populate allergy label
+        	patientAllergyLabel.setText(patientVisits.get(0).getAllergies());
+        	
+        	//populate medical history label
+        	patientMedHistoryLabel.setText(patientVisits.get(0).getMedicalHistory());
+        	
+        }
+        
         medicationGrid.add(medicationLabel,0,0);
         medicationGrid.add(patientMedicationLabel,0,1);
 
@@ -287,12 +321,12 @@ public class DoctorViewPage extends VBox
         Scene newPatientScene = new Scene(intakePane, 800, 500);
         Stage stage = (Stage) getScene().getWindow();
         stage.setScene(newPatientScene);       	 
-        visitButton.setOnAction(event -> visitScreen());
+        //visitButton.setOnAction(event -> visitScreen()); comment out for now
 
 
     }
 	
-	private void visitScreen() {
+	private void visitScreen(Patient patient, int index) {
 		
 		   BorderPane visitPane = new BorderPane();
 		   //visitPane.setPadding(new Insets(0,50,50,50));
@@ -309,8 +343,9 @@ public class DoctorViewPage extends VBox
 		    backBtn= new Button("Back");
 	        backBtn.setOnAction(new ButtonHandler());
 	        
+	        Visits visit = patient.getVisits().get(index);
 
-		    Label visitTopLabel = new Label("Visit MM-DD-YYYY");
+		    Label visitTopLabel = new Label("Visit " + visit.getDate());
 		    Font largeBoldFont = Font.font("Arial", FontWeight.BOLD, 20); 
 		    visitTopLabel.setFont(largeBoldFont);
 
@@ -351,8 +386,12 @@ public class DoctorViewPage extends VBox
 
 		    Button orderButton=new Button("Order");
 		    
-		    TextArea concernArea= new TextArea();
-		    TextArea physicalResultArea= new TextArea();
+		    TextArea concernArea= new TextArea(visit.getHealthConcerns());
+		    TextArea physicalResultArea= new TextArea(visit.getPhysicalResults());
+		    
+		    //make text area
+		    concernArea.setEditable(false);
+		    physicalResultArea.setEditable(false);
 		    
 		    concernArea.setMaxWidth(200);
 		    concernArea.setMaxHeight(2);
@@ -369,10 +408,10 @@ public class DoctorViewPage extends VBox
 		    Label tempLabel= new Label("Body Temperature: ");
 		    Label BPLabel= new Label("Blood Pressure: ");
 		    
-		    Label XWLabel= new Label("XXX");
-		    Label XHLabel= new Label("XXX");
-		    Label XTLabel= new Label("XXX");
-		    Label XBPLabel= new Label("XXX");
+		    Label XWLabel= new Label("" + visit.getWeight());
+		    Label XHLabel= new Label("" + visit.getHeight());
+		    Label XTLabel= new Label("" + visit.getBodyTemperature());
+		    Label XBPLabel= new Label(visit.getBloodPressure());
 		    
 		    vitalGrid.add(vitalResult, 0,0);
 		    vitalGrid.add(weightLabel, 0,1);
@@ -415,6 +454,30 @@ public class DoctorViewPage extends VBox
 		    Stage visitStage = new Stage();
 		    visitStage.setScene(visitScene);
 		    visitStage.show();
+		    
+
+		    
+		    
+		    orderButton.setOnAction(event -> {
+		    	Medication prescription = new Medication(medNameArea.getText(), medDosageArea.getText(), medStrengthArea.getText());
+		    	
+		    	visit.setPrescription(prescription);
+		    	 
+		    	 try
+		    	 {
+		    		 Patient.writePatientToDatabase(patient); // update patient in database
+		    	 }
+		    	 catch (IOException ex)
+		    	 {
+		    		 // do nothing
+		    		 Label err = new Label(ex.toString());
+		    		 prescribeBox.getChildren().add(err);
+	
+		    	 }
+		    	
+		    	Label orderedPrescription = new Label("Prescription ordered!");
+		    	prescribeBox.getChildren().add(orderedPrescription);
+		    } );
 	}
 	
 	private void messageScreen() {

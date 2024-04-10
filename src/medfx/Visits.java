@@ -16,10 +16,13 @@ public class Visits implements Serializable {
 	private double bodyTemp;
 	private String physicalResults;
 	private String healthConcerns;
-	private Medication prescriptions;
+	private Medication prescription;
+	private String allergies;
+	private String medHistory;
 
 	// Constructor
-	public Visits(String visitDate, double weight, double height, String bloodPressure, double bodyTemp, String physicalResults, String healthConcerns, Medication prescription) {
+	public Visits(String visitDate, double weight, double height, String bloodPressure, double bodyTemp, String physicalResults, String healthConcerns, Medication prescription,
+			String allergies, String medHistory) {
 		this.date = visitDate;
 		this.weight = weight;
 		this.height = height;
@@ -27,7 +30,9 @@ public class Visits implements Serializable {
 		this.bodyTemp = bodyTemp;
 		this.physicalResults = physicalResults;
 		this.healthConcerns = healthConcerns;
-		this.prescriptions = prescription;
+		this.prescription = prescription;
+		this.allergies = allergies;
+		this.medHistory = medHistory;
 	}
 
 	// Getters
@@ -60,7 +65,7 @@ public class Visits implements Serializable {
 	}
 	
 	public Medication getPrescription() {
-		return this.prescriptions;
+		return this.prescription;
 	}
 
 	//	Setters
@@ -89,6 +94,26 @@ public class Visits implements Serializable {
 	}
 	
 	public void setPrescription(Medication prescription) {
-		this.prescriptions = prescription;
+		this.prescription = prescription;
+	}
+	
+	public String getAllergies()
+	{
+		return this.allergies;
+	}
+	
+	public String getMedicalHistory()
+	{
+		return this.medHistory;
+	}
+	
+	public void setAllergies(String newAllergy)
+	{
+		this.allergies = newAllergy;
+	}
+	
+	public void setMedicalHistory(String newHistory)
+	{
+		this.medHistory = newHistory;
 	}
 }
