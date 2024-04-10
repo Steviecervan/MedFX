@@ -21,13 +21,19 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.lang.Double;
+import java.lang.NumberFormatException;
+
+
 
 public class NurseViewPage extends VBox{
 private Scene visitScene;
-
 private Nurse nurse;
 private Button signOutButton;
-
+private Button patientButton;
+private Button saveButton;
 private TextArea textInputArea;
 private VBox messageViewContainer;
 	
@@ -39,7 +45,7 @@ private VBox messageViewContainer;
 	    medFXLabel.setFont(Font.font("Arial", FontWeight.BOLD, 24)); 
 	    medFXLabel.setTextFill(javafx.scene.paint.Color.WHITE);
 	    
-	    Button patientButton = new Button("Patients");
+	    patientButton = new Button("Patients");
 	    Button messageButton = new Button("Messages");
 	    signOutButton = new Button("Sign Out");
 	    signOutButton.setOnAction(new ButtonHandler());
@@ -59,11 +65,10 @@ private VBox messageViewContainer;
 		 TextField patientSearch= new TextField();
 		 patientSearch.setPromptText("Search Patient");
 		 Button searchButton= new Button("Search");
-		 Button newPatientButton= new Button("New Patient");
 		 
 		 HBox searchBarBox= new HBox(10);
 		 //searchBarBox.setPadding(new Insets(10)); 
-		 searchBarBox.getChildren().addAll(patientsLabel, patientSearch, searchButton, newPatientButton);
+		 searchBarBox.getChildren().addAll(patientsLabel, patientSearch, searchButton);
 		 searchBarBox.setPadding(new Insets(10,10,10,10));
 		
 		Label patientNameLabel= new Label("Patient Name");
@@ -81,7 +86,7 @@ private VBox messageViewContainer;
 	        Label nameLabel = new Label(patient.getUsername());
 
 		    Button checkInButton= new Button("Check In");
-		    checkInButton.setOnAction(event -> checkInScreen());
+		    checkInButton.setOnAction(event -> checkInScreen(patient));
 		    
 		    Button viewButton = new Button("View");
 	        viewButton.setOnAction(event -> newPatientScreen(patient));
@@ -119,13 +124,17 @@ private VBox messageViewContainer;
 
 }
 	private void newPatientScreen(Patient patient) {
-		HBox topBox= new HBox(500);
+		HBox topBox= new HBox(10);
     	Label medFXLabel= new Label("MedFX");
     	 medFXLabel.setFont(Font.font("Arial", FontWeight.BOLD, 24)); 
     	 medFXLabel.setTextFill(javafx.scene.paint.Color.WHITE);
          signOutButton = new Button("Sign Out");
-        
-        topBox.getChildren().addAll(medFXLabel, signOutButton);
+ 	    signOutButton.setOnAction(new ButtonHandler());
+ 	    patientButton= new Button("Patients");
+ 	    patientButton.setOnAction(new ButtonHandler());
+
+
+        topBox.getChildren().addAll(medFXLabel,patientButton,signOutButton);
         topBox.setStyle("-fx-background-color: #39C0EA;");
         topBox.setPadding(new Insets(10));
     	
@@ -218,15 +227,22 @@ private VBox messageViewContainer;
 
         GridPane medHistoryGrid= new GridPane();
         Label medHistoryLabel= new Label("Medical History");
-        medHistoryGrid.getChildren().addAll(medHistoryLabel);
-
-        GridPane allergyGrid= new GridPane();
+        Label patientMedHistoryLabel = new Label("");
+       
+       medHistoryGrid.add(medHistoryLabel,0,0);
+       medHistoryGrid.add(patientMedHistoryLabel,0,1);
+        
+       GridPane allergyGrid= new GridPane();
         Label allergyLabel= new Label("Allergies");
-        allergyGrid.getChildren().addAll(allergyLabel);
+        Label patientAllergyLabel = new Label ("Patient Allergies");
+        allergyGrid.add(allergyLabel,0,0);
+        allergyGrid.add(patientAllergyLabel,0,1);
 
         GridPane medicationGrid= new GridPane();
         Label medicationLabel= new Label("Medication History");
-        medicationGrid.getChildren().addAll(medicationLabel);
+        Label patientMedicationLabel = new Label ("Patient Medication History");
+        medicationGrid.add(medicationLabel,0,0);
+        medicationGrid.add(patientMedicationLabel,0,1);
         
         medHistoryLabel.setFont(Font.font("Arial", FontWeight.BOLD, 12)); 
         allergyLabel.setFont(Font.font("Arial", FontWeight.BOLD, 12)); 
@@ -260,8 +276,9 @@ private VBox messageViewContainer;
 
     }
 	
-	private void checkInScreen()
+	private void checkInScreen(Patient patient)
 	{
+		
 		Stage summaryWindow = new Stage();
 		summaryWindow.setWidth(800);
 		summaryWindow.setHeight(500);
@@ -274,9 +291,26 @@ private VBox messageViewContainer;
 	    medFXLabel.setFont(Font.font("Arial", FontWeight.BOLD, 24)); 
 	    medFXLabel.setTextFill(javafx.scene.paint.Color.WHITE);
 	    
-	    Button patientButton = new Button("Patients");
+	    LocalDate currentDate = LocalDate.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        String formattedDate = currentDate.format(formatter);
+        
+	    patientButton = new Button("Patients");
+	    patientButton.setOnAction(new ButtonHandler());
+
+	    
 	    Button messageButton = new Button("Messages");
 	    Button signOutButton = new Button("Sign Out");
+	    signOutButton.setOnAction(new ButtonHandler());
+
+	    String[] usernameParts = patient.getUsername().split("-");
+        String firstName = usernameParts[1];
+        String lastName = usernameParts[0];
+        String DOB = usernameParts[2] + "-" + usernameParts[3] + "-" + usernameParts[4];
+        String patientID= lastName+ "-" + firstName+ "-"+ DOB +"    ";
+        Label ptIDLabel= new Label(patientID);
+        ptIDLabel.setStyle("-fx-font-family: roboto; -fx-font-weight: bold; -fx-font-size: 20; -fx-padding: 0, 0, 0, 20");
+
 
 		 HBox titleBox= new HBox(10);
 	     titleBox.setStyle("-fx-background-color: #39C0EA;");
@@ -290,8 +324,6 @@ private VBox messageViewContainer;
 		Label dateLabel = new Label(" (MM-DD-YYYY) ");
 		dateLabel.setStyle("-fx-font-family: roboto; -fx-font-weight: bold; -fx-font-size: 20; -fx-padding: 0, 0, 0, 20");
 		
-	
-		
 		Label vitalResultsLabel = new Label("Vitals");
 		vitalResultsLabel.setStyle("-fx-font-family: roboto; -fx-font-weight: bold; -fx-font-size: 15; -fx-padding: 0, 5, 0, 5");
 						
@@ -302,19 +334,17 @@ private VBox messageViewContainer;
 		Label allergyLabel = new Label("Known Allergies: ");
 		TextArea allergyArea= new TextArea();
 
-		Label substancesLabel = new Label("History of Alcohol/Drug use: ");
+		Label substancesLabel = new Label("Physical Results: ");
 		TextArea substancesArea= new TextArea();
 		
 		Label concernLabel = new Label("Concerns/Reasons for Visit: ");
 		TextArea concernArea= new TextArea();
-		
-		Button saveButton= new Button("Save");
+		   
 		
 		over12Area.setPrefSize(10, 10); 
 		allergyArea.setPrefSize(1, 1); 
 		substancesArea.setPrefSize(300, 20); 
 		concernArea.setPrefSize(300, 20); 
-
 		
 		HBox substancesBox= new HBox();
 		substancesBox.setPadding(new Insets(10));
@@ -323,9 +353,7 @@ private VBox messageViewContainer;
 
 		substancesBox.getChildren().addAll(substancesLabel,substancesArea);
 		concernBox.getChildren().addAll(concernLabel,concernArea);
-		
-
-		
+	
 		//	Vital Results
 		Label weightLabel = new Label("Weight");
 		Label heightLabel = new Label("Height");
@@ -345,9 +373,7 @@ private VBox messageViewContainer;
 	     patientBPArea.setPrefSize(100, 5);
 	     patientHeightArea.setPrefSize(100, 5);
 	     patientTempArea.setPrefSize(100, 5);
-
-		
-		
+	
 		TextArea healthConcernTextArea = new TextArea();				
 		healthConcernTextArea.setEditable(false);
 		
@@ -356,46 +382,79 @@ private VBox messageViewContainer;
 		
 		GridPane vitalsGridPane = new GridPane();
 		//vitalsGridPane.setAlignment(Pos.CENTER_LEFT);
+		saveButton= new Button("Save");
 		
+		Label currDateLabel= new Label(formattedDate);
+		currDateLabel.setStyle("-fx-font-family: roboto; -fx-font-weight: bold; -fx-font-size: 20; -fx-padding: 0, 0, 0, 20");
+
+					
+					
 		vitalsGridPane.setVgap(5);
 		vitalsGridPane.setHgap(20);
-		
-		
+				
 		vitalsGridPane.add(heightLabel, 0, 0);
 		vitalsGridPane.add(patientHeightArea, 1, 0);
 		vitalsGridPane.add(weightLabel, 0, 1);
 		vitalsGridPane.add(patientWeightArea, 1, 1);
 		vitalsGridPane.add(over12Label, 2, 1);
 		vitalsGridPane.add(over12Area, 3, 1);
-
 		
 		vitalsGridPane.add(bodyTemperatureLabel, 0, 2);
 		vitalsGridPane.add(patientTempArea, 1, 2);
 		vitalsGridPane.add(allergyLabel, 2, 2);
 		vitalsGridPane.add(allergyArea, 3, 2);
-
 		
 		vitalsGridPane.add(bloodPressureLabel, 0, 3);
-		vitalsGridPane.add(patientBPArea, 1, 3);
-		
+		vitalsGridPane.add(patientBPArea, 1, 3);		
 		
 		HBox infoBox= new HBox();
-		infoBox.getChildren().addAll(visitNameLabel,dateLabel);
+		infoBox.getChildren().addAll(ptIDLabel,currDateLabel);
 		
 		VBox visitSummaryBox= new VBox();
 		visitSummaryBox.getChildren().addAll(infoBox, vitalResultsLabel, vitalsGridPane, substancesBox, concernBox,saveButton);
 		visitSummaryBox.setPadding(new Insets(5, 50, 55, 55));
 
-	
+		Medication baseScript= new Medication("","","", 0,"","");
+
+		saveButton.setOnAction(event -> 
+		{
+			
+			try {
+		        double weight = Double.parseDouble(patientWeightArea.getText());
+		        double height = Double.parseDouble(patientHeightArea.getText());
+		        double temp = Double.parseDouble(patientTempArea.getText());
+
+		        Visits patientVisit = new Visits(formattedDate, weight, height, patientBPArea.getText(), temp, substancesArea.getText(), concernArea.getText(),baseScript);
+		        patient.addVisit(patientVisit);
+		        Label successLabel=new Label("Successfully saved Visit Information");
+		        visitSummaryBox.getChildren().addAll(successLabel);
+		     
+		    } catch (NumberFormatException e) {
+		    	Label failLabel=new Label("Failed to save Visit Information, Input entered incorrectly");
+		        visitSummaryBox.getChildren().addAll(failLabel);
+		    }
+			
+		});
+		
+		
 		summaryContainer.setTop(titleBox);
 		summaryContainer.setCenter(visitSummaryBox);
 		
-		
-		//	Add everything together
+	
 		Scene scene = new Scene(summaryContainer);
 		summaryWindow.setScene(scene);
+				
+		try 
+		{
+			Patient.writePatientToDatabase(patient);
+		} 
+		catch (IOException e) 
+		{
+		}
 		
 		summaryWindow.show();
+		
+		
 		
 	}
 	
@@ -409,12 +468,18 @@ private VBox messageViewContainer;
 		VBox summaryContainer = new VBox();
 		//summaryContainer.setPadding(new Insets(0, 0, 15, 15));
 		
-		HBox topBox= new HBox(500);
+		HBox topBox= new HBox(20);
     	Label medFXLabel= new Label("MedFX");
     	 medFXLabel.setFont(Font.font("Arial", FontWeight.BOLD, 24)); 
     	 medFXLabel.setTextFill(javafx.scene.paint.Color.WHITE);
-        Button signOutButton = new Button("Sign Out");
-        topBox.getChildren().addAll(medFXLabel, signOutButton);
+        signOutButton = new Button("Sign Out");
+	    signOutButton.setOnAction(new ButtonHandler());
+	    
+        patientButton = new Button("Patients");
+        patientButton.setOnAction(new ButtonHandler());
+
+
+        topBox.getChildren().addAll(medFXLabel, patientButton, signOutButton);
         topBox.setStyle("-fx-background-color: #39C0EA;");
         topBox.setPadding(new Insets(10)); 
 		
@@ -446,9 +511,9 @@ private VBox messageViewContainer;
 		TextArea patientTempArea= new TextArea();
 
 		 patientWeightArea.setPrefSize(20, 20); 
-	        patientBPArea.setPrefSize(20, 20);
-	        patientHeightArea.setPrefSize(20, 20);
-	        patientTempArea.setPrefSize(20, 20);
+	     patientBPArea.setPrefSize(20, 20);
+	     patientHeightArea.setPrefSize(20, 20);
+	     patientTempArea.setPrefSize(20, 20);
 
 		
 		
@@ -634,6 +699,23 @@ private VBox messageViewContainer;
 				
 				
 			}
+			
+			if (patientButton.isArmed())
+			{
+				try
+				{
+					
+					SceneController.switchToNurseView(e, nurse); 
+				}
+				catch (Exception ex)
+				{
+					
+				}
+				
+				
+			}
+			
+			
 		}
 	}
 	
