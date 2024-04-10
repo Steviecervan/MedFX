@@ -29,6 +29,7 @@ public class Patient extends User {
 		}
 	}
 
+	/*
 	// Removes a visit from the patient's record based on visit ID
 	public void removeVisit(String visitID) {
 		visitInformation.removeIf(visit -> visit.getVisitID().equals(visitID));
@@ -53,7 +54,7 @@ public class Patient extends User {
 				break;
 			}
 		}
-	}
+	}*/
 
 
 	// Retrieves all visits for this patient
