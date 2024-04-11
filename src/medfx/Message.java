@@ -3,8 +3,10 @@ package medfx;
 import java.io.Serializable;
 
 public class Message implements Serializable{
-	private static final long serialVersionUID = -100L;
-	
+	/**
+	 *	Generated Serializable
+	 */
+	//private static final long serialVersionUID = 2489504787498637710L;
 	private String sender;
 	private String receiver;
 	private String contents;
