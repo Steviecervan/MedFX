@@ -128,7 +128,16 @@ public class UserMainPage extends VBox
 					// try to read the patient file
 					try
 					{
-						Patient currentPatient = Patient.readPatientFromDatabase(inputUsername); // reads the patient file object
+						Patient currentPatient = null; // temp value
+						
+						for (Patient patient : Doctor.getPatientList()) // reads through patient list in order to find the same object in memory
+						{
+							if (patient.getUsername().equals(inputUsername))
+							{
+								currentPatient = patient;
+								break; // break the for loop
+							}
+						}
 						
 						SceneController.switchToPatientView(e, currentPatient); // doesn't throw an error so do not need try and catch
 					}

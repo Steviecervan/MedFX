@@ -434,19 +434,19 @@ public class PatientViewPage extends VBox{
 			updateButton.setOnAction(new EventHandler<ActionEvent>() {
 				public void handle(ActionEvent event) {
 					//	Change the data
-					if(data == "address") {
+					if(data.equals("address")) {
 						patient.getPersonalInfo().changeAddress(newDataTextField.getText());
 						pAddress.setText(patient.getPersonalInfo().getAddress());
 					}
-					if(data == "phone") {
+					if(data.equals("phone")) {
 						patient.getPersonalInfo().changePhoneNumber(newDataTextField.getText());
 						pPhoneNumber.setText(patient.getPersonalInfo().getPhoneNumber());
 					}
-					if(data == "email") {
+					if(data.equals("email")) {
 						patient.getPersonalInfo().changeEmail(newDataTextField.getText());
 						pEmail.setText(patient.getPersonalInfo().getEmail());
 					}
-					if(data == "pharmacy") {
+					if(data.equals("pharmacy")) {
 						patient.setPharmacy(newDataTextField.getText());
 						pPharmacy.setText(patient.getPharmacy());
 					}
