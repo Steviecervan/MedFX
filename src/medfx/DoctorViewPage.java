@@ -51,16 +51,21 @@ public class DoctorViewPage extends VBox
 	
 	public DoctorViewPage(Doctor doctor) throws IOException {
 		
+		// get style sheets
+		this.getStylesheets().add(getClass().getResource("application.css").toString());
+		
 		this.doctor = doctor;
 	
-	Label medFXLabel= new Label("MedFX");
+		Label medFXLabel= new Label("MedFX");
 	    medFXLabel.setFont(Font.font("Arial", FontWeight.BOLD, 24)); 
 	    medFXLabel.setTextFill(javafx.scene.paint.Color.WHITE);
 	    
 	   // Button patientButton = new Button("Patients");
 	    Button messageButton = new Button("Messages");
+	    messageButton.getStyleClass().add("BlueButton");
 	    signOutButton = new Button("Sign Out");
 	    signOutButton.setOnAction(new ButtonHandler());
+	    signOutButton.getStyleClass().add("BlueButton");
 	    
 	    Region spacer = new Region();
         HBox.setHgrow(spacer, Priority.ALWAYS);
@@ -96,15 +101,16 @@ public class DoctorViewPage extends VBox
 	    	 Region bigSpace = new Region();
 	         HBox.setHgrow(bigSpace, Priority.ALWAYS);
 	        Label nameLabel = new Label(patient.getUsername());
+	        nameLabel.setFont(Font.font("Arial", 16));
 
 	        Button viewButton = new Button("View");
+	        viewButton.getStyleClass().add("WhiteButton");
 	        viewButton.setOnAction(event -> newPatientScreen(patient));
 
-	        Button msgsButton = new Button("Message");
 
 	        HBox individualPatientBox = new HBox(5);
 	        individualPatientBox.setPadding(new Insets(10, 10, 10, 10));
-	        individualPatientBox.getChildren().addAll(nameLabel, bigSpace, viewButton, msgsButton);
+	        individualPatientBox.getChildren().addAll(nameLabel, bigSpace, viewButton);
 			individualPatientBox.setStyle("-fx-background-color: #F4F4F4;");
 
 	        individualPatientHolderBox.getChildren().add(individualPatientBox);
@@ -141,8 +147,12 @@ public class DoctorViewPage extends VBox
     	 medFXLabel.setFont(Font.font("Arial", FontWeight.BOLD, 24)); 
     	 medFXLabel.setTextFill(javafx.scene.paint.Color.WHITE);
          signOutButton = new Button("Sign Out");
+         topBox.getStylesheets().add(getClass().getResource("application.css").toString());
+         signOutButton.getStyleClass().add("BlueButton");
+         signOutButton.setOnAction(new ButtonHandler());
 
          backBtn= new Button("Back");
+         backBtn.getStyleClass().add("BlueButton");
          backBtn.setOnAction(new ButtonHandler());
         
         topBox.getChildren().addAll(medFXLabel, signOutButton, backBtn);
@@ -221,6 +231,7 @@ public class DoctorViewPage extends VBox
         Label visitLabel= new Label(); // temporarily creates empty label
         visitLabel.setFont(Font.font("Arial", FontWeight.BOLD, 12)); 
         visitBox.getChildren().add(visitLabel); // add label to visit box
+        visitBox.getStylesheets().add(getClass().getResource("application.css").toString());
 
         ArrayList<Visits> patientVisits = patient.getVisits();
 
@@ -233,6 +244,7 @@ public class DoctorViewPage extends VBox
             	int visitIndex = patientVisits.indexOf(visit);
             	
             	Button visitButton= new Button("View");
+            	visitButton.getStyleClass().add("WhiteButton");
             	Region spacer = new Region();
                 HBox.setHgrow(spacer, Priority.ALWAYS);
                 
@@ -333,11 +345,11 @@ public class DoctorViewPage extends VBox
 		    Label medFXLabel = new Label("MedFX");
 		    medFXLabel.setFont(Font.font("Arial", FontWeight.BOLD, 24)); 
 		    medFXLabel.setTextFill(javafx.scene.paint.Color.WHITE);
-		    Button patientButton = new Button("Patients");
-		    Button messageButton = new Button("Messages");
+
 		    signOutButton = new Button("Sign Out");
+		    signOutButton.setOnAction(new ButtonHandler());
 		    
-		    backBtn= new Button("Back");
+		    backBtn = new Button("Patients");
 	        backBtn.setOnAction(new ButtonHandler());
 	        
 	        Visits visit = patient.getVisits().get(index);
@@ -427,6 +439,10 @@ public class DoctorViewPage extends VBox
 		    concernBox.getChildren().addAll(concernLabel, concernArea);
 		    physicalResultBox.getChildren().addAll(physicalResultLabel,physicalResultArea);
 		    prescribeBox.getChildren().addAll(prescribeLabel, prescriptionPane, orderButton);
+		    prescribeBox.setSpacing(20);
+		    
+		    prescribeBox.getStylesheets().add(getClass().getResource("application.css").toString());
+		    orderButton.getStyleClass().add("BlueButton");
 		   
 		    prescriptionPane.setAlignment(Pos.CENTER);
 		    prescriptionPane.setVgap(6);
@@ -441,8 +457,11 @@ public class DoctorViewPage extends VBox
 		    physicalResultBox.setAlignment(Pos.CENTER);
 		    prescribeBox.setAlignment(Pos.CENTER);
 
-		    topBox.getChildren().addAll(medFXLabel, patientButton, messageButton, signOutButton, backBtn);
+		    topBox.getChildren().addAll(medFXLabel, backBtn, signOutButton);
 		    topBox.setPadding(new Insets(10));
+		    topBox.getStylesheets().add(getClass().getResource("application.css").toString());
+		    backBtn.getStyleClass().add("BlueButton");
+		    signOutButton.getStyleClass().add("BlueButton");
 
 
 		    visitPane.setTop(topBox);
