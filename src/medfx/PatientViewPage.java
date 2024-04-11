@@ -356,7 +356,7 @@ public class PatientViewPage extends VBox{
 			
 			//	-- Text Input Container --
 			HBox textInputContainer = new HBox();
-			textInputContainer.getStyleClass().add("TextInputContainer");
+			textInputContainer.setStyle("-fx-alignment: center; -fx-spacing: 7;");
 			
 			//	TextField - message input
 			textInputArea = new TextArea();
@@ -376,81 +376,36 @@ public class PatientViewPage extends VBox{
 					//	Add Message to patient arraylist
 					patient.getMessages().add(newMessage);
 					
-					//	~ Message bubble (Sender) ~
-					VBox messageBubbleContainerSender = new VBox();
-					messageBubbleContainerSender.getStyleClass().add("MessageBoxSend");
-					messageBubbleContainerSender.setMaxWidth(300);
-					
-					//	Text for Message
-					Label messageTextSender = new Label();
-					messageTextSender.setText(textInputArea.getText());
-					messageTextSender.getStyleClass().add("MessageTextSend");
-					
-					//	Puts the text into the message bubble
-					messageBubbleContainerSender.getChildren().addAll(messageTextSender);
-					
 					//	Save the patient object
 					try {
 						//	Write new patient object to the database
-						Patient.writePatientToDatabase(patient);						
-					}catch(IOException ie) {
+						Patient.writePatientToDatabase(patient);
+
+						//	Clear the text input
+						textInputArea.clear();
 						
+						//	Show the message view
+						updateMessageView();
+					}catch(IOException ie) {
+
 					}
 					
-					//	Clear the text input
-					textInputArea.clear();
 					
+
 					//	Adds the bubble to the messageViewContainer
-					messageViewContainer.getChildren().add(messageBubbleContainerSender);
+					//	messageViewContainer.getChildren().addAll(messageBubbleContainerSender, err);
 				}
 			});
+			
 			
 			//	Add message input & send message button to textInputContainer
 			textInputContainer.getChildren().addAll(textInputArea, sendButton);
 			
-			//	Updates Message View Container with messages
-			if(patient.getMessages().size() != 0) {
-				for(Message message : patient.getMessages()) {
-					if(message.getSender() == "Patient") {
-						//	Show the sender message style
-						//	~ Message bubble (Sender) ~
-						VBox messageBubbleContainerSender = new VBox();
-						messageBubbleContainerSender.getStyleClass().add("MessageBoxSend");
-						messageBubbleContainerSender.setMaxWidth(300);
-						
-						//	Text for Message
-						Label messageTextSender = new Label();
-						messageTextSender.setText(message.getContents());
-						messageTextSender.getStyleClass().add("MessageTextSend");
-						
-						//	Puts the text into the message bubble
-						messageBubbleContainerSender.getChildren().addAll(messageTextSender);
-						
-						//	Add to messageViewContainer
-						messageViewContainer.getChildren().add(messageBubbleContainerSender);
-					}else if(message.getSender().equals("Doctor") || message.getSender().equals("Nurse")) {
-						//	Show the receiver message style
-						//	~ Message bubble (Sender) ~
-						VBox messageBubbleContainerReceiver = new VBox();
-						messageBubbleContainerReceiver.getStyleClass().add("MessageBoxReceive");
-						messageBubbleContainerReceiver.setMaxWidth(300);
-						
-						//	Text for Message
-						Label messageTextSender = new Label();
-						messageTextSender.setText(message.getContents());
-						messageTextSender.getStyleClass().add("MessageTextReceive");
-						
-						//	Puts the text into the message bubble
-						messageBubbleContainerReceiver.getChildren().addAll(messageTextSender);
-						
-						//	Add to messageViewContainer
-						messageViewContainer.getChildren().add(messageBubbleContainerReceiver);
-					}
-				}
-			}
-			
 			//	Adds the message bubble container and text input container to the main container
 			mainContainer.getChildren().addAll(messageViewContainer, textInputContainer);
+			
+			//	Shows all the messages in the view
+			updateMessageView();
 			
 			return mainContainer;
 	}
@@ -488,7 +443,7 @@ public class PatientViewPage extends VBox{
 						pPhoneNumber.setText(patient.getPersonalInfo().getPhoneNumber());
 					}
 					if(data == "email") {
-						patient.getPersonalInfo().changePhoneNumber(newDataTextField.getText());
+						patient.getPersonalInfo().changeEmail(newDataTextField.getText());
 						pEmail.setText(patient.getPersonalInfo().getEmail());
 					}
 					if(data == "pharmacy") {
@@ -550,4 +505,65 @@ public class PatientViewPage extends VBox{
 			}
 		}
 	}
+
+	private void updateMessageView() {
+		//	Clear the message view before populating
+		messageViewContainer.getChildren().clear();
+		
+		//	Updates Message View Container with messages
+		if(patient.getMessages().size() != 0) {
+			for(Message message : patient.getMessages()) {
+				if(message.getSender().equals("Patient")) {
+					//	Show the sender message style
+					//	~ Message bubble (Sender) ~
+					VBox messageBubbleContainerSender = new VBox();
+					messageBubbleContainerSender.setMaxWidth(300);
+					messageBubbleContainerSender.setStyle("-fx-background-color: #39C0EA;\r\n"
+							+ "	-fx-background-radius: 15;\r\n"
+							+ "	-fx-font-family: 'Roboto';\r\n"
+							+ "	-fx-font-size: 15;\r\n"
+							+ "	-fx-alignment: top-left;");
+					
+					//	Text for Message
+					Label messageTextSender = new Label();
+					messageTextSender.setText(message.getContents());
+					messageTextSender.setStyle("-fx-text-fill: white;\r\n"
+							+ "	-fx-padding: 8, 8, 8, 8;\r\n"
+							+ "	-fx-border-radius: 20;\r\n"
+							+ "	-fx-wrap-text: true;");
+					
+					//	Puts the text into the message bubble
+					messageBubbleContainerSender.getChildren().addAll(messageTextSender);
+							
+					//	Add to messageViewContainer
+					messageViewContainer.getChildren().add(messageBubbleContainerSender);
+				}else if(message.getSender().equals("Doctor") || message.getSender().equals("Nurse")) {
+					//	Show the receiver message style
+					//	~ Message bubble (Receiver) ~
+					VBox messageBubbleContainerReceiver = new VBox();
+					messageBubbleContainerReceiver.setMaxWidth(300);
+					messageBubbleContainerReceiver.setStyle("-fx-background-color: white;\r\n"
+							+ "	-fx-background-radius: 15;\r\n"
+							+ "	-fx-font-family: 'Roboto';\r\n"
+							+ "	-fx-font-size: 15;\r\n"
+							+ "	-fx-alignment: top-left;");
+					
+					//	Text for Message
+					Label messageTextSender = new Label();
+					messageTextSender.setText(message.getContents());
+					messageTextSender.setStyle("-fx-text-fill: black;\r\n"
+							+ "	-fx-padding: 8, 8, 8, 8;\r\n"
+							+ "	-fx-border-radius: 20;\r\n"
+							+ "	-fx-wrap-text: true;");
+					
+					//	Puts the text into the message bubble
+					messageBubbleContainerReceiver.getChildren().addAll(messageTextSender);
+							
+					//	Add to messageViewContainer
+					messageViewContainer.getChildren().add(messageBubbleContainerReceiver);
+				}
+			}
+		}
+	}
 }
+
