@@ -578,8 +578,8 @@ public class DoctorViewPage extends VBox
 				//	We could pass in a patient object to get all of this information
 				
 				//	Displays all conversations with patients
-				if(doctor.getPatientList().size() != 0) {
-					for(Patient patient : doctor.getPatientList()) {
+				if(Doctor.getPatientList().size() != 0) {
+					for(Patient patient : Doctor.getPatientList()) {
 						VBox patientContact = new VBox();
 						patientContact.setMaxWidth(220);
 						patientContact.setMaxHeight(50);
@@ -587,8 +587,15 @@ public class DoctorViewPage extends VBox
 						
 						//	Contact Labels 
 						Button pName = new Button(patient.getPersonalInfo().getFirstName() + " " + patient.getPersonalInfo().getLastName());
-						Label messagePreview = new Label(patient.getMessages().get(patient.getMessages().size() - 1).getContents()); //	Will be the last send message (either from patient or doctor)
+						Label messagePreview = new Label(); //	Will be the last send message (either from patient or doctor)
 
+						//	Check for previous message
+						if(patient.getMessages().size() != 0) {
+							messagePreview.setText(patient.getMessages().get(patient.getMessages().size() - 1).getContents());
+						}else {
+							messagePreview.setText("...");
+						}
+						
 						//	Set styling
 						pName.setStyle("-fx-text-fill: black; -fx-font-size: 15; -fx-background-color: white");
 						messagePreview.setStyle("-fx-text-fill: grey; -fx-font-size: 13;");
