@@ -50,6 +50,9 @@ public class DoctorViewPage extends VBox
 	private VBox messageViewContainer;
 	
 	public DoctorViewPage(Doctor doctor) throws IOException {
+		//		Use CSS
+		this.getStylesheets().add(getClass().getResource("application.css").toString()); // fetches the style sheet
+		//this.getStyleClass().add("BasicPaneSetUp");
 		
 		this.doctor = doctor;
 	
@@ -541,30 +544,6 @@ public class DoctorViewPage extends VBox
 				sendButton.setMinWidth(30);
 				sendButton.setMinHeight(30);
 				sendButton.setStyle("-fx-border-radius: 100; -fx-text-fill: white; -fx-text-weight: bold; -fx-background-color: #39C0EA; -fx-text-alignment: center;");
-				sendButton.setOnAction(new EventHandler<ActionEvent>() {
-					public void handle(ActionEvent e) {
-						// ~ Message bubble (Sender) ~
-						VBox messageBubbleContainerSender = new VBox();
-						//messageBubbleContainerSender.getStyleClass().add("MessageBoxSend");
-						messageBubbleContainerSender.setStyle("-fx-background-color: #39C0EA; -fx-background-radius: 15; -fx-font-family: 'Roboto'; -fx-font-size: 15; -fx-alignment: top-left;");
-						messageBubbleContainerSender.setMaxWidth(300);
-
-						// Text for Message
-						Label messageTextSender = new Label();
-						messageTextSender.setText(textInputArea.getText());
-						//messageTextSender.getStyleClass().add("MessageTextSend");
-						messageTextSender.setStyle("-fx-text-fill: white;-fx-padding: 8, 8, 8, 8; -fx-border-radius: 20; -fx-wrap-text: true;");
-
-						// Puts the text into the message bubble
-						messageBubbleContainerSender.getChildren().addAll(messageTextSender);
-
-						// Clear the text input
-						textInputArea.clear();
-
-						// Adds the bubble to the messageViewContainer
-						messageViewContainer.getChildren().add(messageBubbleContainerSender);
-					}
-				});
 
 				// Add message input & send message button to textInputContainer
 				textInputContainer.getChildren().addAll(textInputArea, sendButton);
@@ -581,30 +560,63 @@ public class DoctorViewPage extends VBox
 				//	PATIENT CONTACT CONTAINER ----------------
 				//	This will be used to show patient contacts in the contacts container
 				//	We could pass in a patient object to get all of this information
-				VBox patientContact = new VBox();
-				patientContact.setMaxWidth(220);
-				patientContact.setMaxHeight(50);
-				patientContact.setStyle("-fx-background-color: white; -fx-spacing: 5; -fx-padding: 8, 8, 8, 8; -fx-background-radius: 10");
+				
+				//	Displays all conversations with patients
+				if(doctor.getPatientList().size() != 0) {
+					for(Patient patient : doctor.getPatientList()) {
+						VBox patientContact = new VBox();
+						patientContact.setMaxWidth(220);
+						patientContact.setMaxHeight(50);
+						patientContact.setStyle("-fx-background-color: white; -fx-spacing: 5; -fx-padding: 8, 8, 8, 8; -fx-background-radius: 10");
+						
+						//	Contact Labels 
+						Button pName = new Button(patient.getPersonalInfo().getFirstName() + " " + patient.getPersonalInfo().getLastName());
+						Label messagePreview = new Label(patient.getMessages().get(patient.getMessages().size() - 1).getContents()); //	Will be the last send message (either from patient or doctor)
 
-				//	Contact Labels 
-				Label pName = new Label();
-				Label messagePreview = new Label(); //	Will be the last send message (either from patient or doctor)
-
-				pName.setText("Patient Name");	//	Placeholder
-				messagePreview.setText("Here is a small message preview"); //	Placeholder
-
-				//	Set styling
-				pName.setStyle("-fx-text-fill: black;\r\n"
-						+ "	-fx-font-size: 15;");
-				messagePreview.setStyle("-fx-text-fill: grey;\r\n"
-						+ "	-fx-font-size: 13;");
-				messagePreview.setMaxWidth(220);
-
-				//	Put the name and preview into the patientContact container
-				patientContact.getChildren().addAll(pName, messagePreview);
-
-				//	Add the patientContact to the contacts container
-				contactsContainer.getChildren().add(patientContact);
+						//	Set styling
+						pName.setStyle("-fx-text-fill: black; -fx-font-size: 15; -fx-background-color: white");
+						messagePreview.setStyle("-fx-text-fill: grey; -fx-font-size: 13;");
+						messagePreview.setMaxWidth(220);
+						
+						//	pName button handling
+						pName.setOnAction(new EventHandler<ActionEvent>() {
+							public void handle(ActionEvent e) {
+								//	Set the send button to the correct patient
+								sendButton.setOnAction(new EventHandler<ActionEvent>() {
+									public void handle(ActionEvent e) {
+										//	Creating a new message
+										Message newMessage = new Message("Doctor", "Patient", textInputArea.getText());
+										
+										//	Add Message to patient arraylist
+										patient.getMessages().add(newMessage);
+										
+										//	Save the patient object
+										try {
+											//	Write new patient object to the database
+											Patient.writePatientToDatabase(patient);
+											
+											//	Clear the text input
+											textInputArea.clear();
+											
+											//	Show the message view
+											updateMessageView(patient);
+										}catch(IOException ie) {
+											
+										}
+									}
+								});
+								
+								updateMessageView(patient);								
+							}
+						});
+						
+						//	Put the name and preview into the patientContact container
+						patientContact.getChildren().addAll(pName, messagePreview);
+						
+						//	Add the patientContact to the contacts container
+						contactsContainer.getChildren().add(patientContact);	
+					}
+				}				
 
 				Scene messageScene = new Scene(mainContainer, 800, 500);
 				Stage stage = (Stage) getScene().getWindow();
@@ -648,5 +660,63 @@ public class DoctorViewPage extends VBox
 		}
 	}
 	
-	
+	private void updateMessageView(Patient patient) {		
+		//	Clear the message view before populating
+		messageViewContainer.getChildren().clear();
+		
+		//	Updates Message View Container with messages
+		if(patient.getMessages().size() != 0) {
+			for(Message message : patient.getMessages()) {
+				if(message.getSender().equals("Doctor")) {
+					//	Show the sender message style
+					//	~ Message bubble (Sender) ~
+					VBox messageBubbleContainerSender = new VBox();
+					messageBubbleContainerSender.setMaxWidth(300);
+					messageBubbleContainerSender.setStyle("-fx-background-color: #39C0EA;\r\n"
+							+ "	-fx-background-radius: 15;\r\n"
+							+ "	-fx-font-family: 'Roboto';\r\n"
+							+ "	-fx-font-size: 15;\r\n"
+							+ "	-fx-alignment: top-left;");
+					
+					//	Text for Message
+					Label messageTextSender = new Label();
+					messageTextSender.setText(message.getContents());
+					messageTextSender.setStyle("-fx-text-fill: white;\r\n"
+							+ "	-fx-padding: 8, 8, 8, 8;\r\n"
+							+ "	-fx-border-radius: 20;\r\n"
+							+ "	-fx-wrap-text: true;");
+							
+					//	Puts the text into the message bubble
+					messageBubbleContainerSender.getChildren().addAll(messageTextSender);
+							
+					//	Add to messageViewContainer
+					messageViewContainer.getChildren().add(messageBubbleContainerSender);
+				}else if(message.getSender().equals("Patient")) {
+					//	Show the receiver message style
+					//	~ Message bubble (Sender) ~
+					VBox messageBubbleContainerReceiver = new VBox();
+					messageBubbleContainerReceiver.setMaxWidth(300);
+					messageBubbleContainerReceiver.setStyle("-fx-background-color: white;\r\n"
+							+ "	-fx-background-radius: 15;\r\n"
+							+ "	-fx-font-family: 'Roboto';\r\n"
+							+ "	-fx-font-size: 15;\r\n"
+							+ "	-fx-alignment: top-left;");
+							
+					//	Text for Message
+					Label messageTextReceive = new Label();
+					messageTextReceive.setText(message.getContents());
+					messageTextReceive.setStyle("-fx-text-fill: black;\r\n"
+							+ "	-fx-padding: 8, 8, 8, 8;\r\n"
+							+ "	-fx-border-radius: 20;\r\n"
+							+ "	-fx-wrap-text: true;");
+					
+					//	Puts the text into the message bubble
+					messageBubbleContainerReceiver.getChildren().addAll(messageTextReceive);
+							
+					//	Add to messageViewContainer
+					messageViewContainer.getChildren().add(messageBubbleContainerReceiver);
+				}
+			}
+		}
+	}
 }
