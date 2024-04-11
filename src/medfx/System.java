@@ -24,8 +24,7 @@ public class System extends Application{
 		Nurse.writeNurseToDatabase(nurse);
 		
 		//read current patients from database
-		Doctor.readAllPatientsFromDatabase();
-		Nurse.readAllPatientsFromDatabase();
+		Patient.readAllPatientsFromDatabase();
 		
 		StackPane root = new StackPane();
         VBox mainMenu = new UserMainPage(); // this is what the main screen will be called, you can change it to fit your testing purposes
